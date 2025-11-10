@@ -7,15 +7,15 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #e6f2e6; /* أخضر فاتح */
-      color: #064420; /* أخضر داكن للنصوص */
+      background-color: #e6f2e6;
+      color: #064420;
       margin: 0;
       padding: 0;
     }
     .container {
       max-width: 600px;
       margin: 50px auto;
-      background: #cce5cc; /* أخضر متوسط */
+      background: #cce5cc;
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -61,11 +61,11 @@
       align-items: center;
       margin-top: 10px;
       font-size: 14px;
+      gap: 5px;
     }
     label input {
-      margin-right: 8px;
+      margin: 0;
     }
-    /* لجعل النموذج متمركز على الشاشات الصغيرة */
     @media (max-width: 650px) {
       .container {
         margin: 20px;
@@ -80,7 +80,8 @@
   <h1>TalkAndSolve</h1>
 
   <form id="problemForm">
-    <input type="text" id="name" placeholder="اسمك" required>
+    <input type="text" id="name" placeholder="اسمك (اختياري)">
+    <input type="email" id="email" placeholder="البريد الإلكتروني (اختياري)">
     <input type="text" id="type" placeholder="نوع المشكلة" required>
     <textarea id="description" placeholder="صف المشكلة" required></textarea>
     <label>
@@ -115,35 +116,35 @@
 
   // Form submission
   const form = document.getElementById("problemForm");
-  if (form) {
-    form.addEventListener("submit", function(e){
-      e.preventDefault();
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
 
-      const agree = document.getElementById("agree");
-      if (!agree.checked) {
-        alert("يجب الموافقة على الشروط لإرسال المشكلة");
-        return;
-      }
+    const agree = document.getElementById("agree");
+    if (!agree.checked) {
+      alert("يجب الموافقة على الشروط لإرسال المشكلة");
+      return;
+    }
 
-      const name = document.getElementById("name").value || "مجهول";
-      const type = document.getElementById("type").value || "";
-      const description = document.getElementById("description").value || "";
+    const name = document.getElementById("name").value || "مجهول";
+    const email = document.getElementById("email").value || "";
+    const type = document.getElementById("type").value;
+    const description = document.getElementById("description").value;
 
-      const newRef = database.ref("problems").push();
-      newRef.set({
-        name: name,
-        type: type,
-        description: description,
-        createdAt: Date.now()
-      }).then(() => {
-        alert("تم الإرسال!");
-        form.reset();
-      }).catch(err => {
-        console.error(err);
-        alert("حدث خطأ أثناء الإرسال.");
-      });
+    const newRef = database.ref("problems").push();
+    newRef.set({
+      name: name,
+      email: email,
+      type: type,
+      description: description,
+      createdAt: Date.now()
+    }).then(() => {
+      alert("تم الإرسال!");
+      form.reset();
+    }).catch(err => {
+      console.error(err);
+      alert("حدث خطأ أثناء الإرسال.");
     });
-  }
+  });
 </script>
 
 </body>
