@@ -35,28 +35,6 @@ textarea, input, button { width: 100%; padding: 10px; margin: 5px 0; font-size: 
 </div>
 
 <script>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
-  authDomain: "talkandsolve-4ca7d.firebaseapp.com",
-  databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
-  projectId: "talkandsolve-4ca7d",
-  storageBucket: "talkandsolve-4ca7d.firebasestorage.app",
-  messagingSenderId: "753365758409",
-  appId: "1:753365758409:web:8a84f0f11467d1f001b818",
-  measurementId: "G-Y0SDMHNYEZ"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 // إعداد Firebase
 const firebaseConfig = {
   apiKey: "API_KEY_HERE",
@@ -136,5 +114,56 @@ db.ref("problems").on("value", (snapshot) => {
   }
 });
 </script>
+<!-- محتوى الصفحة: نصوص، أزرار، نماذج... -->
+
+  <!-- Firebase libraries + firebaseConfig -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
+      authDomain: "talkandsolve-4ca7d.firebaseapp.com",
+      databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
+      projectId: "talkandsolve-4ca7d",
+      storageBucket: "talkandsolve-4ca7d.firebasestorage.app",
+      messagingSenderId: "753365758409",
+      appId: "1:753365758409:web:8a84f0f11467d1f001b818",
+      measurementId: "G-Y0SDMHNYEZ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const analytics = firebase.analytics();
+  </script>
+
+  <!-- سكربت إرسال النموذج (إن وجد) -->
+  <script>
+    const form = document.getElementById("problemForm");
+    if (form) {
+      form.addEventListener("submit", function(e){
+        e.preventDefault();
+        const name = document.getElementById("name").value || "مجهول";
+        const type = document.getElementById("type").value || "";
+        const description = document.getElementById("description").value || "";
+
+        const newRef = database.ref("problems").push();
+        newRef.set({
+          name: name,
+          type: type,
+          description: description,
+          createdAt: Date.now()
+        }).then(() => {
+          alert("تم الإرسال!");
+          form.reset();
+        }).catch(err => {
+          console.error(err);
+          alert("حدث خطأ أثناء الإرسال.");
+        });
+      });
+    }
+  </script>
+
 </body>
 </html>
