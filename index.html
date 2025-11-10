@@ -1,169 +1,125 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>موقع دعم المشكلات</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<style>
-body { font-family: Arial; background: #f0f8ff; padding: 20px; }
-.container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
-textarea, input, button { width: 100%; padding: 10px; margin: 5px 0; font-size: 16px; }
-.message-card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; }
-.reply { background-color: #e0ffe0; padding: 5px; margin-top: 5px; border-radius: 5px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalkAndSolve</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      background-color: #e6f2e6; /* أخضر فاتح مريح للعين */
+      color: #064420; /* أخضر داكن للنصوص */
+    }
+    h1 {
+      text-align: center;
+      color: #064420;
+    }
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #cce5cc; /* أخضر متوسط */
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    input, textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #99cc99;
+      background-color: #f0fff0;
+      font-size: 16px;
+    }
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #3d9970; /* أخضر أغمق للزر */
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #2e7554;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>اكتب مشكلتك</h1>
 
-<p><strong>تنبيه:</strong> النصائح هنا ليست بديلاً عن مختص نفسي أو طبي. استخدمي الخدمة بمسؤوليتك الخاصة.</p>
+<h1>TalkAndSolve</h1>
 
-<textarea id="userProblem" placeholder="اكتب مشكلتك هنا..."></textarea>
-<input type="text" id="userName" placeholder="اسمك (اختياري)">
-<input type="email" id="userEmail" placeholder="بريدك الإلكتروني (اختياري)">
+<form id="problemForm">
+  <input type="text" id="name" placeholder="اسمك" required>
+  <input type="text" id="type" placeholder="نوع المشكلة" required>
+  <textarea id="description" placeholder="صف المشكلة" required></textarea>
+  <label>
+    <input type="checkbox" id="agree" required> أوافق على الشروط
+  </label>
+  <button type="submit">إرسال</button>
+</form>
 
-<label>
-  <input type="checkbox" id="consentBox">
-  أوافق على أن تُرى معلوماتي من قبل الإدارة وأن النصائح غير احترافية.
-</label>
-
-<button id="sendBtn" disabled>إرسال</button>
-
-<h2>الرسائل الواردة (لوحة الإدارة)</h2>
-<div id="messages"></div>
-</div>
+<!-- Firebase libraries (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
 
 <script>
-// إعداد Firebase
-const firebaseConfig = {
-  apiKey: "API_KEY_HERE",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "PROJECT_ID",
-  storageBucket: "PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
+    authDomain: "talkandsolve-4ca7d.firebaseapp.com",
+    databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
+    projectId: "talkandsolve-4ca7d",
+    storageBucket: "talkandsolve-4ca7d.firebasestorage.app",
+    messagingSenderId: "753365758409",
+    appId: "1:753365758409:web:8a84f0f11467d1f001b818",
+    measurementId: "G-Y0SDMHNYEZ"
+  };
 
-// تمكين الزر عند الموافقة
-const consentBox = document.getElementById('consentBox');
-const sendBtn = document.getElementById('sendBtn');
-consentBox.addEventListener('change', () => sendBtn.disabled = !consentBox.checked);
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+  const analytics = firebase.analytics();
 
-// إرسال المشكلة إلى Firebase
-sendBtn.addEventListener('click', () => {
-  const problem = document.getElementById('userProblem').value.trim();
-  const name = document.getElementById('userName').value.trim();
-  const email = document.getElementById('userEmail').value.trim();
+  // Form submission
+  const form = document.getElementById("problemForm");
+  if (form) {
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
 
-  if (!problem) { alert('من فضلك اكتبي مشكلتك'); return; }
-
-  const newProblem = db.ref("problems").push();
-  newProblem.set({
-    problem: problem,
-    name: name || "مجهول",
-    email: email || "",
-    reply: ""
-  });
-
-  document.getElementById('userProblem').value = "";
-  document.getElementById('userName').value = "";
-  document.getElementById('userEmail').value = "";
-  consentBox.checked = false;
-  sendBtn.disabled = true;
-
-  alert('تم الإرسال! سيتم الرد عليك قريباً.');
-});
-
-// عرض الرسائل في لوحة الإدارة
-const messagesDiv = document.getElementById("messages");
-db.ref("problems").on("value", (snapshot) => {
-  messagesDiv.innerHTML = "";
-  const data = snapshot.val();
-  if(data){
-    Object.keys(data).forEach(key => {
-      const msg = data[key];
-      const card = document.createElement("div");
-      card.className = "message-card";
-      card.innerHTML = `<strong>المشكلة:</strong> ${msg.problem}<br>
-                        <strong>الاسم:</strong> ${msg.name}<br>
-                        <strong>البريد:</strong> ${msg.email || "غير محدد"}`;
-
-      if(msg.reply) {
-        const replyDiv = document.createElement("div");
-        replyDiv.className = "reply";
-        replyDiv.innerText = "النصيحة: " + msg.reply;
-        card.appendChild(replyDiv);
-      } else {
-        const replyBtn = document.createElement("button");
-        replyBtn.innerText = "إعطاء نصيحة";
-        replyBtn.onclick = () => {
-          const replyText = prompt("اكتبي نصيحتك هنا:");
-          if(replyText && replyText.trim() !== ""){
-            db.ref("problems/" + key).update({ reply: replyText.trim() });
-          }
-        };
-        card.appendChild(replyBtn);
+      const agree = document.getElementById("agree");
+      if (!agree.checked) {
+        alert("يجب الموافقة على الشروط لإرسال المشكلة");
+        return;
       }
 
-      messagesDiv.appendChild(card);
+      const name = document.getElementById("name").value || "مجهول";
+      const type = document.getElementById("type").value || "";
+      const description = document.getElementById("description").value || "";
+
+      const newRef = database.ref("problems").push();
+      newRef.set({
+        name: name,
+        type: type,
+        description: description,
+        createdAt: Date.now()
+      }).then(() => {
+        alert("تم الإرسال!");
+        form.reset();
+      }).catch(err => {
+        console.error(err);
+        alert("حدث خطأ أثناء الإرسال.");
+      });
     });
   }
-});
 </script>
-<!-- محتوى الصفحة: نصوص، أزرار، نماذج... -->
-
-  <!-- Firebase libraries + firebaseConfig -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
-      authDomain: "talkandsolve-4ca7d.firebaseapp.com",
-      databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
-      projectId: "talkandsolve-4ca7d",
-      storageBucket: "talkandsolve-4ca7d.firebasestorage.app",
-      messagingSenderId: "753365758409",
-      appId: "1:753365758409:web:8a84f0f11467d1f001b818",
-      measurementId: "G-Y0SDMHNYEZ"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const analytics = firebase.analytics();
-  </script>
-
-  <!-- سكربت إرسال النموذج (إن وجد) -->
-  <script>
-    const form = document.getElementById("problemForm");
-    if (form) {
-      form.addEventListener("submit", function(e){
-        e.preventDefault();
-        const name = document.getElementById("name").value || "مجهول";
-        const type = document.getElementById("type").value || "";
-        const description = document.getElementById("description").value || "";
-
-        const newRef = database.ref("problems").push();
-        newRef.set({
-          name: name,
-          type: type,
-          description: description,
-          createdAt: Date.now()
-        }).then(() => {
-          alert("تم الإرسال!");
-          form.reset();
-        }).catch(err => {
-          console.error(err);
-          alert("حدث خطأ أثناء الإرسال.");
-        });
-      });
-    }
-  </script>
 
 </body>
 </html>
