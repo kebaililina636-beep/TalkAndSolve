@@ -7,21 +7,26 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 20px;
-      background-color: #e6f2e6; /* أخضر فاتح مريح للعين */
+      background-color: #e6f2e6; /* أخضر فاتح */
       color: #064420; /* أخضر داكن للنصوص */
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #cce5cc; /* أخضر متوسط */
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     h1 {
       text-align: center;
-      color: #064420;
+      margin-bottom: 25px;
     }
     form {
-      max-width: 500px;
-      margin: auto;
-      background: #cce5cc; /* أخضر متوسط */
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
     }
     input, textarea {
       width: 100%;
@@ -31,12 +36,18 @@
       border: 1px solid #99cc99;
       background-color: #f0fff0;
       font-size: 16px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
     button {
-      padding: 12px 20px;
+      padding: 12px;
+      margin-top: 15px;
       border: none;
       border-radius: 8px;
-      background: #3d9970; /* أخضر أغمق للزر */
+      background: #3d9970;
       color: #fff;
       font-size: 16px;
       cursor: pointer;
@@ -46,24 +57,38 @@
       background: #2e7554;
     }
     label {
-      display: block;
+      display: flex;
+      align-items: center;
       margin-top: 10px;
+      font-size: 14px;
+    }
+    label input {
+      margin-right: 8px;
+    }
+    /* لجعل النموذج متمركز على الشاشات الصغيرة */
+    @media (max-width: 650px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
 
-<h1>TalkAndSolve</h1>
+<div class="container">
+  <h1>TalkAndSolve</h1>
 
-<form id="problemForm">
-  <input type="text" id="name" placeholder="اسمك" required>
-  <input type="text" id="type" placeholder="نوع المشكلة" required>
-  <textarea id="description" placeholder="صف المشكلة" required></textarea>
-  <label>
-    <input type="checkbox" id="agree" required> أوافق على الشروط
-  </label>
-  <button type="submit">إرسال</button>
-</form>
+  <form id="problemForm">
+    <input type="text" id="name" placeholder="اسمك" required>
+    <input type="text" id="type" placeholder="نوع المشكلة" required>
+    <textarea id="description" placeholder="صف المشكلة" required></textarea>
+    <label>
+      <input type="checkbox" id="agree" required> أوافق على الشروط
+    </label>
+    <button type="submit">إرسال</button>
+  </form>
+</div>
 
 <!-- Firebase libraries (compat) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
