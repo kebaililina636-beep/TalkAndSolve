@@ -20,14 +20,8 @@
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
-  h1 {
-    text-align: center;
-    margin-bottom: 25px;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-  }
+  h1 { text-align: center; margin-bottom: 25px; }
+  form { display: flex; flex-direction: column; }
   input, textarea {
     width: 100%;
     margin: 10px 0;
@@ -76,9 +70,14 @@
   }
   .solution-input input {
     flex: 1;
-    padding: 8px;
+    padding: 10px;
     border-radius: 6px;
     border: 1px solid #99cc99;
+    font-size: 14px;
+  }
+  .solution-input button {
+    padding: 10px 15px;
+    font-size: 14px;
   }
   @media (max-width: 750px) {
     .container { margin: 20px; padding: 20px; }
@@ -103,7 +102,6 @@
 
   <div class="problems" id="problemsList">
     <h2>المشاكل المرسلة:</h2>
-    <!-- المشاكل ستظهر هنا -->
   </div>
 </div>
 
@@ -113,79 +111,79 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
-    authDomain: "talkandsolve-4ca7d.firebaseapp.com",
-    databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
-    projectId: "talkandsolve-4ca7d",
-    storageBucket: "talkandsolve-4ca7d.firebasestorage.app",
-    messagingSenderId: "753365758409",
-    appId: "1:753365758409:web:8a84f0f11467d1f001b818",
-    measurementId: "G-Y0SDMHNYEZ"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
+  authDomain: "talkandsolve-4ca7d.firebaseapp.com",
+  databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
+  projectId: "talkandsolve-4ca7d",
+  storageBucket: "talkandsolve-4ca7d.firebasestorage.app",
+  messagingSenderId: "753365758409",
+  appId: "1:753365758409:web:8a84f0f11467d1f001b818",
+  measurementId: "G-Y0SDMHNYEZ"
+};
 
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-  const analytics = firebase.analytics();
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const analytics = firebase.analytics();
 
-  const form = document.getElementById("problemForm");
-  const problemsList = document.getElementById("problemsList");
+const form = document.getElementById("problemForm");
+const problemsList = document.getElementById("problemsList");
 
-  // إرسال المشكلة
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
-    const agree = document.getElementById("agree");
-    if(!agree.checked){
-      alert("يجب الموافقة على الشروط لإرسال المشكلة");
-      return;
-    }
-
-    const name = document.getElementById("name").value || "مجهول";
-    const email = document.getElementById("email").value || "";
-    const type = document.getElementById("type").value;
-    const description = document.getElementById("description").value;
-
-    const newRef = database.ref("problems").push();
-    newRef.set({
-      name, email, type, description, solution: "", createdAt: Date.now()
-    }).then(()=>{
-      alert("تم الإرسال!");
-      form.reset();
-    }).catch(err=>{
-      console.error(err);
-      alert("حدث خطأ أثناء الإرسال.");
-    });
-  });
-
-  // عرض المشاكل
-  const problemsRef = database.ref("problems");
-  problemsRef.on("value", snapshot => {
-    problemsList.innerHTML = "<h2>المشاكل المرسلة:</h2>";
-    snapshot.forEach(child => {
-      const data = child.val();
-      const problemDiv = document.createElement("div");
-      problemDiv.className = "problem";
-      problemDiv.innerHTML = `
-        <h3>${data.name} - ${data.type}</h3>
-        <p>${data.description}</p>
-        <div class="solution">${data.solution ? "الحل: " + data.solution : "لم يتم حلها بعد"}</div>
-        <div class="solution-input">
-          <input type="text" placeholder="اكتب حلك هنا..." id="solutionInput-${child.key}">
-          <button onclick="addSolution('${child.key}')">حفظ الحل</button>
-        </div>
-      `;
-      problemsList.appendChild(problemDiv);
-    });
-  });
-
-  // حفظ الحل لكل مشكلة
-  function addSolution(key){
-    const input = document.getElementById(`solutionInput-${key}`);
-    const value = input.value.trim();
-    if(value === "") return;
-    database.ref(`problems/${key}/solution`).set(value);
-    input.value = "";
+// إرسال المشكلة
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+  const agree = document.getElementById("agree");
+  if(!agree.checked){
+    alert("يجب الموافقة على الشروط لإرسال المشكلة");
+    return;
   }
+
+  const name = document.getElementById("name").value || "مجهول";
+  const email = document.getElementById("email").value || "";
+  const type = document.getElementById("type").value;
+  const description = document.getElementById("description").value;
+
+  const newRef = database.ref("problems").push();
+  newRef.set({
+    name, email, type, description, solution: "", createdAt: Date.now()
+  }).then(()=>{
+    alert("تم الإرسال!");
+    form.reset();
+  }).catch(err=>{
+    console.error(err);
+    alert("حدث خطأ أثناء الإرسال.");
+  });
+});
+
+// عرض المشاكل مباشرة وتحديث الحلول فورًا
+const problemsRef = database.ref("problems");
+problemsRef.on("value", snapshot => {
+  problemsList.innerHTML = "<h2>المشاكل المرسلة:</h2>";
+  snapshot.forEach(child => {
+    const data = child.val();
+    const problemDiv = document.createElement("div");
+    problemDiv.className = "problem";
+    problemDiv.innerHTML = `
+      <h3>${data.name} - ${data.type}</h3>
+      <p>${data.description}</p>
+      <div class="solution">${data.solution && data.solution.trim() !== "" ? "الحل: " + data.solution : "لم يتم حلها بعد"}</div>
+      <div class="solution-input">
+        <input type="text" placeholder="اكتب حلك هنا..." id="solutionInput-${child.key}">
+        <button onclick="addSolution('${child.key}')">حفظ الحل</button>
+      </div>
+    `;
+    problemsList.appendChild(problemDiv);
+  });
+});
+
+// حفظ الحل
+function addSolution(key){
+  const input = document.getElementById(`solutionInput-${key}`);
+  const value = input.value.trim();
+  if(value === "") return;
+  database.ref(`problems/${key}/solution`).set(value);
+  input.value = "";
+}
 </script>
 
 </body>
