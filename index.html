@@ -9,7 +9,7 @@
 <!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+import { getDatabase, ref, push, get, child, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
@@ -25,7 +25,8 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  // نموذج المشاكل
+
+  // --- إرسال مشكلة ---
   const form = document.getElementById("problemForm");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -40,19 +41,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     push(ref(db, "problems"), {
-      name, type, description, date: new Date().toISOString()
+      name, type, description, solution: "", date: new Date().toISOString()
     })
     .then(() => {
       document.getElementById("successSound").play();
       alert("تم إرسال مشكلتك بنجاح!");
       form.reset();
     })
-    .catch((err) => {
-      alert("حدث خطأ أثناء الإرسال: " + err);
-    });
+    .catch((err) => alert("حدث خطأ أثناء الإرسال: " + err));
   });
 
-  // زر البدء وتحويل الشاشة
+  // --- زر البداية ---
   const startBtn = document.getElementById("startBtn");
   const welcome = document.getElementById("welcomeScreen");
   const formScreen = document.getElementById("formScreen");
@@ -67,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 700);
   });
 
-  // نصوص ترحيب متغيرة
+  // --- نصوص متغيرة ---
   const texts = [
     "ارتاح واوجد حلول لمشاكلك العائلية.",
     "شارك مشاكلك الاجتماعية بسهولة.",
@@ -84,6 +83,42 @@ document.addEventListener("DOMContentLoaded", () => {
       dynamicText.classList.remove("fadeOutText");
     }, 500);
   }, 4000);
+
+  // --- التحقق من الحل للزائر ---
+  const checkBtn = document.getElementById("checkBtn");
+  checkBtn.addEventListener("click", () => {
+    const checkName = document.getElementById("checkName").value.trim();
+    const dbRef = ref(db, "problems");
+    get(dbRef).then(snapshot => {
+      const data = snapshot.val();
+      let found = false;
+      for (let key in data) {
+        if (data[key].name === checkName) {
+          document.getElementById("solutionDisplay").textContent =
+            data[key].solution || "لم يتم الرد بعد، يرجى الانتظار";
+          found = true;
+          break;
+        }
+      }
+      if (!found) document.getElementById("solutionDisplay").textContent = "لم يتم العثور على مشكلتك";
+    });
+  });
+
+  // --- إضافة حلول من الإدارة ---
+  const adminForm = document.getElementById("adminForm");
+  if (adminForm) {
+    adminForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const key = document.getElementById("problemKey").value.trim();
+      const solutionText = document.getElementById("solutionText").value.trim();
+      if (key && solutionText) {
+        update(ref(db, 'problems/' + key), { solution: solutionText })
+          .then(() => alert("تم إضافة الحل بنجاح!"))
+          .catch(err => alert("حدث خطأ: " + err));
+      }
+    });
+  }
+
 });
 </script>
 
@@ -97,13 +132,11 @@ body {
   align-items: center;
   min-height: 100vh;
 }
-
-/* الحاوية */
 .container {
   background: linear-gradient(to bottom, #ffffff, #e0f2f1);
   border-radius: 30px;
   padding: 40px 35px;
-  max-width: 550px;
+  max-width: 600px;
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -111,85 +144,25 @@ body {
   text-align: center;
   box-shadow: 0 15px 50px rgba(0,0,0,0.2);
 }
-
-/* الترحيب */
-h1 {
-  margin-bottom: 15px;
-  font-size: 30px;
-  color: #004d40;
-}
-
-#dynamicText {
-  font-size: 18px;
-  margin-bottom: 30px;
-  color: #00695c;
-  transition: opacity 0.5s ease;
-}
-
+h1 { margin-bottom: 15px; font-size: 30px; color: #004d40; }
+#dynamicText { font-size: 18px; margin-bottom: 30px; color: #00695c; transition: opacity 0.5s ease; }
 .fadeOutText { opacity: 0; }
-
-/* النموذج */
-form {
-  display: grid;
-  grid-gap: 15px;
-  width: 100%;
-}
-
-input, textarea {
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #a8e0d0;
-  font-size: 16px;
-  background-color: #f0fdf9;
-  width: 100%;
-  resize: vertical;
-}
-
-label {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  gap: 10px;
-}
-
-button {
-  padding: 14px 0;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(to right, #009688, #00695c);
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-}
-
-/* شاشة البداية والنموذج */
+form { display: grid; grid-gap: 15px; width: 100%; }
+input, textarea { padding: 15px; border-radius: 12px; border: 1px solid #a8e0d0; font-size: 16px; background-color: #f0fdf9; width: 100%; resize: vertical; }
+label { display: flex; align-items: center; font-size: 14px; gap: 10px; }
+button { padding: 14px 0; border-radius: 12px; border: none; background: linear-gradient(to right, #009688, #00695c); color: #fff; font-size: 18px; cursor: pointer; transition: all 0.3s ease; }
+button:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
 #welcomeScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 #formScreen { display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; }
-
-/* تأثيرات الحركة */
 .fadeOut { animation: fadeOut 0.7s forwards; }
 .fadeIn { animation: fadeIn 0.7s forwards; }
-
 @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
 @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-
-/* Responsive */
-@media (max-width: 600px) {
-  .container { padding: 30px 20px; }
-  h1 { font-size: 24px; }
-  #dynamicText { font-size: 16px; }
-  button { font-size: 16px; }
-}
+@media (max-width: 600px) { .container { padding: 30px 20px; } h1 { font-size: 24px; } #dynamicText { font-size: 16px; } button { font-size: 16px; } }
 </style>
 </head>
 <body>
-<!-- الأصوات -->
+
 <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
 
@@ -207,14 +180,27 @@ button:hover {
 <input type="text" id="name" placeholder="اسمك" required>
 <input type="text" id="type" placeholder="نوع المشكلة" required>
 <textarea id="description" placeholder="صف المشكلة" rows="5" required></textarea>
-<label>
-<input type="checkbox" id="agree" required> أوافق على الشروط
-</label>
+<label><input type="checkbox" id="agree" required> أوافق على الشروط</label>
 <button type="submit">إرسال</button>
 </form>
+
+<h2>عرض الحلول</h2>
+<input id="checkName" placeholder="ادخل اسمك">
+<button id="checkBtn">عرض الحل</button>
+<div id="solutionDisplay" style="margin-top:15px;color:#004d40;font-weight:bold;"></div>
+
+<h2>لوحة الإدارة لإضافة الحلول</h2>
+<form id="adminForm">
+<input id="problemKey" placeholder="ضع معرف المشكلة هنا" required>
+<textarea id="solutionText" placeholder="اكتب الحل هنا" rows="3" required></textarea>
+<button type="submit">تحديث الحل</button>
+</form>
 </div>
+
 </body>
 </html>
+
+
 
 
 
