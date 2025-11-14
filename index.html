@@ -1,193 +1,177 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TalkAndSolve</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e6f2e6;
-    color: #064420;
-    margin: 0;
-    padding: 0;
-  }
-  .container {
-    max-width: 700px;
-    margin: 30px auto;
-    background: #cce5cc;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-  h1 { text-align: center; margin-bottom: 25px; }
-  form { display: flex; flex-direction: column; }
-  input, textarea {
-    width: 100%;
-    margin: 10px 0;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #99cc99;
-    background-color: #f0fff0;
-    font-size: 16px;
-    box-sizing: border-box;
-  }
-  textarea { resize: vertical; min-height: 80px; }
-  button {
-    padding: 12px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 8px;
-    background: #3d9970;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  button:hover { background: #2e7554; }
-  label { display: flex; align-items: center; margin-top: 10px; font-size: 14px; gap: 5px; }
-  label input { margin: 0; }
-  .problems { margin-top: 40px; }
-  .problem {
-    background: #f0fff0;
-    border: 1px solid #99cc99;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-  }
-  .problem h3 { margin: 0 0 8px 0; }
-  .solution {
-    margin-top: 10px;
-    padding: 10px;
-    background: #d9f2d9;
-    border-radius: 8px;
-    font-style: italic;
-  }
-  .solution-input {
-    margin-top: 10px;
-    display: flex;
-    gap: 5px;
-  }
-  .solution-input input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #99cc99;
-    font-size: 14px;
-  }
-  .solution-input button {
-    padding: 10px 15px;
-    font-size: 14px;
-  }
-  @media (max-width: 750px) {
-    .container { margin: 20px; padding: 20px; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalkAndSolve — حلول لمشاكلك اليومية</title>
+  <meta name="description" content="TalkAndSolve: شارك مشكلتك واحصلي على حلول ونصائح عملية باللغة العربية.">
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
+      authDomain: "talkandsolve-4ca7d.firebaseapp.com",
+      databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
+      projectId: "talkandsolve-4ca7d",
+      storageBucket: "talkandsolve-4ca7d.appspot.com",
+      messagingSenderId: "753365758409",
+      appId: "1:753365758409:web:8a84f0f11467d1f001b818"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // نموذج المشاكل
+      const form = document.getElementById("problemForm");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const type = document.getElementById("type").value;
+        const description = document.getElementById("description").value;
+        const agree = document.getElementById("agree").checked;
+
+        if (!agree) {
+          alert("يجب الموافقة على الشروط قبل الإرسال!");
+          return;
+        }
+
+        push(ref(db, "problems"), {
+          name,
+          type,
+          description,
+          date: new Date().toISOString()
+        })
+        .then(() => {
+          alert("تم إرسال مشكلتك بنجاح!");
+          form.reset();
+        })
+        .catch((err) => {
+          alert("حدث خطأ أثناء الإرسال: " + err);
+        });
+      });
+
+      // زر البدء مع تأثير fade
+      const startBtn = document.getElementById("startBtn");
+      const welcome = document.getElementById("welcomeScreen");
+      const formScreen = document.getElementById("formScreen");
+
+      startBtn.addEventListener("click", () => {
+        welcome.style.opacity = 0;
+        setTimeout(() => {
+          welcome.style.display = "none";
+          formScreen.style.display = "block";
+          setTimeout(() => { formScreen.style.opacity = 1; }, 50);
+        }, 500); // مدة اختفاء الشاشة الترحيبية
+      });
+    });
+  </script>
+
+  <style>
+    /* عام */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(to bottom, #d0f0ea, #a8e0d0);
+      color: #004d40;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background 0.5s ease;
+    }
+
+    /* الحاوية */
+    .container {
+      background: linear-gradient(to bottom, #ffffff, #e0f2f1);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    /* الأزرار */
+    button {
+      padding: 12px 20px;
+      background-color: #00695c;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #004d40;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* الحقول */
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #a8e0d0;
+      border-radius: 12px;
+      font-size: 16px;
+      background-color: #f0fdf9;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    label input {
+      margin-right: 10px;
+    }
+
+    /* إخفاء شاشة النموذج في البداية */
+    #formScreen {
+      display: none;
+      opacity: 0;
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
-  <h1>TalkAndSolve</h1>
-
-  <form id="problemForm">
-    <input type="text" id="name" placeholder="اسمك (اختياري)">
-    <input type="email" id="email" placeholder="البريد الإلكتروني (اختياري)">
-    <input type="text" id="type" placeholder="نوع المشكلة" required>
-    <textarea id="description" placeholder="صف المشكلة" required></textarea>
-    <label>
-      <input type="checkbox" id="agree" required> أوافق على الشروط
-    </label>
-    <button type="submit">إرسال</button>
-  </form>
-
-  <div class="problems" id="problemsList">
-    <h2>المشاكل المرسلة:</h2>
+  <!-- شاشة الترحيب -->
+  <div id="welcomeScreen" class="container">
+    <h1>مرحبا بك في TalkAndSolve!</h1>
+    <p>ارتاح واوجد حلول لمشاكلك العائلية، الاجتماعية أو النفسية.</p>
+    <button id="startBtn">ابدأ الآن</button>
   </div>
-</div>
 
-<!-- Firebase libraries -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
-  authDomain: "talkandsolve-4ca7d.firebaseapp.com",
-  databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
-  projectId: "talkandsolve-4ca7d",
-  storageBucket: "talkandsolve-4ca7d.firebasestorage.app",
-  messagingSenderId: "753365758409",
-  appId: "1:753365758409:web:8a84f0f11467d1f001b818",
-  measurementId: "G-Y0SDMHNYEZ"
-};
-
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-const analytics = firebase.analytics();
-
-const form = document.getElementById("problemForm");
-const problemsList = document.getElementById("problemsList");
-
-// إرسال المشكلة
-form.addEventListener("submit", function(e){
-  e.preventDefault();
-  const agree = document.getElementById("agree");
-  if(!agree.checked){
-    alert("يجب الموافقة على الشروط لإرسال المشكلة");
-    return;
-  }
-
-  const name = document.getElementById("name").value || "مجهول";
-  const email = document.getElementById("email").value || "";
-  const type = document.getElementById("type").value;
-  const description = document.getElementById("description").value;
-
-  const newRef = database.ref("problems").push();
-  newRef.set({
-    name, email, type, description, solution: "", createdAt: Date.now()
-  }).then(()=>{
-    alert("تم الإرسال!");
-    form.reset();
-  }).catch(err=>{
-    console.error(err);
-    alert("حدث خطأ أثناء الإرسال.");
-  });
-});
-
-// عرض المشاكل مباشرة وتحديث الحلول فورًا
-const problemsRef = database.ref("problems");
-problemsRef.on("value", snapshot => {
-  problemsList.innerHTML = "<h2>المشاكل المرسلة:</h2>";
-  snapshot.forEach(child => {
-    const data = child.val();
-    const problemDiv = document.createElement("div");
-    problemDiv.className = "problem";
-    problemDiv.innerHTML = `
-      <h3>${data.name} - ${data.type}</h3>
-      <p>${data.description}</p>
-      <div class="solution">${data.solution && data.solution.trim() !== "" ? "الحل: " + data.solution : "لم يتم حلها بعد"}</div>
-      <div class="solution-input">
-        <input type="text" placeholder="اكتب حلك هنا..." id="solutionInput-${child.key}">
-        <button onclick="addSolution('${child.key}')">حفظ الحل</button>
-      </div>
-    `;
-    problemsList.appendChild(problemDiv);
-  });
-});
-
-// حفظ الحل
-function addSolution(key){
-  const input = document.getElementById(`solutionInput-${key}`);
-  const value = input.value.trim();
-  if(value === "") return;
-  database.ref(`problems/${key}/solution`).set(value);
-  input.value = "";
-}
-</script>
-
+  <!-- شاشة نموذج المشاكل -->
+  <div id="formScreen" class="container">
+    <h1>أرسل مشكلتك</h1>
+    <form id="problemForm">
+      <input type="text" id="name" placeholder="اسمك" required>
+      <input type="text" id="type" placeholder="نوع المشكلة" required>
+      <textarea id="description" placeholder="صف المشكلة" required></textarea>
+      <label>
+        <input type="checkbox" id="agree" required> أوافق على الشروط
+      </label>
+      <button type="submit">إرسال</button>
+    </form>
+  </div>
 </body>
 </html>
+
 
 
 
