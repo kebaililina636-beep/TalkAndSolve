@@ -6,10 +6,36 @@
 <title>TalkAndSolve — حلول لمشاكلك اليومية</title>
 <meta name="description" content="TalkAndSolve: شارك مشكلتك واحصل على حلول ونصائح عملية باللغة العربية.">
 
+<style>
+/* --- الخلفية المتحركة --- */
+body, html { margin:0; padding:0; width:100%; height:100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x:hidden; background: linear-gradient(135deg, #d0f0ea, #a8e0d0); display:flex; justify-content:center; align-items:center; }
+.bubbles { position:fixed; width:100%; height:100%; top:0; left:0; overflow:hidden; z-index:-1; }
+.bubble { position:absolute; bottom:-150px; background-color: rgba(0,150,136,0.3); border-radius:50%; opacity:0.6; animation: rise 20s infinite; }
+@keyframes rise { 0% {transform: translateY(0) rotate(0deg);} 100% {transform: translateY(-1200px) rotate(720deg);} }
+
+/* --- الحاوية --- */
+.container { background: linear-gradient(to bottom, #ffffff, #e0f2f1); border-radius:30px; padding:40px 35px; max-width:600px; width:90%; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 15px 50px rgba(0,0,0,0.2); }
+h1 { margin-bottom:15px; font-size:30px; color:#004d40; }
+#dynamicText { font-size:18px; margin-bottom:30px; color:#00695c; transition: opacity 0.5s ease; }
+.fadeOutText { opacity:0; }
+form { display:grid; grid-gap:15px; width:100%; }
+input, textarea { padding:15px; border-radius:12px; border:1px solid #a8e0d0; font-size:16px; background-color:#f0fdf9; width:100%; resize:vertical; }
+label { display:flex; align-items:center; font-size:14px; gap:10px; }
+button { padding:14px 0; border-radius:12px; border:none; background: linear-gradient(to right, #009688, #00695c); color:#fff; font-size:18px; cursor:pointer; transition: all 0.3s ease; }
+button:hover { transform:scale(1.05); box-shadow:0 8px 25px rgba(0,0,0,0.25); }
+#welcomeScreen { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+#formScreen { display:none; flex-direction:column; align-items:center; justify-content:center; opacity:0; }
+.fadeOut { animation:fadeOut 0.7s forwards; }
+.fadeIn { animation:fadeIn 0.7s forwards; }
+@keyframes fadeOut { to { opacity:0; transform:translateY(-20px); } }
+@keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
+@media (max-width:600px){ .container{padding:30px 20px;} h1{font-size:24px;} #dynamicText{font-size:16px;} button{font-size:16px;} }
+</style>
+
 <!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-import { getDatabase, ref, push, get, child, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+import { getDatabase, ref, push, get, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
@@ -34,137 +60,83 @@ document.addEventListener("DOMContentLoaded", () => {
     const type = document.getElementById("type").value.trim();
     const description = document.getElementById("description").value.trim();
     const agree = document.getElementById("agree").checked;
-
-    if (!agree) {
-      alert("يجب الموافقة على الشروط قبل الإرسال!");
-      return;
-    }
-
-    push(ref(db, "problems"), {
-      name, type, description, solution: "", date: new Date().toISOString()
-    })
-    .then(() => {
-      document.getElementById("successSound").play();
-      alert("تم إرسال مشكلتك بنجاح!");
-      form.reset();
-    })
-    .catch((err) => alert("حدث خطأ أثناء الإرسال: " + err));
+    if(!agree){ alert("يجب الموافقة على الشروط قبل الإرسال!"); return; }
+    push(ref(db, "problems"), { name,type,description,solution:"",date:new Date().toISOString() })
+      .then((newRef)=>{ 
+        const id=newRef.key; 
+        document.getElementById("successSound").play();
+        alert("تم إرسال مشكلتك بنجاح!\nمعرف مشكلتك: "+id);
+        form.reset();
+      })
+      .catch(err=>alert("حدث خطأ أثناء الإرسال: "+err));
   });
 
   // --- زر البداية ---
-  const startBtn = document.getElementById("startBtn");
-  const welcome = document.getElementById("welcomeScreen");
-  const formScreen = document.getElementById("formScreen");
-
-  startBtn.addEventListener("click", () => {
+  const startBtn=document.getElementById("startBtn");
+  const welcome=document.getElementById("welcomeScreen");
+  const formScreen=document.getElementById("formScreen");
+  startBtn.addEventListener("click",()=>{
     document.getElementById("clickSound").play();
     welcome.classList.add("fadeOut");
-    setTimeout(() => {
-      welcome.style.display = "none";
-      formScreen.style.display = "flex";
-      formScreen.classList.add("fadeIn");
-    }, 700);
+    setTimeout(()=>{ welcome.style.display="none"; formScreen.style.display="flex"; formScreen.classList.add("fadeIn"); },700);
   });
 
   // --- نصوص متغيرة ---
-  const texts = [
-    "ارتاح واوجد حلول لمشاكلك العائلية.",
-    "شارك مشاكلك الاجتماعية بسهولة.",
-    "احصل على نصائح عملية لنفسيتك اليومية.",
-    "أنت لست وحدك، نحن هنا لنساعدك!"
-  ];
-  let index = 0;
-  const dynamicText = document.getElementById("dynamicText");
-  setInterval(() => {
-    index = (index + 1) % texts.length;
+  const texts=["ارتاح واوجد حلول لمشاكلك العائلية.","شارك مشاكلك الاجتماعية بسهولة.","احصل على نصائح عملية لنفسيتك اليومية.","أنت لست وحدك، نحن هنا لنساعدك!"];
+  let index=0;
+  const dynamicText=document.getElementById("dynamicText");
+  setInterval(()=>{
+    index=(index+1)%texts.length;
     dynamicText.classList.add("fadeOutText");
-    setTimeout(() => {
-      dynamicText.textContent = texts[index];
-      dynamicText.classList.remove("fadeOutText");
-    }, 500);
-  }, 4000);
+    setTimeout(()=>{ dynamicText.textContent=texts[index]; dynamicText.classList.remove("fadeOutText"); },500);
+  },4000);
 
   // --- التحقق من الحل للزائر ---
-  const checkBtn = document.getElementById("checkBtn");
-  checkBtn.addEventListener("click", () => {
-    const checkName = document.getElementById("checkName").value.trim();
-    const dbRef = ref(db, "problems");
-    get(dbRef).then(snapshot => {
-      const data = snapshot.val();
-      let found = false;
-      for (let key in data) {
-        if (data[key].name === checkName) {
-          document.getElementById("solutionDisplay").textContent =
-            data[key].solution || "لم يتم الرد بعد، يرجى الانتظار";
-          found = true;
-          break;
-        }
-      }
-      if (!found) document.getElementById("solutionDisplay").textContent = "لم يتم العثور على مشكلتك";
+  const checkBtn=document.getElementById("checkBtn");
+  checkBtn.addEventListener("click",()=>{
+    const key=document.getElementById("checkKey").value.trim();
+    if(!key) return alert("يرجى إدخال معرف المشكلة");
+    get(ref(db,"problems/"+key)).then(snapshot=>{
+      if(snapshot.exists()){ document.getElementById("solutionDisplay").textContent=snapshot.val().solution||"لم يتم الرد بعد، يرجى الانتظار"; }
+      else{ document.getElementById("solutionDisplay").textContent="لم يتم العثور على مشكلتك"; }
     });
   });
 
   // --- إضافة حلول من الإدارة ---
-  const adminForm = document.getElementById("adminForm");
-  if (adminForm) {
-    adminForm.addEventListener("submit", (e) => {
+  const adminForm=document.getElementById("adminForm");
+  if(adminForm){
+    adminForm.addEventListener("submit",(e)=>{
       e.preventDefault();
-      const key = document.getElementById("problemKey").value.trim();
-      const solutionText = document.getElementById("solutionText").value.trim();
-      if (key && solutionText) {
-        update(ref(db, 'problems/' + key), { solution: solutionText })
-          .then(() => alert("تم إضافة الحل بنجاح!"))
-          .catch(err => alert("حدث خطأ: " + err));
+      const key=document.getElementById("problemKey").value.trim();
+      const solutionText=document.getElementById("solutionText").value.trim();
+      if(key && solutionText){
+        update(ref(db,'problems/'+key),{solution:solutionText})
+          .then(()=>alert("تم إضافة الحل بنجاح!"))
+          .catch(err=>alert("حدث خطأ: "+err));
       }
     });
+  }
+
+  // --- إنشاء فقاعات عشوائية ---
+  const bubbleCount=20;
+  for(let i=0;i<bubbleCount;i++){
+    const bubble=document.createElement("div");
+    bubble.classList.add("bubble");
+    const size=Math.random()*60+20; bubble.style.width=size+"px"; bubble.style.height=size+"px";
+    bubble.style.left=Math.random()*100+"%";
+    bubble.style.animationDuration=(10+Math.random()*10)+"s";
+    bubble.style.animationDelay=Math.random()*5+"s";
+    document.body.appendChild(bubble);
   }
 
 });
 </script>
 
-<style>
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  background: linear-gradient(135deg, #d0f0ea, #a8e0d0);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-.container {
-  background: linear-gradient(to bottom, #ffffff, #e0f2f1);
-  border-radius: 30px;
-  padding: 40px 35px;
-  max-width: 600px;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-}
-h1 { margin-bottom: 15px; font-size: 30px; color: #004d40; }
-#dynamicText { font-size: 18px; margin-bottom: 30px; color: #00695c; transition: opacity 0.5s ease; }
-.fadeOutText { opacity: 0; }
-form { display: grid; grid-gap: 15px; width: 100%; }
-input, textarea { padding: 15px; border-radius: 12px; border: 1px solid #a8e0d0; font-size: 16px; background-color: #f0fdf9; width: 100%; resize: vertical; }
-label { display: flex; align-items: center; font-size: 14px; gap: 10px; }
-button { padding: 14px 0; border-radius: 12px; border: none; background: linear-gradient(to right, #009688, #00695c); color: #fff; font-size: 18px; cursor: pointer; transition: all 0.3s ease; }
-button:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
-#welcomeScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-#formScreen { display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; }
-.fadeOut { animation: fadeOut 0.7s forwards; }
-.fadeIn { animation: fadeIn 0.7s forwards; }
-@keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
-@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 600px) { .container { padding: 30px 20px; } h1 { font-size: 24px; } #dynamicText { font-size: 16px; } button { font-size: 16px; } }
-</style>
-</head>
-<body>
-
 <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+<!-- الخلفية الفقاعية -->
+<div class="bubbles"></div>
 
 <!-- شاشة الترحيب -->
 <div id="welcomeScreen" class="container">
@@ -185,7 +157,8 @@ button:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.25); 
 </form>
 
 <h2>عرض الحلول</h2>
-<input id="checkName" placeholder="ادخل اسمك">
+<p>لرؤية الحل، أدخل معرف مشكلتك الذي حصلت عليه بعد الإرسال:</p>
+<input id="checkKey" placeholder="ادخل معرف المشكلة">
 <button id="checkBtn">عرض الحل</button>
 <div id="solutionDisplay" style="margin-top:15px;color:#004d40;font-weight:bold;"></div>
 
@@ -195,10 +168,12 @@ button:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.25); 
 <textarea id="solutionText" placeholder="اكتب الحل هنا" rows="3" required></textarea>
 <button type="submit">تحديث الحل</button>
 </form>
-</div>
 
+</div>
 </body>
 </html>
+
+
 
 
 
