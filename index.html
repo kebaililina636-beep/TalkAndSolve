@@ -10,9 +10,16 @@
 /* --- عام --- */
 body, html {
   margin:0; padding:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg,#d0f0ea,#a8e0d0);
   overflow-x:hidden;
+  transition: background 0.5s, color 0.5s;
 }
+
+/* --- Dark/Light Mode --- */
+body.light { background: linear-gradient(135deg,#d0f0ea,#a8e0d0); color:#004d40; }
+body.dark { background: #001f1f; color:#a0e0d0; }
+
+/* --- خلفية الفيديو --- */
+#bgVideo { position: fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-2; }
 
 /* --- فقاعات خلفية --- */
 .bubbles { position:fixed; width:100%; height:100%; top:0; left:0; overflow:hidden; z-index:-1; }
@@ -20,12 +27,19 @@ body, html {
 @keyframes rise { 0% {transform: translateY(0) rotate(0deg);} 100% {transform: translateY(-1200px) rotate(720deg);} }
 
 /* --- الحاوية --- */
-.container { background: linear-gradient(to bottom,#ffffff,#e0f2f1); border-radius:25px; padding:30px 25px; max-width:600px; width:90%; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.2); margin:20px auto; box-sizing:border-box; }
-h1 { margin-bottom:15px; font-size:28px; color:#004d40; }
-#dynamicText { font-size:18px; margin-bottom:25px; color:#00695c; transition: opacity 0.5s ease; }
+.container { background: rgba(255,255,255,0.9); border-radius:25px; padding:30px 25px; max-width:600px; width:90%; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.2); margin:20px auto; box-sizing:border-box; transition: background 0.5s, color 0.5s; }
+body.dark .container { background: rgba(0,0,0,0.7); }
+
+/* --- النصوص --- */
+h1 { margin-bottom:15px; font-size:28px; }
+#dynamicText { font-size:18px; margin-bottom:25px; transition: opacity 0.5s ease; }
 .fadeOutText { opacity:0; }
+
+/* --- النماذج --- */
 form { display:grid; grid-gap:15px; width:100%; box-sizing:border-box; }
-input, textarea { padding:12px; border-radius:12px; border:1px solid #a8e0d0; font-size:16px; background-color:#f0fdf9; width:100%; resize:vertical; box-sizing:border-box; }
+input, textarea { padding:12px 35px 12px 12px; border-radius:12px; border:1px solid #a8e0d0; font-size:16px; background-color:#f0fdf9; width:100%; resize:vertical; box-sizing:border-box; background-repeat:no-repeat; background-position:right 10px center; background-size:20px; }
+body.dark input, body.dark textarea { background-color:#003030; border:1px solid #00695c; color:#a0e0d0; }
+textarea { min-height:80px; }
 label { display:flex; align-items:center; font-size:14px; gap:10px; }
 button { padding:12px 0; border-radius:12px; border:none; background: linear-gradient(to right, #009688, #00695c); color:#fff; font-size:18px; cursor:pointer; transition: all 0.3s ease; }
 button:hover { transform:scale(1.05); box-shadow:0 8px 25px rgba(0,0,0,0.25); }
@@ -34,11 +48,19 @@ button:hover { transform:scale(1.05); box-shadow:0 8px 25px rgba(0,0,0,0.25); }
 #welcomeScreen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
 #formScreen { display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding:40px 20px; opacity:0; }
 
-/* --- تأثيرات --- */
+/* --- Fade --- */
 .fadeOut { animation:fadeOut 0.7s forwards; }
 .fadeIn { animation:fadeIn 0.7s forwards; }
 @keyframes fadeOut { to { opacity:0; transform:translateY(-20px); } }
 @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
+
+/* --- بطاقة الحل --- */
+.solutionCard { background: #e0f2f1; border-radius:15px; padding:15px; margin-top:15px; color:#004d40; animation:slideIn 0.7s ease; }
+body.dark .solutionCard { background:#004d40; color:#a0e0d0; }
+@keyframes slideIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+
+/* --- إشعارات قصيرة --- */
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background: #009688; color:#fff; padding:12px 20px; border-radius:25px; opacity:0; pointer-events:none; transition:opacity 0.5s; z-index:9999; }
 
 /* --- استجابة --- */
 @media (max-width:600px){ 
@@ -48,8 +70,56 @@ button:hover { transform:scale(1.05); box-shadow:0 8px 25px rgba(0,0,0,0.25); }
   button{font-size:16px;} 
 }
 </style>
+</head>
+<body class="light">
 
-<!-- Firebase SDK -->
+<video id="bgVideo" autoplay muted loop>
+  <source src="https://www.videvo.net/videvo_files/converted/2017_04/preview/170404_01_Drone_View.mp452527.webm" type="video/webm">
+</video>
+
+<div class="bubbles"></div>
+
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="solutionSound" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
+<audio id="backgroundMusic" src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" loop></audio>
+
+<!-- شاشة الترحيب -->
+<div id="welcomeScreen" class="container">
+<h1>مرحبا بك في TalkAndSolve!</h1>
+<p id="dynamicText">ارتاح واوجد حلول لمشاكلك العائلية.</p>
+<button id="startBtn">ابدأ الآن</button>
+<button id="toggleModeBtn" style="margin-top:10px;">تبديل الوضع الليلي/النهاري</button>
+</div>
+
+<!-- شاشة نموذج المشاكل -->
+<div id="formScreen" class="container">
+<h1>أرسل مشكلتك</h1>
+<form id="problemForm">
+<input type="text" id="name" placeholder="اسمك" required>
+<input type="text" id="type" placeholder="نوع المشكلة" required>
+<textarea id="description" placeholder="صف المشكلة" rows="5" maxlength="250" required></textarea>
+<label><input type="checkbox" id="agree" required> أوافق على الشروط</label>
+<button type="submit">إرسال</button>
+</form>
+
+<h2>عرض الحلول</h2>
+<p>لرؤية الحل، أدخل معرف مشكلتك:</p>
+<input id="checkKey" placeholder="ادخل معرف المشكلة">
+<button id="checkBtn">عرض الحل</button>
+<div id="solutionDisplay"></div>
+
+<h2>لوحة الإدارة لإضافة الحلول</h2>
+<form id="adminForm">
+<input id="problemKey" placeholder="ضع معرف المشكلة هنا" required>
+<textarea id="solutionText" placeholder="اكتب الحل هنا" rows="3" required></textarea>
+<button type="submit">تحديث الحل</button>
+</form>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getDatabase, ref, push, get, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
@@ -67,8 +137,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-document.addEventListener("DOMContentLoaded", () => {
+// --- Toast ---
+function showToast(message){
+  const t = document.getElementById("toast");
+  t.textContent = message;
+  t.style.opacity="1";
+  setTimeout(()=>{ t.style.opacity="0"; },3000);
+}
 
+document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("problemForm");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -78,16 +155,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const agree = document.getElementById("agree").checked;
     if(!agree){ alert("يجب الموافقة على الشروط قبل الإرسال!"); return; }
 
-    // معرف قصير وسهل
     const shortId = Math.random().toString(36).substring(2,8).toUpperCase();
 
     push(ref(db, "problems/"+shortId), { name,type,description,solution:"",date:new Date().toISOString() })
       .then(()=>{ 
         document.getElementById("successSound").play();
-        alert("تم إرسال مشكلتك بنجاح!\nمعرف مشكلتك: "+shortId);
+        showToast("تم إرسال مشكلتك! معرفك: "+shortId);
         form.reset();
       })
-      .catch(err=>alert("حدث خطأ أثناء الإرسال: "+err));
+      .catch(err=>alert("حدث خطأ: "+err));
   });
 
   const startBtn=document.getElementById("startBtn");
@@ -98,6 +174,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("backgroundMusic").play();
     welcome.classList.add("fadeOut");
     setTimeout(()=>{ welcome.style.display="none"; formScreen.style.display="flex"; formScreen.classList.add("fadeIn"); },700);
+  });
+
+  const toggleMode=document.getElementById("toggleModeBtn");
+  toggleMode.addEventListener("click",()=>{
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
   });
 
   const texts=["ارتاح واوجد حلول لمشاكلك العائلية.","شارك مشاكلك الاجتماعية بسهولة.","احصل على نصائح عملية لنفسيتك اليومية.","أنت لست وحدك، نحن هنا لنساعدك!"];
@@ -114,8 +196,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const key=document.getElementById("checkKey").value.trim();
     if(!key) return alert("يرجى إدخال معرف المشكلة");
     get(ref(db,"problems/"+key)).then(snapshot=>{
-      if(snapshot.exists()){ document.getElementById("solutionDisplay").textContent=snapshot.val().solution||"لم يتم الرد بعد، يرجى الانتظار"; }
-      else{ document.getElementById("solutionDisplay").textContent="لم يتم العثور على مشكلتك"; }
+      if(snapshot.exists()){
+        const solDiv=document.getElementById("solutionDisplay");
+        solDiv.innerHTML='<div class="solutionCard">'+(snapshot.val().solution||"لم يتم الرد بعد، يرجى الانتظار")+'</div>';
+        document.getElementById("solutionSound").play();
+      }
+      else{ alert("لم يتم العثور على مشكلتك"); }
     });
   });
 
@@ -127,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const solutionText=document.getElementById("solutionText").value.trim();
       if(key && solutionText){
         update(ref(db,'problems/'+key),{solution:solutionText})
-          .then(()=>alert("تم إضافة الحل بنجاح!"))
+          .then(()=>showToast("تم إضافة الحل بنجاح!"))
           .catch(err=>alert("حدث خطأ: "+err));
       }
     });
@@ -143,50 +229,12 @@ document.addEventListener("DOMContentLoaded", () => {
     bubble.style.animationDelay=Math.random()*5+"s";
     document.body.appendChild(bubble);
   }
-
 });
 </script>
-
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-<audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
-<audio id="backgroundMusic" src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" loop></audio>
-
-<div class="bubbles"></div>
-
-<!-- شاشة الترحيب -->
-<div id="welcomeScreen" class="container">
-<h1>مرحبا بك في TalkAndSolve!</h1>
-<p id="dynamicText">ارتاح واوجد حلول لمشاكلك العائلية.</p>
-<button id="startBtn">ابدأ الآن</button>
-</div>
-
-<!-- شاشة نموذج المشاكل -->
-<div id="formScreen" class="container">
-<h1>أرسل مشكلتك</h1>
-<form id="problemForm">
-<input type="text" id="name" placeholder="اسمك" required>
-<input type="text" id="type" placeholder="نوع المشكلة" required>
-<textarea id="description" placeholder="صف المشكلة" rows="5" required></textarea>
-<label><input type="checkbox" id="agree" required> أوافق على الشروط</label>
-<button type="submit">إرسال</button>
-</form>
-
-<h2>عرض الحلول</h2>
-<p>لرؤية الحل، أدخل معرف مشكلتك:</p>
-<input id="checkKey" placeholder="ادخل معرف المشكلة">
-<button id="checkBtn">عرض الحل</button>
-<div id="solutionDisplay" style="margin-top:15px;color:#004d40;font-weight:bold;"></div>
-
-<h2>لوحة الإدارة لإضافة الحلول</h2>
-<form id="adminForm">
-<input id="problemKey" placeholder="ضع معرف المشكلة هنا" required>
-<textarea id="solutionText" placeholder="اكتب الحل هنا" rows="3" required></textarea>
-<button type="submit">تحديث الحل</button>
-</form>
-
-</div>
 </body>
 </html>
+
+
 
 
 
