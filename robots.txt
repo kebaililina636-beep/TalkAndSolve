@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kebaililina636-beep.github.io/TalkAndSolve/sitemap.xml
