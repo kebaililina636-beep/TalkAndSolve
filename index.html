@@ -46,6 +46,8 @@
           date: new Date().toISOString()
         })
         .then(() => {
+          const audio = document.getElementById("successSound");
+          audio.play();
           alert("تم إرسال مشكلتك بنجاح!");
           form.reset();
         })
@@ -60,18 +62,35 @@
       const formScreen = document.getElementById("formScreen");
 
       startBtn.addEventListener("click", () => {
+        document.getElementById("clickSound").play();
         welcome.style.opacity = 0;
         setTimeout(() => {
           welcome.style.display = "none";
           formScreen.style.display = "block";
           setTimeout(() => { formScreen.style.opacity = 1; }, 50);
-        }, 500); // مدة اختفاء الشاشة الترحيبية
+        }, 500);
       });
+
+      // نصوص متغيرة في الترحيب
+      const texts = [
+        "ارتاح واوجد حلول لمشاكلك العائلية.",
+        "شارك مشاكلك الاجتماعية بسهولة.",
+        "احصل على نصائح عملية للنفسية اليومية."
+      ];
+      let index = 0;
+      const dynamicText = document.getElementById("dynamicText");
+      setInterval(() => {
+        index = (index + 1) % texts.length;
+        dynamicText.style.opacity = 0;
+        setTimeout(() => {
+          dynamicText.textContent = texts[index];
+          dynamicText.style.opacity = 1;
+        }, 500);
+      }, 4000);
     });
   </script>
 
   <style>
-    /* عام */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -84,7 +103,6 @@
       transition: background 0.5s ease;
     }
 
-    /* الحاوية */
     .container {
       background: linear-gradient(to bottom, #ffffff, #e0f2f1);
       padding: 30px;
@@ -98,10 +116,15 @@
     }
 
     h1 {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
-    /* الأزرار */
+    #dynamicText {
+      font-size: 16px;
+      margin-bottom: 25px;
+      transition: opacity 0.5s ease;
+    }
+
     button {
       padding: 12px 20px;
       background-color: #00695c;
@@ -119,7 +142,6 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    /* الحقول */
     input, textarea {
       width: 100%;
       padding: 12px;
@@ -141,7 +163,6 @@
       margin-right: 10px;
     }
 
-    /* إخفاء شاشة النموذج في البداية */
     #formScreen {
       display: none;
       opacity: 0;
@@ -149,10 +170,14 @@
   </style>
 </head>
 <body>
+  <!-- أصوات -->
+  <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+  <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
   <!-- شاشة الترحيب -->
   <div id="welcomeScreen" class="container">
     <h1>مرحبا بك في TalkAndSolve!</h1>
-    <p>ارتاح واوجد حلول لمشاكلك العائلية، الاجتماعية أو النفسية.</p>
+    <p id="dynamicText">ارتاح واوجد حلول لمشاكلك العائلية.</p>
     <button id="startBtn">ابدأ الآن</button>
   </div>
 
@@ -171,6 +196,7 @@
   </div>
 </body>
 </html>
+
 
 
 
