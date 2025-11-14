@@ -7,14 +7,16 @@
 <meta name="description" content="TalkAndSolve: شارك مشكلتك واحصل على حلول ونصائح عملية باللغة العربية.">
 
 <style>
-/* --- الخلفية المتحركة --- */
-body, html { margin:0; padding:0; width:100%; height:100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x:hidden; background: linear-gradient(135deg, #d0f0ea, #a8e0d0); }
+body, html {
+  margin:0; padding:0; width:100%; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg,#d0f0ea,#a8e0d0);
+  overflow-x:hidden;
+}
 .bubbles { position:fixed; width:100%; height:100%; top:0; left:0; overflow:hidden; z-index:-1; }
 .bubble { position:absolute; bottom:-150px; background-color: rgba(0,150,136,0.3); border-radius:50%; opacity:0.6; animation: rise 20s infinite; }
 @keyframes rise { 0% {transform: translateY(0) rotate(0deg);} 100% {transform: translateY(-1200px) rotate(720deg);} }
 
-/* --- الحاوية --- */
-.container { background: linear-gradient(to bottom, #ffffff, #e0f2f1); border-radius:30px; padding:40px 35px; max-width:600px; width:90%; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 15px 50px rgba(0,0,0,0.2); }
+.container { background: linear-gradient(to bottom,#ffffff,#e0f2f1); border-radius:30px; padding:40px 35px; max-width:600px; width:90%; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 15px 50px rgba(0,0,0,0.2); margin:20px auto; }
 h1 { margin-bottom:15px; font-size:30px; color:#004d40; }
 #dynamicText { font-size:18px; margin-bottom:30px; color:#00695c; transition: opacity 0.5s ease; }
 .fadeOutText { opacity:0; }
@@ -24,9 +26,8 @@ label { display:flex; align-items:center; font-size:14px; gap:10px; }
 button { padding:14px 0; border-radius:12px; border:none; background: linear-gradient(to right, #009688, #00695c); color:#fff; font-size:18px; cursor:pointer; transition: all 0.3s ease; }
 button:hover { transform:scale(1.05); box-shadow:0 8px 25px rgba(0,0,0,0.25); }
 
-/* --- شاشات --- */
 #welcomeScreen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; }
-#formScreen { display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:40px; min-height:100vh; opacity:0; }
+#formScreen { display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding:40px 20px; opacity:0; }
 
 .fadeOut { animation:fadeOut 0.7s forwards; }
 .fadeIn { animation:fadeIn 0.7s forwards; }
@@ -61,7 +62,6 @@ const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // --- إرسال مشكلة ---
   const form = document.getElementById("problemForm");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -80,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(err=>alert("حدث خطأ أثناء الإرسال: "+err));
   });
 
-  // --- زر البداية ---
   const startBtn=document.getElementById("startBtn");
   const welcome=document.getElementById("welcomeScreen");
   const formScreen=document.getElementById("formScreen");
@@ -90,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(()=>{ welcome.style.display="none"; formScreen.style.display="flex"; formScreen.classList.add("fadeIn"); },700);
   });
 
-  // --- نصوص متغيرة ---
   const texts=["ارتاح واوجد حلول لمشاكلك العائلية.","شارك مشاكلك الاجتماعية بسهولة.","احصل على نصائح عملية لنفسيتك اليومية.","أنت لست وحدك، نحن هنا لنساعدك!"];
   let index=0;
   const dynamicText=document.getElementById("dynamicText");
@@ -100,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(()=>{ dynamicText.textContent=texts[index]; dynamicText.classList.remove("fadeOutText"); },500);
   },4000);
 
-  // --- التحقق من الحل للزائر ---
   const checkBtn=document.getElementById("checkBtn");
   checkBtn.addEventListener("click",()=>{
     const key=document.getElementById("checkKey").value.trim();
@@ -111,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // --- إضافة حلول من الإدارة ---
   const adminForm=document.getElementById("adminForm");
   if(adminForm){
     adminForm.addEventListener("submit",(e)=>{
@@ -126,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- فقاعات متحركة ---
   const bubbleCount=20;
   for(let i=0;i<bubbleCount;i++){
     const bubble=document.createElement("div");
@@ -143,6 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+<!-- موسيقى خلفية من Bensound -->
+<audio id="backgroundMusic" src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" autoplay loop></audio>
 
 <div class="bubbles"></div>
 
@@ -180,6 +178,8 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 </body>
 </html>
+
+
 
 
 
