@@ -285,52 +285,85 @@ function showToast(msg){
   setTimeout(()=> toastEl.style.opacity = '0', 3200);
 }
 
-/* نصوص مترجمة (بسيطة) */
-let lang = 'ar';
+/* نصوص مترجمة (بسيطة) */// ---------- نصوص متغيرة ومحتوى متعدد اللغات ----------
+let lang = 'ar'; // 'ar' أو 'en'
 const translations = {
   ar:{
-    startBtn:"ابدأي الآن", langBtn:"EN", modeLight:"الوضع: نهاري", modeDark:"الوضع: ليلي",
-    formTitle:"أرسل مشكلتك", agreeText:"أوافق على الشروط", checkTitle:"عرض الحل", checkHint:"أدخلي معرف مشكلتك:",
-    modalTitle:"تم الإرسال بنجاح!", modalMsg:"هذا هو معرف متابعتك:", copyBtn:"نسخ المعرف", closeBtn:"إغلاق",
-    adminPrompt:"أدخلي كود الإدارة:", adminWrong:"كود خاطئ.", issueSent:"تم إرسال مشكلتك — انسخي المعرف للمتابعة",
-    fillReq:"المرجو تعبئة نوع المشكلة والوصف"
+    title: "مرحبا بك في TalkAndSolve!",
+    dynamicTexts: ["ارتاح واوجد حلول لمشاكلك العائلية.","شارك مشاكلك الاجتماعية بسهولة.","احصل على نصائح عملية لنفسيتك اليومية.","أنت لست وحدك، نحن هنا لنساعدك!"],
+    startBtn: "ابدأ الآن",
+    modeBtn: "الوضع: نهاري",
+    formTitle: "أرسل مشكلتك",
+    checkTitle: "عرض الحلول",
+    checkHint: "لرؤية الحل، أدخل معرف مشكلتك:",
+    agreeText: "أوافق على الشروط",
+    adminNote: "حقل الإدارة خاص بالفريق الإداري فقط — لا تملئيه إن لم تكوني من الإدارة.",
+    modalTitle: "تم الإرسال بنجاح!",
+    modalMsg: "هذا هو معرف مشكلتك:",
+    copyBtn: "نسخ المعرف",
+    closeBtn: "إغلاق",
+    adminPrompt: "أدخلي كود الإدارة:",
+    adminWrong: "كود خاطئ."
   },
   en:{
-    startBtn:"Start Now", langBtn:"AR", modeLight:"Mode: Light", modeDark:"Mode: Dark",
-    formTitle:"Submit your issue", agreeText:"I agree to terms", checkTitle:"View solution", checkHint:"Enter your issue ID:",
-    modalTitle:"Sent successfully!", modalMsg:"This is your tracking ID:", copyBtn:"Copy ID", closeBtn:"Close",
-    adminPrompt:"Enter admin code:", adminWrong:"Wrong code.", issueSent:"Issue sent — copy your ID to follow up",
-    fillReq:"Please fill type and description"
+    title: "Welcome to TalkAndSolve!",
+    dynamicTexts: ["Relax and find solutions to family issues.","Share your social problems easily.","Get practical tips for daily mental wellbeing.","You are not alone — we're here to help!"],
+    startBtn: "Start Now",
+    modeBtn: "Mode: Light",
+    formTitle: "Submit your issue",
+    checkTitle: "View solution",
+    checkHint: "To see the solution, enter your issue ID:",
+    agreeText: "I agree to the terms",
+    adminNote: "Admin fields are for staff only — do not fill unless you are admin.",
+    modalTitle: "Sent successfully!",
+    modalMsg: "This is your issue ID:",
+    copyBtn: "Copy ID",
+    closeBtn: "Close",
+    adminPrompt: "Enter admin code:",
+    adminWrong: "Wrong code."
   }
 };
 
 function setLang(to){
   lang = to;
   const t = translations[lang];
+  // update static texts and placeholders
+  document.title = (lang==='ar' ? "TalkAndSolve — حلول لمشاكلك اليومية" : "TalkAndSolve — Solutions for your problems");
+  titleText.textContent = t.title;
+  dynamicText.textContent = t.dynamicTexts[0];
   startBtn.textContent = t.startBtn;
-  langBtn.textContent = t.langBtn;
-  toggleModeBtn.textContent = t.modeLight;
-  if(formTitle) formTitle.textContent = t.formTitle;
-  if(checkTitle) checkTitle.textContent = t.checkTitle;
-  if(checkHint) checkHint.textContent = t.checkHint;
-  if(agreeText) agreeText.textContent = t.agreeText;
-  if(idModalTitle) idModalTitle.textContent = t.modalTitle;
-  if(idModalMsg) idModalMsg.textContent = t.modalMsg;
-  if(copyIdBtn) copyIdBtn.textContent = t.copyBtn;
-  if(closeIdBtn) closeIdBtn.textContent = t.closeBtn;
-  document.documentElement.dir = (lang==='ar' ? 'rtl' : 'ltr');
-  document.body.style.textAlign = (lang==='ar' ? 'right' : 'left');
+  toggleModeBtn.textContent = t.modeBtn;
+  formTitle.textContent = t.formTitle;
+  checkTitle.textContent = t.checkTitle;
+  checkHint.textContent = t.checkHint;
+  agreeText.textContent = t.agreeText;
+  document.getElementById('idModalTitle').textContent = t.modalTitle;
+  document.getElementById('idModalMsg').textContent = t.modalMsg;
+  copyIdBtn.textContent = t.copyBtn;
+  closeIdBtn.textContent = t.closeBtn;
+  langBtn.textContent = (lang==='ar' ? 'EN' : 'AR');
+  document.getElementById('adminNote').textContent = t.adminNote;
+  // placeholders
+  nameInput.placeholder = (lang==='ar' ? "اسمك (اختياري)" : "Your name (optional)");
+  typeInput.placeholder = (lang==='ar' ? "نوع المشكلة (مثلاً: تنمر، خوف، خلاف)" : "Issue type (e.g. bullying, fear, conflict)");
+  descriptionInput.placeholder = (lang==='ar' ? "صف المشكلة (أهم نقاطها - حتى 250 حرف)" : "Describe the issue (up to 250 chars)");
+  document.getElementById('checkKey').placeholder = (lang==='ar' ? "ادخل معرف المشكلة (مثال: 4F7A2B)" : "Enter your issue ID (e.g. 4F7A2B)");
+  document.getElementById('problemKey').placeholder = (lang==='ar' ? "ضع معرف المشكلة هنا (مثال: 4F7A2B)" : "Enter issue ID here (e.g. 4F7A2B)");
+  document.getElementById('solutionText').placeholder = (lang==='ar' ? "اكتبي الحل هنا..." : "Write the solution here...");
+  // update direction attribute for RTL/LTR
+  if(lang==='ar'){ document.documentElement.dir = 'rtl'; document.body.style.textAlign='right'; }
+  else{ document.documentElement.dir = 'ltr'; document.body.style.textAlign='left'; }
 }
-setLang('ar');
+setLang('ar'); // default
 
-/* dynamic subtitle rotate */
-const promos = { ar:["مكان هادئ لمشاركة مشاكلك والحصول على حلول مُريحة.","خطوات بسيطة وواضحة لدعم نفسيتك.","نحترم خصوصيتك ونقدّم حلولًا عملية."], en:["A calm place to share your issues and get gentle solutions.","Simple, clear steps to support your wellbeing.","We respect privacy and offer practical help."]};
-let promoIndex=0;
+// rotate dynamic text
+let dynIndex = 0;
 setInterval(()=>{
-  promoIndex = (promoIndex+1) % promos[lang].length;
-  subtitle.style.opacity = 0;
-  setTimeout(()=> { subtitle.textContent = promos[lang][promoIndex]; subtitle.style.opacity = 1; }, 300);
-},4200);
+  const arr = translations[lang].dynamicTexts;
+  dynIndex = (dynIndex+1)%arr.length;
+  dynamicText.classList.add('fadeOutText');
+  setTimeout(()=>{ dynamicText.textContent = arr[dynIndex]; dynamicText.classList.remove('fadeOutText'); },400);
+},4000);
 
 /* START btn: hide hero, show form, play music */
 startBtn.addEventListener('click', ()=>{
@@ -444,6 +477,7 @@ document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ idModal.styl
 </script>
 </body>
 </html>
+
 
 
 
