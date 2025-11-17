@@ -99,6 +99,9 @@ body.dark .preview{background:linear-gradient(180deg,#033a36,#01302e);color:#cfe
   .hero-card{padding:18px;border-radius:16px}
   #lastIdInput{font-size:15px}
 }
+
+/* إضافة لتحسين الترجمة */
+.hide{display:none!important}
 </style>
 </head>
 <body class="light">
@@ -124,8 +127,8 @@ body.dark .preview{background:linear-gradient(180deg,#033a36,#01302e);color:#cfe
     <div class="hero-right">
       <div class="preview" aria-hidden="true">
         <div class="screen">
-          <h3>كيف نعمل؟</h3>
-          <p>أرسلي مشكلتك بإيجاز، ستحصلين على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
+          <h3 id="howItWorksTitle">كيف نعمل؟</h3>
+          <p id="howItWorksDesc">أرسلي مشكلتك بإيجاز، ستحصلين على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
         </div>
       </div>
     </div>
@@ -148,7 +151,7 @@ body.dark .preview{background:linear-gradient(180deg,#033a36,#01302e);color:#cfe
         <label style="display:flex;align-items:center;gap:8px"><input id="agree" type="checkbox" /> <span id="agreeText">أوافق على الشروط</span></label>
         <div style="display:flex;gap:12px;align-items:center">
           <small id="charCount">0/250</small>
-          <button type="submit" class="btn btn-primary">إرسال</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">إرسال</button>
         </div>
       </div>
     </form>
@@ -170,7 +173,7 @@ body.dark .preview{background:linear-gradient(180deg,#033a36,#01302e);color:#cfe
       <input id="problemKey" class="input" placeholder="ضع معرف المشكلة هنا (مثال: 4F7A2B)" required />
       <textarea id="solutionText" class="input" placeholder="اكتبي الحل هنا..." rows="3" required></textarea>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
-        <button type="submit" class="btn btn-primary small">تحديث الحل</button>
+        <button type="submit" class="btn btn-primary small" id="updateSolutionBtn">تحديث الحل</button>
         <button id="closeAdminBtn" type="button" class="btn btn-ghost small">إخفاء</button>
       </div>
     </form>
@@ -243,7 +246,6 @@ const lastIdInput = document.getElementById('lastIdInput');
 const copyIdBtn = document.getElementById('copyIdBtn');
 const closeIdBtn = document.getElementById('closeIdBtn');
 
-const openAdminBtn = document.getElementById('openAdminBtn');
 const adminArea = document.getElementById('adminArea');
 const adminForm = document.getElementById('adminForm');
 const closeAdminBtn = document.getElementById('closeAdminBtn');
@@ -259,7 +261,10 @@ const checkHint = document.getElementById('checkHint');
 const agreeText = document.getElementById('agreeText');
 const idModalTitle = document.getElementById('idModalTitle');
 const idModalMsg = document.getElementById('idModalMsg');
-const copyBtnText = copyIdBtn;
+const howItWorksTitle = document.getElementById('howItWorksTitle');
+const howItWorksDesc = document.getElementById('howItWorksDesc');
+const submitBtn = document.getElementById('submitBtn');
+const updateSolutionBtn = document.getElementById('updateSolutionBtn');
 
 /* توليد فقاعات زخرفية */
 function createBubbles(n=16){
@@ -285,199 +290,308 @@ function showToast(msg){
   setTimeout(()=> toastEl.style.opacity = '0', 3200);
 }
 
-/* نصوص مترجمة (بسيطة) */// ---------- نصوص متغيرة ومحتوى متعدد اللغات ----------
-let lang = 'ar'; // 'ar' أو 'en'
+/* نصوص مترجمة (محدثة) */
+let lang = 'ar';
 const translations = {
-  ar:{
-    title: "مرحبا بك في TalkAndSolve!",
-    dynamicTexts: ["ارتاح واوجد حلول لمشاكلك العائلية.","شارك مشاكلك الاجتماعية بسهولة.","احصل على نصائح عملية لنفسيتك اليومية.","أنت لست وحدك، نحن هنا لنساعدك!"],
-    startBtn: "ابدأ الآن",
-    modeBtn: "الوضع: نهاري",
-    formTitle: "أرسل مشكلتك",
-    checkTitle: "عرض الحلول",
-    checkHint: "لرؤية الحل، أدخل معرف مشكلتك:",
-    agreeText: "أوافق على الشروط",
-    adminNote: "حقل الإدارة خاص بالفريق الإداري فقط — لا تملئيه إن لم تكوني من الإدارة.",
-    modalTitle: "تم الإرسال بنجاح!",
-    modalMsg: "هذا هو معرف مشكلتك:",
-    copyBtn: "نسخ المعرف",
+  ar: {
+    titleText: "مرحبا في <span style='color:var(--accent)'>TalkAndSolve</span>!",
+    startBtn: "ابدأي الآن", 
+    langBtn: "EN", 
+    modeLight: "الوضع: نهاري", 
+    modeDark: "الوضع: ليلي",
+    formTitle: "أرسل مشكلتك", 
+    agreeText: "أوافق على الشروط", 
+    checkTitle: "عرض الحل", 
+    checkHint: "أدخلي معرف مشكلتك لتحصلي على الحل:",
+    modalTitle: "تم الإرسال بنجاح!", 
+    modalMsg: "هذا هو معرف مشكلتك — احتفظي به للعودة لاحقاً:", 
+    copyBtn: "نسخ المعرف", 
     closeBtn: "إغلاق",
-    adminPrompt: "أدخلي كود الإدارة:",
-    adminWrong: "كود خاطئ."
+    adminPrompt: "أدخلي كود الإدارة:", 
+    adminWrong: "كود خاطئ.", 
+    issueSent: "تم إرسال مشكلتك — انسخي المعرف للمتابعة",
+    fillReq: "المرجو تعبئة نوع المشكلة والوصف",
+    howItWorksTitle: "كيف نعمل؟",
+    howItWorksDesc: "أرسلي مشكلتك بإيجاز، ستحصلين على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.",
+    namePlaceholder: "اسمك (اختياري)",
+    typePlaceholder: "نوع المشكلة (مثلاً: تنمر، خوف، خلاف)",
+    descPlaceholder: "صف المشكلة بإيجاز (حتى 250 حرف)",
+    submitBtn: "إرسال",
+    checkPlaceholder: "ادخلي معرف المشكلة (مثال: 4F7A2B)",
+    checkSolutionBtn: "عرض الحل",
+    adminNote: "حقل الإدارة خاص بالفريق الإداري فقط — لا تملئيه إن لم تكوني من الإدارة.",
+    adminKeyPlaceholder: "ضع معرف المشكلة هنا (مثال: 4F7A2B)",
+    adminSolutionPlaceholder: "اكتبي الحل هنا...",
+    updateSolutionBtn: "تحديث الحل",
+    hideBtn: "إخفاء"
   },
-  en:{
-    title: "Welcome to TalkAndSolve!",
-    dynamicTexts: ["Relax and find solutions to family issues.","Share your social problems easily.","Get practical tips for daily mental wellbeing.","You are not alone — we're here to help!"],
-    startBtn: "Start Now",
-    modeBtn: "Mode: Light",
-    formTitle: "Submit your issue",
-    checkTitle: "View solution",
-    checkHint: "To see the solution, enter your issue ID:",
-    agreeText: "I agree to the terms",
-    adminNote: "Admin fields are for staff only — do not fill unless you are admin.",
-    modalTitle: "Sent successfully!",
-    modalMsg: "This is your issue ID:",
-    copyBtn: "Copy ID",
+  en: {
+    titleText: "Welcome to <span style='color:var(--accent)'>TalkAndSolve</span>!",
+    startBtn: "Start Now", 
+    langBtn: "AR", 
+    modeLight: "Mode: Light", 
+    modeDark: "Mode: Dark",
+    formTitle: "Submit your issue", 
+    agreeText: "I agree to terms", 
+    checkTitle: "View solution", 
+    checkHint: "Enter your issue ID to get the solution:",
+    modalTitle: "Sent successfully!", 
+    modalMsg: "This is your issue ID — keep it for later:", 
+    copyBtn: "Copy ID", 
     closeBtn: "Close",
-    adminPrompt: "Enter admin code:",
-    adminWrong: "Wrong code."
+    adminPrompt: "Enter admin code:", 
+    adminWrong: "Wrong code.", 
+    issueSent: "Issue sent — copy your ID to follow up",
+    fillReq: "Please fill type and description",
+    howItWorksTitle: "How it works?",
+    howItWorksDesc: "Send your issue briefly, you'll get an ID for tracking, and the admin will add a solution that appears here later.",
+    namePlaceholder: "Your name (optional)",
+    typePlaceholder: "Issue type (e.g., bullying, fear, conflict)",
+    descPlaceholder: "Describe the issue briefly (up to 250 chars)",
+    submitBtn: "Submit",
+    checkPlaceholder: "Enter issue ID (example: 4F7A2B)",
+    checkSolutionBtn: "View Solution",
+    adminNote: "Admin field is for admin team only — don't fill if you're not admin.",
+    adminKeyPlaceholder: "Put issue ID here (example: 4F7A2B)",
+    adminSolutionPlaceholder: "Write solution here...",
+    updateSolutionBtn: "Update Solution",
+    hideBtn: "Hide"
   }
 };
 
-function setLang(to){
+function setLang(to) {
   lang = to;
   const t = translations[lang];
-  // update static texts and placeholders
-  document.title = (lang==='ar' ? "TalkAndSolve — حلول لمشاكلك اليومية" : "TalkAndSolve — Solutions for your problems");
-  titleText.textContent = t.title;
-  dynamicText.textContent = t.dynamicTexts[0];
+  
+  // تحديث جميع النصوص
+  titleText.innerHTML = t.titleText;
   startBtn.textContent = t.startBtn;
-  toggleModeBtn.textContent = t.modeBtn;
+  langBtn.textContent = t.langBtn;
+  toggleModeBtn.textContent = document.body.classList.contains('dark') ? t.modeDark : t.modeLight;
   formTitle.textContent = t.formTitle;
   checkTitle.textContent = t.checkTitle;
   checkHint.textContent = t.checkHint;
   agreeText.textContent = t.agreeText;
-  document.getElementById('idModalTitle').textContent = t.modalTitle;
-  document.getElementById('idModalMsg').textContent = t.modalMsg;
+  idModalTitle.textContent = t.modalTitle;
+  idModalMsg.textContent = t.modalMsg;
   copyIdBtn.textContent = t.copyBtn;
   closeIdBtn.textContent = t.closeBtn;
-  langBtn.textContent = (lang==='ar' ? 'EN' : 'AR');
+  howItWorksTitle.textContent = t.howItWorksTitle;
+  howItWorksDesc.textContent = t.howItWorksDesc;
+  submitBtn.textContent = t.submitBtn;
+  checkBtn.textContent = t.checkSolutionBtn;
+  updateSolutionBtn.textContent = t.updateSolutionBtn;
+  document.getElementById('closeAdminBtn').textContent = t.hideBtn;
   document.getElementById('adminNote').textContent = t.adminNote;
-  // placeholders
-  nameInput.placeholder = (lang==='ar' ? "اسمك (اختياري)" : "Your name (optional)");
-  typeInput.placeholder = (lang==='ar' ? "نوع المشكلة (مثلاً: تنمر، خوف، خلاف)" : "Issue type (e.g. bullying, fear, conflict)");
-  descriptionInput.placeholder = (lang==='ar' ? "صف المشكلة (أهم نقاطها - حتى 250 حرف)" : "Describe the issue (up to 250 chars)");
-  document.getElementById('checkKey').placeholder = (lang==='ar' ? "ادخل معرف المشكلة (مثال: 4F7A2B)" : "Enter your issue ID (e.g. 4F7A2B)");
-  document.getElementById('problemKey').placeholder = (lang==='ar' ? "ضع معرف المشكلة هنا (مثال: 4F7A2B)" : "Enter issue ID here (e.g. 4F7A2B)");
-  document.getElementById('solutionText').placeholder = (lang==='ar' ? "اكتبي الحل هنا..." : "Write the solution here...");
-  // update direction attribute for RTL/LTR
-  if(lang==='ar'){ document.documentElement.dir = 'rtl'; document.body.style.textAlign='right'; }
-  else{ document.documentElement.dir = 'ltr'; document.body.style.textAlign='left'; }
+  
+  // تحديد النصوص في الحقول
+  nameInput.placeholder = t.namePlaceholder;
+  typeInput.placeholder = t.typePlaceholder;
+  descriptionInput.placeholder = t.descPlaceholder;
+  checkKey.placeholder = t.checkPlaceholder;
+  document.getElementById('problemKey').placeholder = t.adminKeyPlaceholder;
+  document.getElementById('solutionText').placeholder = t.adminSolutionPlaceholder;
+  
+  // تحديث اتجاه الصفحة
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar' ? 'rtl' : 'ltr');
+  document.body.style.textAlign = (lang === 'ar' ? 'right' : 'left');
+  document.body.style.fontFamily = (lang === 'ar' ? "'Cairo', sans-serif" : "'Poppins', sans-serif");
 }
-setLang('ar'); // default
 
-// rotate dynamic text
-let dynIndex = 0;
-setInterval(()=>{
-  const arr = translations[lang].dynamicTexts;
-  dynIndex = (dynIndex+1)%arr.length;
-  dynamicText.classList.add('fadeOutText');
-  setTimeout(()=>{ dynamicText.textContent = arr[dynIndex]; dynamicText.classList.remove('fadeOutText'); },400);
-},4000);
+// التهيئة الأولية
+setLang('ar');
+
+/* dynamic subtitle rotate */
+const promos = { 
+  ar: [
+    "مكان هادئ لمشاركة مشاكلك والحصول على حلول مُريحة.",
+    "خطوات بسيطة وواضحة لدعم نفسيتك.",
+    "نحترم خصوصيتك ونقدّم حلولًا عملية."
+  ], 
+  en: [
+    "A calm place to share your issues and get gentle solutions.",
+    "Simple, clear steps to support your wellbeing.",
+    "We respect privacy and offer practical help."
+  ]
+};
+
+let promoIndex = 0;
+setInterval(() => {
+  promoIndex = (promoIndex + 1) % promos[lang].length;
+  subtitle.style.opacity = 0;
+  setTimeout(() => { 
+    subtitle.textContent = promos[lang][promoIndex]; 
+    subtitle.style.opacity = 1; 
+  }, 300);
+}, 4200);
 
 /* START btn: hide hero, show form, play music */
-startBtn.addEventListener('click', ()=>{
-  try{ clickSound.play(); }catch(e){}
-  try{ backgroundMusic.play(); }catch(e){}
+startBtn.addEventListener('click', () => {
+  try { clickSound.play(); } catch(e) {}
+  try { backgroundMusic.play(); } catch(e) {}
   document.querySelector('.hero').style.display = 'none';
   formScreen.style.display = 'block';
   formScreen.setAttribute('aria-hidden','false');
   formScreen.scrollIntoView({behavior:'smooth'});
-  setTimeout(()=> typeInput && typeInput.focus(), 300);
+  setTimeout(() => typeInput && typeInput.focus(), 300);
   showToast(translations[lang].issueSent);
 });
 
 /* char counter (if present) */
 const charCountEl = document.getElementById('charCount');
 if(charCountEl && descriptionInput){
-  descriptionInput.addEventListener('input', ()=> charCountEl.textContent = `${descriptionInput.value.length}/250`);
+  descriptionInput.addEventListener('input', () => charCountEl.textContent = `${descriptionInput.value.length}/250`);
 }
 
 /* send issue: generate shortId, push to Firebase, show modal (persistent) */
-problemForm.addEventListener('submit', (e)=>{
+problemForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const name = nameInput.value.trim();
   const type = typeInput.value.trim();
   const description = descriptionInput.value.trim();
   const agree = document.getElementById('agree').checked;
-  if(!agree){ alert(translations[lang].agreeText); return; }
-  if(!type || !description){ alert(translations[lang].fillReq); return; }
+  
+  if(!agree){ 
+    alert(translations[lang].agreeText); 
+    return; 
+  }
+  if(!type || !description){ 
+    alert(translations[lang].fillReq); 
+    return; 
+  }
 
   const shortId = Math.random().toString(36).substring(2,8).toUpperCase();
 
-  push(ref(db, 'problems/' + shortId), { name, type, description, solution:'', date: new Date().toISOString() })
-    .then(()=>{
-      try{ successSound.play(); }catch(e){}
-      lastIdInput.value = shortId;
-      idModal.style.display = 'block';
-      lastIdInput.select(); lastIdInput.setSelectionRange(0, lastIdInput.value.length);
-      showToast(translations[lang].issueSent);
-      problemForm.reset();
-      if(charCountEl) charCountEl.textContent = '0/250';
-    })
-    .catch(err=> alert((lang==='ar' ? 'حصل خطأ: ' : 'Error: ') + err));
+  push(ref(db, 'problems/' + shortId), { 
+    name, 
+    type, 
+    description, 
+    solution: '', 
+    date: new Date().toISOString() 
+  })
+  .then(() => {
+    try { successSound.play(); } catch(e) {}
+    lastIdInput.value = shortId;
+    idModal.style.display = 'block';
+    lastIdInput.select(); 
+    lastIdInput.setSelectionRange(0, lastIdInput.value.length);
+    showToast(translations[lang].issueSent);
+    problemForm.reset();
+    if(charCountEl) charCountEl.textContent = '0/250';
+  })
+  .catch(err => alert((lang === 'ar' ? 'حصل خطأ: ' : 'Error: ') + err));
 });
 
 /* copy id */
-copyIdBtn.addEventListener('click', async ()=>{
+copyIdBtn.addEventListener('click', async () => {
   try{
     await navigator.clipboard.writeText(lastIdInput.value);
-    copyIdBtn.textContent = (lang==='ar' ? '✔ تم النسخ' : '✔ Copied');
-    setTimeout(()=> copyIdBtn.textContent = translations[lang].copyBtn,1600);
-  }catch(e){
+    copyIdBtn.textContent = (lang === 'ar' ? '✔ تم النسخ' : '✔ Copied');
+    setTimeout(() => copyIdBtn.textContent = translations[lang].copyBtn, 1600);
+  } catch(e) {
     lastIdInput.select();
-    alert((lang==='ar' ? 'انسخي المعرف يدوياً: ' : 'Copy manually: ')+ lastIdInput.value);
+    alert((lang === 'ar' ? 'انسخي المعرف يدوياً: ' : 'Copy manually: ') + lastIdInput.value);
   }
 });
-closeIdBtn.addEventListener('click', ()=> idModal.style.display = 'none');
+
+closeIdBtn.addEventListener('click', () => idModal.style.display = 'none');
 
 /* check solution */
-checkBtn.addEventListener('click', ()=>{
+checkBtn.addEventListener('click', () => {
   const key = checkKey.value.trim();
-  if(!key){ alert(lang==='ar' ? 'يرجى إدخال معرف المشكلة' : 'Please enter the issue ID'); return; }
-  get(ref(db, 'problems/' + key)).then(snapshot=>{
+  if(!key){ 
+    alert(lang === 'ar' ? 'يرجى إدخال معرف المشكلة' : 'Please enter the issue ID'); 
+    return; 
+  }
+  
+  get(ref(db, 'problems/' + key)).then(snapshot => {
     if(snapshot.exists()){
       const data = snapshot.val();
-      const sol = data.solution || (lang==='ar' ? 'لم يتم الرد بعد، يرجى الانتظار' : 'No reply yet, please wait');
+      const sol = data.solution || (lang === 'ar' ? 'لم يتم الرد بعد، يرجى الانتظار' : 'No reply yet, please wait');
       solutionDisplay.innerHTML = `<div class="solutionCard">${sol}</div>`;
-      try{ solutionSound.play(); }catch(e){}
-    } else alert(lang==='ar' ? 'لم يتم العثور على مشكلتك' : 'Issue not found');
+      try{ solutionSound.play(); } catch(e) {}
+    } else {
+      alert(lang === 'ar' ? 'لم يتم العثور على مشكلتك' : 'Issue not found');
+    }
   });
 });
 
 /* admin area (client-side code protection) */
 const ADMIN_CODE = '5566'; // غيّري للمفتاح الذي ترغبينه
-const openAdminBtnEl = document.getElementById('openAdminBtn');
-if(openAdminBtnEl){
-  openAdminBtnEl.addEventListener('click', ()=>{
-    const code = prompt(translations[lang].adminPrompt);
-    if(code === ADMIN_CODE){ adminArea.classList.remove('hide'); adminArea.style.display = 'block'; showToast(lang==='ar' ? 'تم فتح لوحة الإدارة' : 'Admin panel opened'); }
-    else alert(translations[lang].adminWrong);
-  });
-}
-if(closeAdminBtn) closeAdminBtn.addEventListener('click', ()=> { adminArea.classList.add('hide'); adminArea.style.display='none'; });
+
+// إضافة زر فتح لوحة الإدارة
+const openAdminBtn = document.createElement('button');
+openAdminBtn.textContent = 'Admin';
+openAdminBtn.className = 'btn btn-ghost small';
+openAdminBtn.style.marginTop = '10px';
+document.querySelector('.cta-row').appendChild(openAdminBtn);
+
+openAdminBtn.addEventListener('click', () => {
+  const code = prompt(translations[lang].adminPrompt);
+  if(code === ADMIN_CODE){ 
+    adminArea.classList.remove('hide'); 
+    adminArea.style.display = 'block'; 
+    showToast(lang === 'ar' ? 'تم فتح لوحة الإدارة' : 'Admin panel opened'); 
+  }
+  else { 
+    alert(translations[lang].adminWrong); 
+  }
+});
+
+closeAdminBtn.addEventListener('click', () => { 
+  adminArea.classList.add('hide'); 
+  adminArea.style.display = 'none'; 
+});
 
 /* admin update solution */
-if(adminForm){
-  adminForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const key = document.getElementById('problemKey').value.trim();
-    const solutionText = document.getElementById('solutionText').value.trim();
-    if(!key || !solutionText){ alert(lang==='ar' ? 'المرجو ملء الحقول' : 'Please fill fields'); return; }
-    update(ref(db, 'problems/' + key), { solution: solutionText })
-      .then(()=> showToast(lang==='ar' ? 'تم إضافة الحل بنجاح!' : 'Solution updated!'))
-      .catch(err=> alert((lang==='ar'?'حدث خطأ: ':'Error: ') + err));
-  });
-}
+adminForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const key = document.getElementById('problemKey').value.trim();
+  const solutionText = document.getElementById('solutionText').value.trim();
+  
+  if(!key || !solutionText){ 
+    alert(lang === 'ar' ? 'المرجو ملء الحقول' : 'Please fill fields'); 
+    return; 
+  }
+  
+  update(ref(db, 'problems/' + key), { solution: solutionText })
+    .then(() => showToast(lang === 'ar' ? 'تم إضافة الحل بنجاح!' : 'Solution updated!'))
+    .catch(err => alert((lang === 'ar' ? 'حدث خطأ: ' : 'Error: ') + err));
+});
 
 /* toggle dark/light */
-if(toggleModeBtn) toggleModeBtn.addEventListener('click', ()=>{
-  if(document.body.classList.contains('dark')){ document.body.classList.remove('dark'); document.body.classList.add('light'); toggleModeBtn.textContent = translations[lang].modeLight; }
-  else{ document.body.classList.remove('light'); document.body.classList.add('dark'); toggleModeBtn.textContent = translations[lang].modeDark; }
+toggleModeBtn.addEventListener('click', () => {
+  if(document.body.classList.contains('dark')){ 
+    document.body.classList.remove('dark'); 
+    document.body.classList.add('light'); 
+    toggleModeBtn.textContent = translations[lang].modeLight; 
+  } else { 
+    document.body.classList.remove('light'); 
+    document.body.classList.add('dark'); 
+    toggleModeBtn.textContent = translations[lang].modeDark; 
+  }
 });
 
 /* language toggle */
-if(langBtn) langBtn.addEventListener('click', ()=> setLang(lang === 'ar' ? 'en' : 'ar'));
+langBtn.addEventListener('click', () => setLang(lang === 'ar' ? 'en' : 'ar'));
 
 /* small: pause heavy elements on small screens */
-if(window.innerWidth < 600){ document.querySelectorAll('.bubble').forEach(n=>n.remove()); }
+if(window.innerWidth < 600){ 
+  document.querySelectorAll('.bubble').forEach(n => n.remove()); 
+}
 
 /* Accessibility: focus helpers */
-document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ idModal.style.display='none'; adminArea.classList.add('hide'); adminArea.style.display='none'; }});
+document.addEventListener('keydown', (e) => { 
+  if(e.key === 'Escape'){ 
+    idModal.style.display = 'none'; 
+    adminArea.classList.add('hide'); 
+    adminArea.style.display = 'none'; 
+  }
+});
 </script>
 </body>
 </html>
-
 
 
 
