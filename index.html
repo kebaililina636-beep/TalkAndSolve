@@ -4,140 +4,136 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>TalkAndSolve — جوّ آمن لحلول مشاكلك</title>
+
+<!-- خطوط جميلة -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --bg1:#e9fbf6;
+  --bg1:#e8fbf6;
   --bg2:#d9f6ef;
   --accent:#00a389;
   --accent-dark:#00796b;
   --muted:#4b6b66;
-  --card:#ffffffdd;
+  --card:#ffffffdf;
   --radius:18px;
-  --shadow: 0 18px 50px rgba(4,30,20,0.12);
+  --shadow: 0 20px 60px rgba(3,30,26,0.12);
+  --soft-shadow: 0 10px 30px rgba(2,30,25,0.06);
 }
 
 /* عام */
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:'Cairo','Poppins',sans-serif;-webkit-font-smoothing:antialiased}
-body{background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:#053a35;}
+body{background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:#053a35; overflow-x:hidden;}
 
-/* HERO: جعل الــhero عالي وكيوت */
-.hero {
-  position:relative;
-  min-height:88vh;             /* ارتفاع كبير ليبدو صفحة رئيسية جميلة */
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:36px 20px;
-  overflow:hidden;
+/* --- زخارف خلفية: دوائر وSVG صغيرة --- */
+.bg-decor {
+  position:fixed; inset:0; z-index:-3; pointer-events:none;
+  background:
+    radial-gradient(circle at 5% 10%, rgba(0,163,137,0.06) 0 8%, transparent 9%),
+    radial-gradient(circle at 80% 80%, rgba(0,121,107,0.04) 0 10%, transparent 11%);
 }
 
-/* خلفية هادئة (يمكن تغييرها) */
-.bg-layer{
-  position:absolute; inset:0; z-index:0;
-  background: radial-gradient(circle at 10% 10%, rgba(0,163,137,0.06), transparent 10%),
-              radial-gradient(circle at 90% 80%, rgba(0,121,107,0.05), transparent 12%),
-              linear-gradient(180deg,#f3fffb,#e8fff6);
-}
+/* فقاعات متحركة (مستنسخة ديناميكيًا) */
+.bubbles { position:fixed; inset:0; z-index:-2; pointer-events:none; overflow:hidden; }
+.bubble { position:absolute; bottom:-160px; background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.6)); border-radius:50%; opacity:0.45; box-shadow:0 10px 30px rgba(2,30,25,0.06); transform:translateY(0); }
 
-/* بطاقة الهيرو مركزة، بعرض أقل عن الحافة لتبدو "بطاقة" وليست استمارة ممتدة */
+/* زخرفة متطايرة (SVG leaf-like) */
+.floaters { position:fixed; inset:auto 0 0 0; height:0; z-index:-1; pointer-events:none; }
+
+/* HERO */
+.hero { position:relative; min-height:86vh; display:flex; align-items:center; justify-content:center; padding:36px 20px; overflow:hidden; }
+.bg-layer{ position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(255,255,255,0.30), rgba(255,255,255,0.20)); }
+
+/* البطاقة الرئيسية */
 .hero-card{
   position:relative; z-index:2;
-  width:100%;
-  max-width:980px;             /* محدود لضبط العرض */
-  display:grid;
-  grid-template-columns: 1fr 380px;   /* نص + لوحة معاينة */
-  gap:28px;
-  padding:34px;
-  border-radius:28px;
-  background: var(--card);
-  box-shadow: var(--shadow);
-  align-items:center;
+  width:100%; max-width:980px;
+  display:grid; grid-template-columns: 1fr 380px; gap:28px;
+  padding:34px; border-radius:28px; background: linear-gradient(180deg,var(--card), #f8fffd);
+  box-shadow:var(--shadow); align-items:center; backdrop-filter: blur(6px);
 }
-@media(max-width:900px){
-  .hero-card{ grid-template-columns: 1fr; padding:24px; gap:18px; }
-}
+@media(max-width:900px){ .hero-card{ grid-template-columns:1fr; padding:24px } }
 
-/* يسار الهيرو: نص جميل كبير */
-.hero-left h1{
-  margin:0; font-size:42px; line-height:1.01; font-weight:700; color:var(--accent-dark);
-}
-.hero-left p{ margin:14px 0 20px 0; color:var(--muted); font-size:17px; max-width:640px; }
+/* نص الهيرو */
+.hero-left h1{ margin:0; font-size:40px; line-height:1.02; font-weight:700; color:var(--accent-dark); letter-spacing:0.2px; }
+.hero-left p{ margin:12px 0 18px; color:var(--muted); font-size:17px; max-width:680px; }
 
-/* أزرار أنيقة مع تأثير انتفاخ */
-.cta-row{display:flex;gap:12px;align-items:center}
+/* أزرار متحركة (pop + glow) */
+.cta-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:10px;
   padding:12px 18px; border-radius:12px; border:0; cursor:pointer; font-weight:600;
-  transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s;
-  box-shadow: 0 8px 30px rgba(2,30,25,0.08);
+  transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s, filter .18s;
+  box-shadow: 0 8px 28px rgba(2,30,25,0.08);
 }
-.btn-primary{ background: linear-gradient(90deg,var(--accent),var(--accent-dark)); color:white; }
+.btn-primary{ background:linear-gradient(90deg,var(--accent),var(--accent-dark)); color:white; filter:drop-shadow(0 8px 18px rgba(0,163,137,0.12)); }
 .btn-ghost{ background:transparent; border:1px solid rgba(3,58,52,0.08); color:var(--accent-dark); }
-.btn:hover{ transform: translateY(-6px) scale(1.03); box-shadow: 0 24px 50px rgba(2,30,25,0.14); }
+.btn:hover{ transform: translateY(-8px) scale(1.04); box-shadow: 0 28px 70px rgba(3,45,40,0.12); }
 
-/* يمين الهيرو: بطاقة معاينة أصغر */
-.hero-right{ width:380px; max-width:42%; }
-@media(max-width:900px){ .hero-right{ width:100%; max-width:100%; } }
+/* لوحة المعاينة */
+.preview{ border-radius:16px; overflow:hidden; background: linear-gradient(180deg,#ffffff,#f5fffb); padding:18px; box-shadow:var(--soft-shadow); }
+.preview h3{ margin:0; font-size:16px; color:#04524b; }
+.preview p{ margin:8px 0 0 0; color:#0f6b60; font-size:14px; }
 
-.preview{
-  border-radius:16px; overflow:hidden; background: linear-gradient(180deg,#ffffff,#f5fffb);
-  padding:18px; box-shadow: 0 10px 30px rgba(2,30,25,0.06);
-}
-.preview h3{ margin:0; font-size:16px; color:#03594f }
-.preview p{ margin:8px 0 0 0; color:#0f6b60; font-size:14px }
+/* MAIN content */
+.main{ max-width:980px; margin:28px auto 80px; padding:0 20px; }
+.card{ background:var(--card); border-radius:16px; padding:20px; box-shadow:var(--soft-shadow); margin-bottom:18px; transition: transform .18s; }
+.card:hover{ transform: translateY(-6px); }
 
-/* MAIN form section أقل ارتفاعًا ومركز */
-.main{
-  max-width:980px; margin:28px auto 80px; padding:0 20px;
-}
-
-/* نمط البطاقة العامة */
-.card{
-  background:var(--card); border-radius:16px; padding:20px; box-shadow: 0 8px 30px rgba(2,30,25,0.06);
-}
-
-/* فورم: ضبط العرض حتى لا يمتد */
+/* form grid */
 .form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
 @media(max-width:820px){ .form-grid{ grid-template-columns:1fr } }
-.input{ width:100%; padding:12px; border-radius:12px; border:1px solid rgba(2,30,25,0.06); background:#f8fffc; font-size:15px; }
+.input{ width:100%; padding:12px; border-radius:12px; border:1px solid rgba(2,30,25,0.06); font-size:15px; background:#f8fffc; }
 textarea.input{ min-height:120px; resize:vertical; }
 
-/* صف التحكم */
+/* controls */
 .controls{ display:flex; align-items:center; gap:12px; justify-content:space-between; margin-top:12px; }
 
-/* بطاقة الحل */
+/* solution card */
 .solutionCard{ border-radius:12px; padding:14px; margin-top:16px; background:linear-gradient(180deg,#e9fff6,#d7fff0); color:#004a43; box-shadow:0 12px 30px rgba(2,45,40,0.06); animation:cardIn .45s ease; }
 @keyframes cardIn{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)} }
 
 /* toast */
 .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:24px; background:var(--accent); color:white; padding:10px 16px; border-radius:20px; opacity:0; transition:opacity .3s; z-index:9999; }
 
-/* مودال المعرف */
-#idModal{ display:none; position:fixed; left:50%; top:14%; transform:translateX(-50%); z-index:99999 }
-#idModal .box{ min-width:320px; max-width:92vw; padding:18px; border-radius:12px; background:white; box-shadow:0 18px 60px rgba(2,30,25,0.18); text-align:center }
-#lastIdInput{ width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); text-align:center; font-weight:700; background:#e9fff6; color:#004a43; user-select:all }
+/* id modal */
+#idModal{ display:none; position:fixed; left:50%; top:14%; transform:translateX(-50%); z-index:99999; }
+#idModal .box{ min-width:320px; max-width:92vw; padding:18px; border-radius:12px; background:white; box-shadow:0 18px 60px rgba(2,30,25,0.18); text-align:center; }
+#lastIdInput{ width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); text-align:center; font-weight:700; background:#e9fff6; color:#004a43; user-select:all; }
 
 /* admin note */
-.admin-note{ background:linear-gradient(90deg,#fff8e1,#fff); padding:10px; border-radius:10px; border:1px solid #ffecb3; color:#6b4f00; font-size:14px; margin-bottom:10px }
+.admin-note{ background:linear-gradient(90deg,#fff8e1,#fff); padding:10px; border-radius:10px; border:1px solid #ffecb3; color:#6b4f00; font-size:14px; margin-bottom:10px; }
 
-/* responsive tweaks */
+/* responsiveness */
 @media(max-width:560px){
   .hero-left h1{ font-size:28px }
   .hero-card{ padding:18px; border-radius:16px }
+  #lastIdInput{ font-size:15px }
 }
 </style>
 </head>
 <body>
 
+<!-- خلفية زخرفية وفقاعات -->
+<div class="bg-decor" aria-hidden="true"></div>
+<div class="bubbles" id="bubbles" aria-hidden="true"></div>
+
+<!-- زخارف عائمة (SVG) -->
+<div class="floaters" aria-hidden="true">
+  <!-- بعض الدوائر المتحركة عبر SVG -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="blurSmall"><feGaussianBlur stdDeviation="10" /></filter>
+    </defs>
+  </svg>
+</div>
+
 <!-- HERO -->
 <div class="hero" role="banner" aria-label="Welcome">
-  <div class="bg-layer"></div>
-
   <div class="hero-card" role="region" aria-label="Hero content">
     <div class="hero-left">
-      <h1 id="titleText">مرحبا بك في <span style="color:var(--accent)">TalkAndSolve</span></h1>
+      <h1 id="titleText">مرحبا بك في <span style="color:var(--accent)">&nbsp;TalkAndSolve</span></h1>
       <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول عملية. اكتبي مشكلتك باختصار واحصلي على معرف للمتابعة.</p>
 
       <div class="cta-row" style="margin-top:6px">
@@ -150,8 +146,8 @@ textarea.input{ min-height:120px; resize:vertical; }
     <div class="hero-right">
       <div class="preview" aria-hidden="true">
         <div class="screen">
-          <h3>كيف نعالج المشكلات؟</h3>
-          <p>نعرض خطوات عملية ومحترمة تساعدك على التواصل، التعامل مع الخوف، أو حل النزاعات—بدون أحكام.</p>
+          <h3>كيف نساعدك؟</h3>
+          <p>نُقدّم خطوات عملية، نصائح ودعم يحترم خصوصيتك. ستحصلين على معرف لمتابعة الحل.</p>
         </div>
       </div>
     </div>
@@ -159,7 +155,7 @@ textarea.input{ min-height:120px; resize:vertical; }
 </div>
 
 <!-- MAIN -->
-<main class="main" id="formScreen" style="display:none">
+<main class="main" id="formScreen" style="display:none" aria-hidden="true">
   <div class="card">
     <h2 id="formTitle">أرسل مشكلتك</h2>
 
@@ -220,16 +216,17 @@ textarea.input{ min-height:120px; resize:vertical; }
   </div>
 </div>
 
-<!-- أصوات وموسيقى -->
+<!-- أصوات + موسيقى -->
 <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
 <audio id="solutionSound" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
 <audio id="backgroundMusic" src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" loop></audio>
 
-<!-- Firebase + JS (تكامل كما قبل) -->
+<!-- Firebase + منطق التطبيق -->
 <script type="module">
+/* Firebase */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-import { getDatabase, ref, push, get, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+import { getDatabase, ref, push, get, update, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
@@ -243,37 +240,89 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-/* DOM */
+/* DOM elements */
+const bubblesEl = document.getElementById('bubbles');
 const startBtn = document.getElementById('startBtn');
 const formScreen = document.getElementById('formScreen');
 const clickSound = document.getElementById('clickSound');
+const successSound = document.getElementById('successSound');
+const solutionSound = document.getElementById('solutionSound');
 const backgroundMusic = document.getElementById('backgroundMusic');
+const toastEl = document.getElementById('toast');
+
 const problemForm = document.getElementById('problemForm');
 const nameInput = document.getElementById('name');
 const typeInput = document.getElementById('type');
 const descriptionInput = document.getElementById('description');
 const charCount = document.getElementById('charCount');
 const agreeChk = document.getElementById('agree');
+
 const checkKey = document.getElementById('checkKey');
 const checkBtn = document.getElementById('checkBtn');
 const solutionDisplay = document.getElementById('solutionDisplay');
+
 const idModal = document.getElementById('idModal');
 const lastIdInput = document.getElementById('lastIdInput');
 const copyIdBtn = document.getElementById('copyIdBtn');
 const closeIdBtn = document.getElementById('closeIdBtn');
-const toastEl = document.getElementById('toast');
+
 const openAdminBtn = document.getElementById('openAdminBtn');
 const adminArea = document.getElementById('adminArea');
 const adminForm = document.getElementById('adminForm');
 const closeAdminBtn = document.getElementById('closeAdminBtn');
 
+const toggleModeBtn = document.getElementById('toggleModeBtn');
+const langBtn = document.getElementById('langBtn');
+
+/* توليد فقاعات زخرفية (تصغير/تحريك) */
+function createBubbles(n=16){
+  for(let i=0;i<n;i++){
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = Math.random()*80 + 20;
+    b.style.width = size + 'px';
+    b.style.height = size + 'px';
+    b.style.left = Math.random()*100 + '%';
+    b.style.animationDuration = (12 + Math.random()*10) + 's';
+    b.style.animationDelay = Math.random()*5 + 's';
+    b.style.opacity = 0.35 + Math.random()*0.35;
+    bubblesEl.appendChild(b);
+  }
+}
+createBubbles(18);
+
+/* small float animation for some SVG-like decorative elements */
+(function createFloaters(){
+  // create a couple of soft floating circles using DOM for depth
+  for(let i=0;i<6;i++){
+    const el = document.createElement('div');
+    el.style.position='fixed';
+    el.style.width = (40 + Math.random()*80) + 'px';
+    el.style.height = el.style.width;
+    el.style.borderRadius = '50%';
+    el.style.left = (Math.random()*100) + '%';
+    el.style.top = (20 + Math.random()*60) + '%';
+    el.style.background = 'rgba(0,163,137,0.03)';
+    el.style.zIndex = -2;
+    el.style.filter = 'blur(8px)';
+    el.style.pointerEvents = 'none';
+    document.body.appendChild(el);
+    // animate slowly
+    el.animate([{transform:'translateY(0px)'},{transform:`translateY(${ -30 - Math.random()*40 }px)`}],{duration:20000 + Math.random()*20000, iterations:Infinity, direction:'alternate'});
+  }
+})();
+
+/* toast helper */
 function showToast(msg){
   toastEl.textContent = msg;
   toastEl.style.opacity = '1';
   setTimeout(()=> toastEl.style.opacity = '0', 3200);
 }
 
-/* START: افتح الفورم وشغّل الموسيقى (gesture) */
+/* language simple (keeps as AR default) */
+let lang = 'ar';
+
+/* Start button behavior: hide hero, show form, play music */
 startBtn.addEventListener('click', ()=>{
   try{ clickSound.play(); }catch(e){}
   try{ backgroundMusic.play(); }catch(e){}
@@ -281,14 +330,18 @@ startBtn.addEventListener('click', ()=>{
   formScreen.style.display = 'block';
   formScreen.scrollIntoView({behavior:'smooth'});
   setTimeout(()=> typeInput.focus(), 300);
+  showToast(lang==='ar' ? 'تم فتح النافذة — ابدئي بكتابة مشكلتك' : 'Form opened — start typing your issue');
 });
 
-/* عداد الأحرف */
-descriptionInput.addEventListener('input', ()=> {
-  if(charCount) charCount.textContent = `${descriptionInput.value.length}/250`;
-});
+/* char count */
+if(descriptionInput){
+  descriptionInput.addEventListener('input', ()=> {
+    const el = document.getElementById('charCount');
+    if(el) el.textContent = `${descriptionInput.value.length}/250`;
+  });
+}
 
-/* إرسال المشكلة - معرف قصير */
+/* submit issue: generate short id, save, show modal (persistent) */
 problemForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const name = nameInput.value.trim();
@@ -302,25 +355,31 @@ problemForm.addEventListener('submit', (e)=>{
 
   push(ref(db, 'problems/' + shortId), { name, type, description, solution:'', date: new Date().toISOString() })
     .then(()=>{
-      document.getElementById('successSound').play();
+      try{ successSound.play(); }catch(e){}
       lastIdInput.value = shortId;
       idModal.style.display = 'block';
       lastIdInput.select(); lastIdInput.setSelectionRange(0, lastIdInput.value.length);
       showToast('تم إرسال مشكلتك — انسخي المعرف للمتابعة');
       problemForm.reset();
-      if(charCount) charCount.textContent = '0/250';
+      const el = document.getElementById('charCount'); if(el) el.textContent = '0/250';
     })
     .catch(err=> alert('حدث خطأ: ' + err));
 });
 
-/* نسخ المعرف */
+/* copy id */
 copyIdBtn.addEventListener('click', async ()=>{
-  try{ await navigator.clipboard.writeText(lastIdInput.value); copyIdBtn.textContent = '✔ تم النسخ'; setTimeout(()=> copyIdBtn.textContent = 'نسخ المعرف',1600); }
-  catch(e){ lastIdInput.select(); alert('انسخي المعرف يدوياً: ' + lastIdInput.value); }
+  try{
+    await navigator.clipboard.writeText(lastIdInput.value);
+    copyIdBtn.textContent = '✔ تم النسخ';
+    setTimeout(()=> copyIdBtn.textContent = (lang==='ar' ? 'نسخ المعرف' : 'Copy ID'), 1600);
+  }catch(e){
+    lastIdInput.select();
+    alert('انسخي المعرف يدوياً: ' + lastIdInput.value);
+  }
 });
 closeIdBtn.addEventListener('click', ()=> idModal.style.display = 'none');
 
-/* عرض الحل */
+/* check solution */
 checkBtn.addEventListener('click', ()=>{
   const key = checkKey.value.trim();
   if(!key) return alert('يرجى إدخال معرف المشكلة');
@@ -329,22 +388,27 @@ checkBtn.addEventListener('click', ()=>{
       const data = snapshot.val();
       const sol = data.solution || 'لم يتم الرد بعد، يرجى الانتظار';
       solutionDisplay.innerHTML = `<div class="solutionCard">${sol}</div>`;
-      try{ document.getElementById('solutionSound').play(); }catch(e){}
+      try{ solutionSound.play(); }catch(e){}
+      // highlight bubble effect
+      const b = document.createElement('div'); b.className='bubble';
+      b.style.width='50px'; b.style.height='50px'; b.style.left=((Math.random()*60)+20)+'%'; b.style.animationDuration='7s';
+      document.getElementById('bubbles').appendChild(b);
+      setTimeout(()=> b.remove(), 8000);
     } else alert('لم يتم العثور على مشكلتك');
   });
 });
 
-/* لوحة الإدارة محمية بكود بسيط (غير آمن لوحده) */
+/* admin panel open (simple client-side code protect) */
 const ADMIN_CODE = '5566';
-openAdminBtn.addEventListener('click', ()=>{
+openAdminBtn && openAdminBtn.addEventListener('click', ()=>{
   const code = prompt('أدخلي كود الإدارة:');
   if(code === ADMIN_CODE){ adminArea.classList.remove('hide'); adminArea.style.display='block'; showToast('تم فتح لوحة الإدارة'); }
   else alert('كود خاطئ');
 });
-closeAdminBtn.addEventListener('click', ()=> { adminArea.classList.add('hide'); adminArea.style.display='none'; });
+closeAdminBtn && closeAdminBtn.addEventListener('click', ()=> { adminArea.classList.add('hide'); adminArea.style.display='none'; });
 
-/* إضافة الحل */
-adminForm.addEventListener('submit', (e)=>{
+/* update solution */
+adminForm && adminForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const key = document.getElementById('problemKey').value.trim();
   const solutionText = document.getElementById('solutionText').value.trim();
@@ -353,9 +417,28 @@ adminForm.addEventListener('submit', (e)=>{
     .then(()=> showToast('تم إضافة الحل بنجاح!'))
     .catch(err=> alert('حدث خطأ: ' + err));
 });
+
+/* small: toggle dark/light (cosmetic) */
+toggleModeBtn && toggleModeBtn.addEventListener('click', ()=>{
+  if(document.body.classList.contains('dark')){ document.body.classList.remove('dark'); document.body.classList.add('light'); toggleModeBtn.textContent = 'الوضع: نهاري'; }
+  else{ document.body.classList.remove('light'); document.body.classList.add('dark'); toggleModeBtn.textContent = 'الوضع: ليلي'; document.body.style.background = 'linear-gradient(180deg,#042423,#052a2a)'; }
+});
+
+/* optional: language toggle (only UI labels simplified) */
+langBtn && langBtn.addEventListener('click', ()=> {
+  if(lang === 'ar'){ lang = 'en'; langBtn.textContent = 'AR'; startBtn.textContent = 'Start Now'; }
+  else{ lang = 'ar'; langBtn.textContent = 'EN'; startBtn.textContent = 'ابدأي الآن'; }
+});
+
+/* Accessibility: pause heavy decorations on small screens */
+if(window.innerWidth < 600){
+  // remove many floating elements for performance
+  document.querySelectorAll('.bubble').forEach(n=>n.remove());
+}
 </script>
 </body>
 </html>
+
 
 
 
