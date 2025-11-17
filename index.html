@@ -4,34 +4,28 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>TalkAndSolve — جوّ آمن لحلول مشاكلك</title>
-
-<!-- خطوط أنيقة -->
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg1:#e6fbf4;
-  --bg2:#d9f3ea;
-  --accent1:#00a389;
-  --accent2:#00796b;
-  --muted:#546e66;
-  --card:#ffffffcc;
-  --glass-blur:10px;
+  --bg1:#e9fbf6;
+  --bg2:#d9f6ef;
+  --accent:#00a389;
+  --accent-dark:#00796b;
+  --muted:#4b6b66;
+  --card:#ffffffdd;
   --radius:18px;
-  --shadow: 0 20px 50px rgba(4,30,20,0.12);
-  --soft-shadow: 0 8px 30px rgba(2,30,25,0.08);
+  --shadow: 0 18px 50px rgba(4,30,20,0.12);
 }
 
 /* عام */
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:'Cairo','Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
-body{background:linear-gradient(180deg,var(--bg1),var(--bg2)); color: #033a34; overflow-x:hidden; transition:background .4s,color .3s}
-a{color:inherit;text-decoration:none}
+html,body{height:100%;margin:0;font-family:'Cairo','Poppins',sans-serif;-webkit-font-smoothing:antialiased}
+body{background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:#053a35;}
 
-/* صفحة كاملة - hero */
-.hero{
+/* HERO: جعل الــhero عالي وكيوت */
+.hero {
   position:relative;
-  min-height:78vh;
+  min-height:88vh;             /* ارتفاع كبير ليبدو صفحة رئيسية جميلة */
   display:flex;
   align-items:center;
   justify-content:center;
@@ -39,116 +33,125 @@ a{color:inherit;text-decoration:none}
   overflow:hidden;
 }
 
-/* خلفية فيديو / صورة */
-.bg-media{
-  position:absolute;inset:0;z-index:0;object-fit:cover;width:100%;height:100%;filter:contrast(.95) saturate(.95) brightness(.9);
+/* خلفية هادئة (يمكن تغييرها) */
+.bg-layer{
+  position:absolute; inset:0; z-index:0;
+  background: radial-gradient(circle at 10% 10%, rgba(0,163,137,0.06), transparent 10%),
+              radial-gradient(circle at 90% 80%, rgba(0,121,107,0.05), transparent 12%),
+              linear-gradient(180deg,#f3fffb,#e8fff6);
 }
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.12));z-index:1}
 
-/* بطاقة الهيروا */
+/* بطاقة الهيرو مركزة، بعرض أقل عن الحافة لتبدو "بطاقة" وليست استمارة ممتدة */
 .hero-card{
   position:relative; z-index:2;
-  width:100%; max-width:1080px;
-  display:grid; grid-template-columns: 1fr 420px; gap:28px;
-  padding:34px; border-radius:26px; background:var(--card);
-  box-shadow:var(--shadow); backdrop-filter: blur(var(--glass-blur));
+  width:100%;
+  max-width:980px;             /* محدود لضبط العرض */
+  display:grid;
+  grid-template-columns: 1fr 380px;   /* نص + لوحة معاينة */
+  gap:28px;
+  padding:34px;
+  border-radius:28px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  align-items:center;
 }
-@media(max-width:980px){ .hero-card{grid-template-columns:1fr; padding:24px} }
+@media(max-width:900px){
+  .hero-card{ grid-template-columns: 1fr; padding:24px; gap:18px; }
+}
 
-.hero-left h1{margin:0;font-size:34px;line-height:1.02;color:var(--accent2); font-weight:700}
-.hero-left p{margin:14px 0 20px 0;color:var(--muted); font-size:17px}
+/* يسار الهيرو: نص جميل كبير */
+.hero-left h1{
+  margin:0; font-size:42px; line-height:1.01; font-weight:700; color:var(--accent-dark);
+}
+.hero-left p{ margin:14px 0 20px 0; color:var(--muted); font-size:17px; max-width:640px; }
 
-/* أزرار تفاعلية - نفخ عند hover */
+/* أزرار أنيقة مع تأثير انتفاخ */
+.cta-row{display:flex;gap:12px;align-items:center}
 .btn{
-  display:inline-flex;align-items:center;gap:10px;justify-content:center;
-  padding:12px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:600;
-  transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s, background .18s;
-  box-shadow:var(--soft-shadow);
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  padding:12px 18px; border-radius:12px; border:0; cursor:pointer; font-weight:600;
+  transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s;
+  box-shadow: 0 8px 30px rgba(2,30,25,0.08);
 }
-.btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white}
-.btn-ghost{background:transparent;border:2px solid rgba(3,58,52,0.06); color: rgba(3,58,52,0.9)}
-.btn:hover{transform: translateY(-6px) scale(1.02); box-shadow: 0 24px 50px rgba(0,0,0,0.12)}
-.btn:active{transform: translateY(-2px) scale(.995)}
+.btn-primary{ background: linear-gradient(90deg,var(--accent),var(--accent-dark)); color:white; }
+.btn-ghost{ background:transparent; border:1px solid rgba(3,58,52,0.08); color:var(--accent-dark); }
+.btn:hover{ transform: translateY(-6px) scale(1.03); box-shadow: 0 24px 50px rgba(2,30,25,0.14); }
 
-/* preview card (يمين) */
-.preview{border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#fbfffe,#f2fffb);box-shadow:0 10px 30px rgba(2,30,25,0.06)}
-.preview .screen{padding:18px}
-.preview h3{margin:0;font-size:16px;color:#04524b}
-.preview p{margin:6px 0 0 0;color:#0d6b61;font-size:13px}
+/* يمين الهيرو: بطاقة معاينة أصغر */
+.hero-right{ width:380px; max-width:42%; }
+@media(max-width:900px){ .hero-right{ width:100%; max-width:100%; } }
 
-/* MAIN content */
+.preview{
+  border-radius:16px; overflow:hidden; background: linear-gradient(180deg,#ffffff,#f5fffb);
+  padding:18px; box-shadow: 0 10px 30px rgba(2,30,25,0.06);
+}
+.preview h3{ margin:0; font-size:16px; color:#03594f }
+.preview p{ margin:8px 0 0 0; color:#0f6b60; font-size:14px }
+
+/* MAIN form section أقل ارتفاعًا ومركز */
 .main{
-  max-width:1080px;margin:28px auto;padding:0 20px 80px;
+  max-width:980px; margin:28px auto 80px; padding:0 20px;
 }
+
+/* نمط البطاقة العامة */
 .card{
-  background:var(--card); border-radius:18px; padding:20px; box-shadow:var(--soft-shadow); margin-bottom:18px;
-  transition: transform .18s, box-shadow .18s;
+  background:var(--card); border-radius:16px; padding:20px; box-shadow: 0 8px 30px rgba(2,30,25,0.06);
 }
-.card:hover{transform: translateY(-6px)}
 
-/* form grid */
-.form-grid{display:grid;grid-template-columns: 1fr 1fr; gap:14px}
-@media(max-width:820px){ .form-grid{grid-template-columns:1fr} }
-.input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(2,30,25,0.06);font-size:15px;background:#f8fffc}
-textarea.input{min-height:120px; resize:vertical}
+/* فورم: ضبط العرض حتى لا يمتد */
+.form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+@media(max-width:820px){ .form-grid{ grid-template-columns:1fr } }
+.input{ width:100%; padding:12px; border-radius:12px; border:1px solid rgba(2,30,25,0.06); background:#f8fffc; font-size:15px; }
+textarea.input{ min-height:120px; resize:vertical; }
 
-/* row small */
-.row{display:flex;gap:10px;align-items:center}
-.right{margin-left:auto}
+/* صف التحكم */
+.controls{ display:flex; align-items:center; gap:12px; justify-content:space-between; margin-top:12px; }
 
-/* solution card (animated & highlighted) */
-.solutionCard{border-radius:12px;padding:14px;margin-top:14px;background:linear-gradient(180deg,#e9fff6,#d7fff0);color:#004a43;box-shadow:0 12px 30px rgba(2,45,40,0.06);animation:cardIn .45s ease}
-@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* بطاقة الحل */
+.solutionCard{ border-radius:12px; padding:14px; margin-top:16px; background:linear-gradient(180deg,#e9fff6,#d7fff0); color:#004a43; box-shadow:0 12px 30px rgba(2,45,40,0.06); animation:cardIn .45s ease; }
+@keyframes cardIn{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)} }
 
 /* toast */
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:var(--accent1);color:white;padding:10px 16px;border-radius:20px;opacity:0;transition:opacity .3s;z-index:9999}
+.toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:24px; background:var(--accent); color:white; padding:10px 16px; border-radius:20px; opacity:0; transition:opacity .3s; z-index:9999; }
 
-/* modal ID (قابل للنسخ) */
-#idModal{display:none;position:fixed;left:50%;top:14%;transform:translateX(-50%);z-index:99999}
-#idModal .box{min-width:320px;max-width:92vw;padding:18px;border-radius:12px;background:white;box-shadow:0 18px 60px rgba(2,30,25,0.2);text-align:center}
-#lastIdInput{width:100%;padding:12px;border-radius:10px;border:2px solid var(--accent1);text-align:center;font-weight:700;background:#e9fff6;color:#004a43;user-select:all}
+/* مودال المعرف */
+#idModal{ display:none; position:fixed; left:50%; top:14%; transform:translateX(-50%); z-index:99999 }
+#idModal .box{ min-width:320px; max-width:92vw; padding:18px; border-radius:12px; background:white; box-shadow:0 18px 60px rgba(2,30,25,0.18); text-align:center }
+#lastIdInput{ width:100%; padding:12px; border-radius:10px; border:2px solid var(--accent); text-align:center; font-weight:700; background:#e9fff6; color:#004a43; user-select:all }
 
 /* admin note */
-.admin-note{background:linear-gradient(90deg,#fff8e1,#fff);padding:10px;border-radius:10px;border:1px solid #ffecb3;color:#6b4f00;font-size:14px;margin-bottom:10px}
+.admin-note{ background:linear-gradient(90deg,#fff8e1,#fff); padding:10px; border-radius:10px; border:1px solid #ffecb3; color:#6b4f00; font-size:14px; margin-bottom:10px }
 
-/* small helpers */
-.small{padding:8px 10px;font-size:14px;border-radius:10px}
-.hide{display:none}
-
-/* responsiveness tweaks */
+/* responsive tweaks */
 @media(max-width:560px){
-  .hero-left h1{font-size:22px}
-  .hero-card{padding:18px}
-  #lastIdInput{font-size:15px}
+  .hero-left h1{ font-size:28px }
+  .hero-card{ padding:18px; border-radius:16px }
 }
 </style>
 </head>
 <body>
 
-<!-- فيديو خلفية (يمكن استبداله) -->
-<video id="bgVideo" class="bg-media" autoplay muted loop playsinline>
-  <source src="https://www.videvo.net/videvo_files/converted/2017_04/preview/170404_01_Drone_View.mp452527.webm" type="video/webm">
-</video>
-<div class="hero">
-  <div class="hero-overlay"></div>
+<!-- HERO -->
+<div class="hero" role="banner" aria-label="Welcome">
+  <div class="bg-layer"></div>
 
-  <div class="hero-card" role="region" aria-label="Intro">
+  <div class="hero-card" role="region" aria-label="Hero content">
     <div class="hero-left">
-      <h1 id="titleText">TalkAndSolve — مرحباً بك</h1>
-      <p id="subtitle">مكان هادئ لتشارك مشاكلك وتحصل على حلول ودعم عملي. ابدئي الآن، خطوة بخطوة.</p>
+      <h1 id="titleText">مرحبا بك في <span style="color:var(--accent)">TalkAndSolve</span></h1>
+      <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول عملية. اكتبي مشكلتك باختصار واحصلي على معرف للمتابعة.</p>
 
-      <div style="display:flex;gap:12px;align-items:center;margin-top:18px">
-        <button id="startBtn" class="btn btn-primary">ابدأ الآن</button>
+      <div class="cta-row" style="margin-top:6px">
+        <button id="startBtn" class="btn btn-primary" aria-controls="formScreen">ابدأي الآن</button>
         <button id="langBtn" class="btn btn-ghost small">EN</button>
         <button id="toggleModeBtn" class="btn btn-ghost small">الوضع: نهاري</button>
       </div>
     </div>
 
     <div class="hero-right">
-      <div class="preview">
+      <div class="preview" aria-hidden="true">
         <div class="screen">
-          <h3>سهل وسريع</h3>
-          <p>أرسلي مشكلتك، خذي معرف المتابعة، واطلعي على الحل عندما يكون متاحًا.</p>
+          <h3>كيف نعالج المشكلات؟</h3>
+          <p>نعرض خطوات عملية ومحترمة تساعدك على التواصل، التعامل مع الخوف، أو حل النزاعات—بدون أحكام.</p>
         </div>
       </div>
     </div>
@@ -159,43 +162,41 @@ textarea.input{min-height:120px; resize:vertical}
 <main class="main" id="formScreen" style="display:none">
   <div class="card">
     <h2 id="formTitle">أرسل مشكلتك</h2>
+
     <form id="problemForm" autocomplete="off">
       <div class="form-grid">
         <input id="name" class="input" placeholder="اسمك (اختياري)" />
         <input id="type" class="input" placeholder="نوع المشكلة (مثال: تنمر، خوف، خلاف)" required />
       </div>
 
-      <textarea id="description" class="input" placeholder="صف المشكل بإيجاز (حتى 250 حرف)" maxlength="250" required></textarea>
+      <textarea id="description" class="input" placeholder="صف المشكلة بإيجاز (حتى 250 حرف)" maxlength="250" required></textarea>
 
-      <div class="row" style="align-items:center;justify-content:space-between;margin-top:6px">
+      <div class="controls">
         <label style="display:flex;align-items:center;gap:8px"><input id="agree" type="checkbox" /> <span id="agreeText">أوافق على الشروط</span></label>
-        <div class="right"><small id="charCount">0/250</small></div>
-      </div>
-
-      <div style="display:flex;gap:12px;margin-top:14px;align-items:center">
-        <button type="submit" class="btn btn-primary">إرسال</button>
-        <button id="openAdminBtn" type="button" class="btn btn-ghost small">لوحة الإدارة</button>
-        <div class="right" style="color:var(--muted);font-size:13px">TalkAndSolve</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <small id="charCount">0/250</small>
+          <button type="submit" class="btn btn-primary">إرسال</button>
+        </div>
       </div>
     </form>
   </div>
 
-  <div class="card">
+  <div class="card" style="margin-top:18px">
     <h3 id="checkTitle">عرض الحل</h3>
     <p id="checkHint">أدخلي معرف مشكلتك لتحصلي على الحل:</p>
-    <div style="display:flex;gap:10px;align-items:center">
+    <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
       <input id="checkKey" class="input" placeholder="ادخلي معرف المشكلة (مثال: 4F7A2B)" />
       <button id="checkBtn" class="btn btn-primary small">عرض الحل</button>
     </div>
     <div id="solutionDisplay"></div>
   </div>
 
-  <div class="card hide" id="adminArea">
+  <div class="card hide" id="adminArea" style="margin-top:18px">
     <div class="admin-note" id="adminNote">حقل الإدارة خاص بالفريق الإداري فقط — لا تملئيه إن لم تكوني من الإدارة.</div>
     <form id="adminForm">
       <input id="problemKey" class="input" placeholder="ضع معرف المشكلة هنا (مثال: 4F7A2B)" required />
       <textarea id="solutionText" class="input" placeholder="اكتبي الحل هنا..." rows="3" required></textarea>
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
         <button type="submit" class="btn btn-primary small">تحديث الحل</button>
         <button id="closeAdminBtn" type="button" class="btn btn-ghost small">إخفاء</button>
       </div>
@@ -203,7 +204,7 @@ textarea.input{min-height:120px; resize:vertical}
   </div>
 </main>
 
-<!-- toast -->
+<!-- Toast -->
 <div id="toast" class="toast" aria-live="polite"></div>
 
 <!-- ID Modal ثابت قابل للنسخ -->
@@ -219,18 +220,17 @@ textarea.input{min-height:120px; resize:vertical}
   </div>
 </div>
 
-<!-- أصوات + موسيقى (Bensound - Dreams royalty-free) -->
+<!-- أصوات وموسيقى -->
 <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
 <audio id="solutionSound" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
 <audio id="backgroundMusic" src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" loop></audio>
 
-<!-- سكربت: Firebase + منطق التطبيق -->
+<!-- Firebase + JS (تكامل كما قبل) -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getDatabase, ref, push, get, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-// === إعداد Firebase (افتحي إعدادات مشروعك إن احتجت تغيّر) ===
 const firebaseConfig = {
   apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
   authDomain: "talkandsolve-4ca7d.firebaseapp.com",
@@ -243,110 +243,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// عناصر DOM
+/* DOM */
 const startBtn = document.getElementById('startBtn');
-const bgVideo = document.getElementById('bgVideo');
 const formScreen = document.getElementById('formScreen');
 const clickSound = document.getElementById('clickSound');
-const successSound = document.getElementById('successSound');
-const solutionSound = document.getElementById('solutionSound');
 const backgroundMusic = document.getElementById('backgroundMusic');
-const toastEl = document.getElementById('toast');
-
 const problemForm = document.getElementById('problemForm');
 const nameInput = document.getElementById('name');
 const typeInput = document.getElementById('type');
 const descriptionInput = document.getElementById('description');
-const charCount = document.getElementById('charCount') || document.createElement('span'); // optional
-
+const charCount = document.getElementById('charCount');
+const agreeChk = document.getElementById('agree');
 const checkKey = document.getElementById('checkKey');
 const checkBtn = document.getElementById('checkBtn');
 const solutionDisplay = document.getElementById('solutionDisplay');
-
+const idModal = document.getElementById('idModal');
+const lastIdInput = document.getElementById('lastIdInput');
+const copyIdBtn = document.getElementById('copyIdBtn');
+const closeIdBtn = document.getElementById('closeIdBtn');
+const toastEl = document.getElementById('toast');
 const openAdminBtn = document.getElementById('openAdminBtn');
 const adminArea = document.getElementById('adminArea');
 const adminForm = document.getElementById('adminForm');
 const closeAdminBtn = document.getElementById('closeAdminBtn');
 
-const idModal = document.getElementById('idModal');
-const lastIdInput = document.getElementById('lastIdInput');
-const copyIdBtn = document.getElementById('copyIdBtn');
-const closeIdBtn = document.getElementById('closeIdBtn');
-
-const toggleModeBtn = document.getElementById('toggleModeBtn');
-const langBtn = document.getElementById('langBtn');
-
-const titleText = document.getElementById('titleText');
-const dynamicText = document.getElementById('subtitle');
-const formTitle = document.getElementById('formTitle');
-const checkTitle = document.getElementById('checkTitle');
-const checkHint = document.getElementById('checkHint');
-const agreeText = document.getElementById('agreeText');
-const idModalTitle = document.getElementById('idModalTitle');
-const idModalMsg = document.getElementById('idModalMsg');
-const copyBtnText = copyIdBtn;
-
-// فقاعات زخرفية صغيرة
-(function createDecoration(){
-  // هنا نترك الفيديو والبطاقة الجميلة — لا حاجة لفقاعات إضافية كبيرة
-})();
-
-// toast
 function showToast(msg){
   toastEl.textContent = msg;
   toastEl.style.opacity = '1';
-  setTimeout(()=> toastEl.style.opacity='0', 3200);
+  setTimeout(()=> toastEl.style.opacity = '0', 3200);
 }
 
-// ترجمة نصوص (AR/EN) — بسيط وعملي
-let lang = 'ar';
-const translations = {
-  ar:{
-    startBtn:"ابدأ الآن", langBtn:"EN", modeLight:"الوضع: نهاري", modeDark:"الوضع: ليلي",
-    formTitle:"أرسل مشكلتك", agreeText:"أوافق على الشروط", checkTitle:"عرض الحل", checkHint:"أدخلي معرف مشكلتك:",
-    modalTitle:"تم الإرسال بنجاح!", modalMsg:"هذا هو معرف متابعتك:", copyBtn:"نسخ المعرف", closeBtn:"إغلاق",
-    adminPrompt:"أدخلي كود الإدارة:", adminWrong:"كود خاطئ.", issueSent:"تم إرسال مشكلتك — انسخي المعرف للمتابعة",
-    fillReq: "المرجو تعبئة نوع المشكلة والوصف"
-  },
-  en:{
-    startBtn:"Start Now", langBtn:"AR", modeLight:"Mode: Light", modeDark:"Mode: Dark",
-    formTitle:"Submit your issue", agreeText:"I agree to terms", checkTitle:"View solution", checkHint:"Enter your issue ID:",
-    modalTitle:"Sent successfully!", modalMsg:"This is your tracking ID:", copyBtn:"Copy ID", closeBtn:"Close",
-    adminPrompt:"Enter admin code:", adminWrong:"Wrong code.", issueSent:"Issue sent — copy your ID to follow up",
-    fillReq: "Please fill type and description"
-  }
-};
-
-function setLang(to){
-  lang = to;
-  const t = translations[lang];
-  startBtn.textContent = t.startBtn;
-  langBtn.textContent = t.langBtn;
-  toggleModeBtn.textContent = t.modeLight;
-  document.getElementById('formTitle').textContent = t.formTitle;
-  document.getElementById('checkTitle').textContent = t.checkTitle;
-  document.getElementById('checkHint').textContent = t.checkHint;
-  document.getElementById('agreeText').textContent = t.agreeText;
-  idModalTitle.textContent = t.modalTitle;
-  idModalMsg.textContent = t.modalMsg;
-  copyIdBtn.textContent = t.copyBtn;
-  closeIdBtn.textContent = t.closeBtn;
-}
-setLang('ar');
-
-// نص برومو متغير بسيط
-const promoTexts = {
-  ar:["مكان هادئ لمشاركة مشاكلك و الحصول على حلول مُريحة.","خطوات عملية ومباشرة لدعم نفسيتك.","احصلي على إجابات محترمة وسرية."],
-  en:["A calm place to share issues and get gentle solutions.","Practical steps to support your wellbeing.","Receive respectful, confidential responses."]
-};
-let promoIndex = 0;
-setInterval(()=>{
-  promoIndex = (promoIndex+1) % promoTexts[lang].length;
-  dynamicText.style.opacity = 0;
-  setTimeout(()=> { dynamicText.textContent = promoTexts[lang][promoIndex]; dynamicText.style.opacity = 1; }, 300);
-},4200);
-
-// بدء: إخفاء الهيرو وإظهار الفورم + تشغيل الموسيقى (user gesture)
+/* START: افتح الفورم وشغّل الموسيقى (gesture) */
 startBtn.addEventListener('click', ()=>{
   try{ clickSound.play(); }catch(e){}
   try{ backgroundMusic.play(); }catch(e){}
@@ -354,110 +281,82 @@ startBtn.addEventListener('click', ()=>{
   formScreen.style.display = 'block';
   formScreen.scrollIntoView({behavior:'smooth'});
   setTimeout(()=> typeInput.focus(), 300);
-  showToast(translations[lang].issueSent);
 });
 
-// عداد أحرف
-const charCountEl = document.getElementById('charCount');
-if(charCountEl){
-  descriptionInput.addEventListener('input', ()=> charCountEl.textContent = `${descriptionInput.value.length}/250`);
-}
+/* عداد الأحرف */
+descriptionInput.addEventListener('input', ()=> {
+  if(charCount) charCount.textContent = `${descriptionInput.value.length}/250`;
+});
 
-// إرسال المشكلة: معرف قصير سهل الحفظ، مودال ثابت للنسخ
+/* إرسال المشكلة - معرف قصير */
 problemForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const name = nameInput.value.trim();
   const type = typeInput.value.trim();
   const description = descriptionInput.value.trim();
-  const agree = document.getElementById('agree').checked;
-  if(!agree){ alert(translations[lang].agreeText); return; }
-  if(!type || !description){ alert(translations[lang].fillReq); return; }
+  const agree = agreeChk.checked;
+  if(!agree){ alert('يجب الموافقة على الشروط'); return; }
+  if(!type || !description){ alert('المرجو تعبئة نوع المشكلة والوصف'); return; }
 
   const shortId = Math.random().toString(36).substring(2,8).toUpperCase();
 
-  // نحفظ في Firebase تحت problems/{shortId}
   push(ref(db, 'problems/' + shortId), { name, type, description, solution:'', date: new Date().toISOString() })
     .then(()=>{
-      try{ successSound.play(); }catch(e){}
+      document.getElementById('successSound').play();
       lastIdInput.value = shortId;
       idModal.style.display = 'block';
       lastIdInput.select(); lastIdInput.setSelectionRange(0, lastIdInput.value.length);
-      showToast(translations[lang].issueSent);
+      showToast('تم إرسال مشكلتك — انسخي المعرف للمتابعة');
       problemForm.reset();
-      if(charCountEl) charCountEl.textContent = '0/250';
+      if(charCount) charCount.textContent = '0/250';
     })
-    .catch(err=> alert((lang==='ar' ? 'حصل خطأ: ' : 'Error: ') + err));
+    .catch(err=> alert('حدث خطأ: ' + err));
 });
 
-// زر النسخ
+/* نسخ المعرف */
 copyIdBtn.addEventListener('click', async ()=>{
-  try{
-    await navigator.clipboard.writeText(lastIdInput.value);
-    copyIdBtn.textContent = (lang==='ar' ? '✔ تم النسخ' : '✔ Copied');
-    setTimeout(()=> copyIdBtn.textContent = translations[lang].copyBtn,1800);
-  }catch(e){
-    lastIdInput.select();
-    alert((lang==='ar' ? 'انسخي المعرف يدوياً: ' : 'Copy manually: ') + lastIdInput.value);
-  }
+  try{ await navigator.clipboard.writeText(lastIdInput.value); copyIdBtn.textContent = '✔ تم النسخ'; setTimeout(()=> copyIdBtn.textContent = 'نسخ المعرف',1600); }
+  catch(e){ lastIdInput.select(); alert('انسخي المعرف يدوياً: ' + lastIdInput.value); }
 });
 closeIdBtn.addEventListener('click', ()=> idModal.style.display = 'none');
 
-// عرض الحل بواسطة المعرف
+/* عرض الحل */
 checkBtn.addEventListener('click', ()=>{
   const key = checkKey.value.trim();
-  if(!key) return alert(lang==='ar' ? 'يرجى إدخال معرف المشكلة' : 'Please enter the issue ID');
+  if(!key) return alert('يرجى إدخال معرف المشكلة');
   get(ref(db, 'problems/' + key)).then(snapshot=>{
     if(snapshot.exists()){
       const data = snapshot.val();
-      const sol = data.solution || (lang==='ar' ? 'لم يتم الرد بعد، يرجى الانتظار' : 'No reply yet, please wait');
+      const sol = data.solution || 'لم يتم الرد بعد، يرجى الانتظار';
       solutionDisplay.innerHTML = `<div class="solutionCard">${sol}</div>`;
-      try{ solutionSound.play(); }catch(e){}
-    } else {
-      alert(lang==='ar' ? 'لم يتم العثور على مشكلتك' : 'Issue not found');
-    }
+      try{ document.getElementById('solutionSound').play(); }catch(e){}
+    } else alert('لم يتم العثور على مشكلتك');
   });
 });
 
-// لوحة الإدارة محمية بكود بسيط (غير آمن بشكل مطلق - مناسب للمنع العرضي)
-const ADMIN_CODE = '5566'; // غيّريه إلى رمز أقوى خاص بك
+/* لوحة الإدارة محمية بكود بسيط (غير آمن لوحده) */
+const ADMIN_CODE = '5566';
 openAdminBtn.addEventListener('click', ()=>{
-  const code = prompt(translations[lang].adminPrompt || 'Enter admin code:');
-  if(code === ADMIN_CODE){
-    adminArea.classList.remove('hide'); adminArea.style.display='block';
-    showToast(lang==='ar' ? 'تم فتح لوحة الإدارة' : 'Admin panel opened');
-  } else {
-    alert(translations[lang].adminWrong || 'Wrong code.');
-  }
+  const code = prompt('أدخلي كود الإدارة:');
+  if(code === ADMIN_CODE){ adminArea.classList.remove('hide'); adminArea.style.display='block'; showToast('تم فتح لوحة الإدارة'); }
+  else alert('كود خاطئ');
 });
 closeAdminBtn.addEventListener('click', ()=> { adminArea.classList.add('hide'); adminArea.style.display='none'; });
 
-// إضافة الحل في لوحة الإدارة
+/* إضافة الحل */
 adminForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const key = document.getElementById('problemKey').value.trim();
   const solutionText = document.getElementById('solutionText').value.trim();
-  if(!key || !solutionText){ alert(lang==='ar' ? 'المرجو ملء الحقول' : 'Please fill fields'); return; }
+  if(!key || !solutionText){ alert('المرجو ملء الحقول'); return; }
   update(ref(db, 'problems/' + key), { solution: solutionText })
-    .then(()=> showToast(lang==='ar' ? 'تم إضافة الحل بنجاح!' : 'Solution updated!'))
-    .catch(err=> alert((lang==='ar' ? 'حدث خطأ: ' : 'Error: ') + err));
+    .then(()=> showToast('تم إضافة الحل بنجاح!'))
+    .catch(err=> alert('حدث خطأ: ' + err));
 });
-
-// تبديل الوضع - ليلي/نهاري
-toggleModeBtn.addEventListener('click', ()=>{
-  if(document.body.classList.contains('dark')){ document.body.classList.remove('dark'); document.body.classList.add('light'); toggleModeBtn.textContent = translations[lang].modeLight; }
-  else{ document.body.classList.remove('light'); document.body.classList.add('dark'); toggleModeBtn.textContent = translations[lang].modeDark; }
-});
-
-// تبديل اللغة
-langBtn.addEventListener('click', ()=> setLang(lang === 'ar' ? 'en' : 'ar'));
-
-// تهيئة افتراضية
-document.body.classList.add('light');
-if(window.innerWidth < 600){ bgVideo.removeAttribute('autoplay'); bgVideo.pause(); }
-
 </script>
 </body>
 </html>
+
 
 
 
