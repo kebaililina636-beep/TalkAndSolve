@@ -1,473 +1,569 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Talk And Solve - نسخة مصححة</title>
-<style>
-/* ====== RESET ====== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Tajawal', sans-serif;
-  background: #f2f8ff;
-  color: #2c3e50;
-  overflow-x: hidden;
-  line-height: 1.6;
-}
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk And Solve</title>
 
-:root {
-  --primary: #0077b6;
-  --secondary: #00b4d8;
-  --accent: #90e0ef;
-  --light: #caf0f8;
-  --danger: #d90429;
-  --success: #2a9d8f;
-}
+    <style>
+        :root {
+            --bg-light: linear-gradient(to top, #fdfbfb, #ebedee);
+            --bg-dark: #0a0a0a;
+            --text-light: #000;
+            --text-dark: #fff;
+            --card-bg-light: #fff;
+            --card-bg-dark: rgba(255, 255, 255, 0.05);
+            --accent: #ff4f7b;
+            --accent-hover: #ff335f;
+        }
 
-/* ====== COPY BUTTON ====== */
-.copy-btn {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.copy-btn:hover { background: var(--secondary); }
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: 0.4s ease-in-out;
+            overflow-x: hidden;
+        }
 
-/* ====== FLOATING HEARTS ====== */
-.floating-hearts {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  gap: 5px;
-  z-index: 10;
-}
-.heart {
-  font-size: 22px;
-  animation: float 3s infinite ease-in-out;
-}
-@keyframes float {
-  0% { transform: translateY(0); opacity: 1; }
-  50% { transform: translateY(-10px); opacity: 0.7; }
-  100% { transform: translateY(0); opacity: 1; }
-}
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
 
-/* ====== PROGRESS BAR ====== */
-.progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: rgba(0,0,0,0.1);
-  z-index: 9999;
-}
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: var(--primary);
-  transition: width 0.2s ease;
-}
+        .container {
+            width: 92%;
+            max-width: 850px;
+            margin: auto;
+            padding: 15px 0;
+        }
 
-/* ====== NAVIGATION ====== */
-nav {
-  width: 100%;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-nav .logo { font-size: 20px; font-weight: bold; color: var(--primary); }
-nav button {
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  background: var(--secondary);
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-}
+        .hero {
+            text-align: center;
+            padding: 55px 12px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #fdfbfb, #ebedee);
+            transition: 0.4s;
+        }
 
-/* ====== HERO SECTION ====== */
-.hero {
-  padding: 50px 20px;
-  text-align: center;
-}
-.hero-left { margin-bottom: 20px; }
-.hero h1 {
-  font-size: 32px;
-  font-weight: bold;
-  color: var(--primary);
-  position: relative;
-}
-.hero h1::after {
-  content: "✨";
-  margin-right: 8px;
-  opacity: 0.8;
-}
-.hero p { font-size: 16px; color: #555; margin: 15px 0; }
-.hero button {
-  padding: 12px 20px;
-  font-size: 16px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.hero button:hover { background: var(--secondary); }
-.hero-image { text-align: center; }
-.hero-image img { width: 70%; max-width: 350px; }
+        body.dark-mode .hero {
+            background: #111;
+        }
 
-/* ====== CONTENT SECTIONS ====== */
-.content-section { display: none; padding: 40px 20px; }
-.container {
-  background: #fff;
-  padding: 25px;
-  border-radius: 15px;
-  max-width: 800px;
-  margin: auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
+        #floatingHearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
 
-/* ====== FORM ====== */
-input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-top: 5px;
-  font-size: 14px;
-}
-textarea { resize: none; height: 120px; }
-label { font-weight: bold; margin-top: 10px; display: block; }
-#charCount { font-size: 13px; color: #555; margin-top: 5px; }
+        .hero-left h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease-out;
+            position: relative;
+        }
 
-button[type="submit"] {
-  background: var(--primary);
-  color: #fff;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 15px;
-  font-size: 16px;
-}
-button[type="submit"]:hover { background: var(--secondary); }
+        .hero-left h1::after {
+            content: '✨';
+            position: absolute;
+            margin-right: 8px;
+            animation: sparkle 1.5s infinite alternate;
+            aria-hidden: true;
+        }
 
-/* ====== MODAL ====== */
-#idModal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 99999;
-  padding-top: 80px;
-}
-#idModal .card {
-  background: #fff;
-  width: 90%;
-  max-width: 400px;
-  padding: 25px;
-  margin: auto;
-  border-radius: 15px;
-  text-align: center;
-}
+        @keyframes sparkle {
+            from { opacity: 0.2; transform: scale(1); }
+            to   { opacity: 1; transform: scale(1.2); }
+        }
 
-/* ====== NOTIFICATIONS ====== */
-.notification {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--primary);
-  color: white;
-  padding: 12px 18px;
-  border-radius: 8px;
-  animation: slideIn .4s ease;
-  z-index: 99999;
-}
-@keyframes slideIn {
-  from { transform: translateX(100px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
+        .hero-left p {
+            font-size: 18px;
+            opacity: 0.85;
+            animation: fadeInUp 1s ease-out;
+        }
 
-/* ====== ADMIN ====== */
-#adminArea {
-  display: none;
-  background: #fff;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 600px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-.hide { display: none !important; }
-</style>
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            background: var(--accent);
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 8px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        .card {
+            background: var(--card-bg-light);
+            padding: 20px;
+            border-radius: 14px;
+            margin-top: 25px;
+            box-shadow: 0px 0px 14px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        body.dark-mode .card {
+            background: var(--card-bg-dark);
+            backdrop-filter: blur(6px);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1.4px solid #ccc;
+            margin-bottom: 10px;
+            resize: vertical;
+            font-size: 16px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 25px;
+        }
+
+        .progress {
+            width: 3%;
+            height: 8px;
+            background: var(--accent);
+            transition: width 0.2s linear;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s;
+            z-index: 1000;
+            font-size: 16px;
+        }
+
+        .admin-panel {
+            padding: 15px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 14px;
+            margin-top: 25px;
+        }
+
+        body.dark-mode .admin-panel {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .hide { display: none; }
+
+        .solutionCard {
+            background: #fff3f7;
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            margin-top: 12px;
+        }
+
+        body.dark-mode .solutionCard {
+            background: rgba(255,255,255,0.07);
+        }
+
+        #idModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.65);
+            display:none;
+            justify-content:center;
+            align-items:center;
+            z-index:1000;
+        }
+
+        #idModalBox {
+            background:#fff;
+            padding:20px;
+            border-radius:12px;
+            max-width:320px;
+            width:90%;
+            text-align:center;
+        }
+
+        body.dark-mode #idModalBox {
+            background: #222;
+            color: white;
+        }
+
+        .tagline {
+            background: rgba(255,255,255,0.5);
+            padding: 8px 16px;
+            margin-top: 28px;
+            border-radius: 12px;
+            display: inline-block;
+            font-size: 15.5px;
+        }
+
+        body.dark-mode .tagline {
+            background: rgba(255,255,255,0.08);
+        }
+
+        @keyframes floatBubble {
+            from { transform: translateY(0) scale(1); opacity: 0.8; }
+            to   { transform: translateY(-120px) scale(1.2); opacity: 0; }
+        }
+
+        .bubble {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,79,123,0.7);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            animation: floatBubble 4s linear infinite;
+        }
+
+        #bubbleContainer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            overflow: hidden;
+        }
+
+    </style>
 </head>
+
 <body>
 
-<!-- === Floating Hearts === -->
-<div class="floating-hearts">
-  <span class="heart">💙</span>
-  <span class="heart">💙</span>
-  <span class="heart">💙</span>
+<div id="toast" aria-live="polite"></div>
+
+<div class="container">
+
+    <div class="hero" id="heroSection">
+        <div id="floatingHearts"></div>
+
+        <h1>Talk And Solve</h1>
+        <p>منصة لطرح مشاكلكِ بسرية تامة والحصول على حل.</p>
+
+        <div class="button-group">
+            <button class="btn" id="startBtn">ابدئي الآن</button>
+        </div>
+
+        <div id="bubbleContainer"></div>
+    </div>
+
+    <div id="problemSection" class="hide">
+        <div class="card">
+            <h2>أرسلي مشكلتك</h2>
+
+            <form id="problemForm">
+                <label>اسمك (اختياري):</label>
+                <input type="text" id="name" placeholder="اسمك...">
+
+                <label>نوع المشكلة:</label>
+                <input type="text" id="type" placeholder="مثال: صداقة / علاقة / عائلة">
+
+                <label>مشكلتك (بتفصيل):</label>
+                <textarea id="description" maxlength="250"></textarea>
+
+                <div id="charCount" style="text-align:left;font-size:14px;opacity:0.7;">0/250</div>
+
+                <br>
+                <button class="btn" type="submit">إرسال</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress"></div>
+    </div>
+
+    <div class="card">
+        <h2>عرض حل مشكلتك</h2>
+        <input type="text" id="checkKey" placeholder="اكتبي المعرف" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;">
+        <button class="btn" id="checkBtn">عرض الحل</button>
+
+        <div id="solutionDisplay" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="admin-panel hide" id="adminArea">
+        <h2>منطقة الإدارة</h2>
+        <form id="adminForm">
+            <label>معرف المشكلة:</label>
+            <input type="text" id="problemKey" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;">
+
+            <label>اكتبي الحل:</label>
+            <textarea id="solutionText"></textarea>
+
+            <button class="btn" type="submit">نشر الحل</button>
+        </form>
+
+        <button class="btn" id="closeAdminBtn" type="button" style="margin-top:10px;background:#666;">إغلاق</button>
+    </div>
+
+    <p class="tagline">خصوصيتك أولويتنا — لا يتم تخزين أي بيانات شخصية.</p>
+
 </div>
 
-<!-- === Progress Bar === -->
-<div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
 
-<!-- === NAVBAR === -->
-<nav>
-  <div class="logo">Talk & Solve 🔧</div>
-  <button id="langBtn">EN</button>
-</nav>
+<!-- المودال -->
+<div id="idModal">
+    <div id="idModalBox">
+        <h3>تم الإرسال بنجاح!</h3>
+        <p>احتفظي بالمعرف التالي لعرض الحل:</p>
 
-<!-- === HERO SECTION === -->
-<section id="heroSection" class="hero">
-  <div class="hero-left">
-    <h1>أهلاً في Talk And Solve 💙</h1>
-    <p>اكتبي مشكلتك بكل أمان، وخلي بالكرتون الزرق يحلّها لكِ بسرعة وبأسلوب لطيف.</p>
-    <button id="startBtn">ابدئي الآن 🚀</button>
-  </div>
-  <div class="hero-image">
-    <img src="https://media1.tenor.com/m/xVkT-2zaZx8AAAAd/blue-cat-blue.gif" />
-  </div>
-</section>
-
-<!-- === Steps Content === -->
-<section id="step1" class="content-section">
-  <div class="container">
-    <h2>✨ اكتبي مشكلتك</h2>
-    <form id="problemForm">
-      <label>اسمك (اختياري):</label>
-      <input type="text" id="name" placeholder="اكتبي اسمك هنا..." />
-
-      <label>نوع المشكلة:</label>
-      <select id="type" required>
-        <option value="">اختاري النوع</option>
-        <option value="اجتماعية">اجتماعية</option>
-        <option value="نفسية">نفسية</option>
-        <option value="عاطفية">عاطفية</option>
-        <option value="أخرى">أخرى</option>
-      </select>
-
-      <label>وصف المشكلة (بحد أقصى 250 حرف):</label>
-      <textarea id="description" maxlength="250" placeholder="اكتبي مشكلتك هنا..." required></textarea>
-      <div id="charCount">0/250</div>
-
-      <label>
-        <input type="checkbox" id="agree" />
-        أوافق على معالجة المشكلة.
-      </label>
-
-      <button type="submit">إرسال المشكلة</button>
-    </form>
-  </div>
-</section>
-
-<section id="step2" class="content-section">
-  <div class="container">
-    <h2>🔎 عرض الحل</h2>
-    <p>أدخلي معرف المشكلة لرؤية الحل:</p>
-    <input type="text" id="checkKey" placeholder="مثل: A1B2C3" />
-    <button id="checkBtn" class="solution">عرض الحل</button>
-    <div id="solutionDisplay" class="mt20"></div>
-  </div>
-</section>
-
-<!-- === ID MODAL === -->
-<div id="idModal" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="card">
-    <h3>🎉 تم تسجيل مشكلتك!</h3>
-    <p>هذا هو المعرف الخاص بك — احتفظي به:</p>
-    <p><strong>لا تشاركيه مع أحد</strong></p>
-    <input type="text" id="lastIdInput" readonly style="text-align:center;font-weight:bold;font-size:18px;margin:10px 0;" />
-    <button id="copyIdBtn" class="copy-btn">نسخ</button>
-    <br /><br />
-    <button id="closeIdBtn">إغلاق</button>
-  </div>
+        <input id="lastIdInput" readonly style="padding:10px;width:90%;border-radius:8px;border:1px solid #ccc;text-align:center;font-size:18px;margin-top:10px;">
+        
+        <button class="btn" id="copyIdBtn" type="button" style="width:90%;margin-top:12px;">نسخ المعرف</button>
+        <button class="btn" id="closeIdBtn" type="button" style="width:90%;margin-top:8px;background:#777;">إغلاق</button>
+    </div>
 </div>
 
-<!-- === ADMIN AREA === -->
-<div id="adminArea">
-  <h3>لوحة الإدارة 🛠️</h3>
-  <form id="adminForm">
-    <label>معرف المشكلة:</label>
-    <input type="text" id="problemKey" placeholder="A1B2C3" />
-    <label>الحل:</label>
-    <textarea id="solutionText" placeholder="اكتب الحل هنا..."></textarea>
-    <button type="submit">حفظ الحل</button>
-  </form>
-  <button id="closeAdminBtn">إخفاء</button>
-</div>
+
 
 <script>
-/* ====== PROGRESS BAR ====== */
-const progressBar = document.getElementById('progressBar');
-window.addEventListener('scroll', () => {
-  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-  if (scrollable > 0) {
-    progressBar.style.width = (window.scrollY / scrollable) * 100 + '%';
-  } else {
-    progressBar.style.width = '0%';
-  }
-});
+/* ========== TOOLS ========== */
 
-/* ====== STEP SYSTEM ====== */
-const steps = ['step1', 'step2'];
-let currentStep = 0;
-function showStep(i) {
-  steps.forEach((id, idx) => {
-    document.getElementById(id).style.display = idx === i ? 'block' : 'none';
-  });
-  document.getElementById('heroSection').style.display = 'none';
+const $ = id => document.getElementById(id);
+
+function showToast(msg) {
+    const toast = $("toast");
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    setTimeout(() => toast.style.opacity = "0", 2200);
 }
 
-document.getElementById('startBtn').onclick = () => {
-  showStep(0);
-};
-
-document.getElementById('nextBtn')?.onclick = () => {
-  currentStep = Math.min(currentStep + 1, steps.length - 1);
-  showStep(currentStep);
-};
-
-document.getElementById('prevBtn')?.onclick = () => {
-  currentStep = Math.max(currentStep - 1, 0);
-  showStep(currentStep);
-};
-
-/* ====== CHAR COUNTER ====== */
-const descInput = document.getElementById('description');
-const charCount = document.getElementById('charCount');
-descInput.addEventListener('input', () => {
-  charCount.textContent = `${descInput.value.length}/250`;
-});
-
-/* ====== NOTIFICATION ====== */
-function showNotification(msg, type='info') {
-  const n = document.createElement('div');
-  n.className = 'notification';
-  n.style.background = type === 'success' ? 'var(--success)' : type === 'warning' ? 'var(--danger)' : 'var(--primary)';
-  n.textContent = msg;
-  document.body.appendChild(n);
-  setTimeout(() => n.remove(), 3000);
+function makeId(len = 6) {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let out = "";
+    for (let i = 0; i < len; i++) {
+        out += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return out;
 }
 
-/* ====== FAKE BACKEND (localStorage) ====== */
-function makeId(length=6) {
-  const chars = 'ABCDEFGHJKLMNPQRTUVWXYZ23456789';
-  let out = '';
-  for (let i = 0; i < length; i++) out += chars[Math.floor(Math.random() * chars.length)];
-  return out;
-}
-function saveProblem(p) {
-  const db = JSON.parse(localStorage.getItem('problems') || '{}');
-  db[p.id] = p;
-  localStorage.setItem('problems', JSON.stringify(db));
-}
-function getProblem(id) {
-  const db = JSON.parse(localStorage.getItem('problems') || '{}');
-  return db[id] || null;
-}
 function escapeHtml(str) {
-  return str.replace(/[&<>"']/g, m => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'
-  }[m]));
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 }
 
-/* ====== SUBMIT PROBLEM ====== */
-const problemForm = document.getElementById('problemForm');
-const idModal = document.getElementById('idModal');
-const lastIdInput = document.getElementById('lastIdInput');
+/* ========== STORAGE MOCKUP ========== */
 
-problemForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const type = document.getElementById('type').value.trim();
-  const desc = document.getElementById('description').value.trim();
-  if (!type || !desc) {
-    showNotification('املئي الحقول المطلوبة', 'warning');
-    return;
-  }
-  const id = makeId();
-  saveProblem({
-    id,
-    name: document.getElementById('name').value.trim() || 'مجهولة',
-    type,
-    description: desc,
-    solution: null,
-    created: new Date().toISOString()
-  });
-  lastIdInput.value = id;
-  idModal.style.display = 'block';
-  idModal.setAttribute('aria-hidden', 'false');
-  lastIdInput.select();
-  showNotification('تم تسجيل المشكلة بنجاح', 'success');
-  problemForm.reset();
-  charCount.textContent = "0/250";
+function saveProblem(p) {
+    const db = JSON.parse(localStorage.getItem("talk_db") || "{}");
+    db[p.id] = p;
+    localStorage.setItem("talk_db", JSON.stringify(db));
+}
+
+function getProblem(id) {
+    const db = JSON.parse(localStorage.getItem("talk_db") || "{}");
+    return db[id] || null;
+}
+
+/* ========== UI ========== */
+
+const hero = $("heroSection");
+const problemSection = $("problemSection");
+const progressBar = document.querySelector(".progress");
+
+$("startBtn").addEventListener("click", () => {
+    hero.classList.add("hide");
+    problemSection.classList.remove("hide");
+    $("name").focus();
 });
 
-document.getElementById('copyIdBtn').onclick = () => {
-  navigator.clipboard.writeText(lastIdInput.value).then(() => {
-    showNotification('تم نسخ المعرف', 'success');
-  });
-};
-document.getElementById('closeIdBtn').onclick = () => {
-  idModal.style.display = 'none';
-  idModal.setAttribute('aria-hidden', 'true');
-};
+/* ========== BUBBLES ========== */
+function createBubbles() {
+    const container = $("bubbleContainer");
+    setInterval(() => {
+        const b = document.createElement("span");
+        b.classList.add("bubble");
+        b.style.left = Math.random() * 100 + "%";
+        b.style.animationDuration = (3 + Math.random() * 3) + "s";
+        container.appendChild(b);
+        setTimeout(() => b.remove(), 6000);
+    }, 600);
+}
+createBubbles();
 
-/* ====== CHECK SOLUTION ====== */
-const checkBtn = document.getElementById('checkBtn');
-const solutionDisplay = document.getElementById('solutionDisplay');
-checkBtn.onclick = () => {
-  const key = document.getElementById('checkKey').value.trim().toUpperCase();
-  const p = getProblem(key);
-  if (!p) {
-    solutionDisplay.innerHTML = '<div class="card">لا يوجد مشكلة بهذا المعرف</div>';
-    return;
-  }
-  if (!p.solution) {
-    solutionDisplay.innerHTML = `<div class='card'>لم يتم نشر حل بعد. المعرف: <strong>${p.id}</strong></div>`;
-  } else {
-    solutionDisplay.innerHTML = `<div class='card'><h3>الحل:</h3><p>${escapeHtml(p.solution)}</p></div>`;
-  }
-};
+/* ========== HEARTS ========== */
+function createFloatingHearts() {
+    const cont = $("floatingHearts");
+    setInterval(() => {
+        const h = document.createElement("div");
+        h.innerHTML = "❤";
+        h.style.position = "absolute";
+        h.style.fontSize = "16px";
+        h.style.left = Math.random() * 100 + "%";
+        h.style.top = Math.random() * 100 + "%";
+        h.style.opacity = "0.8";
+        h.style.animation = "floatHeart 4s linear forwards";
+        cont.appendChild(h);
+        setTimeout(() => h.remove(), 4000);
+    }, 1400);
+}
+createFloatingHearts();
 
-/* ====== ADMIN PANEL (Ctrl+Shift+A) ====== */
-const adminArea = document.getElementById('adminArea');
-document.addEventListener('keydown', e => {
-  if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-    adminArea.style.display = adminArea.style.display === 'block' ? 'none' : 'block';
-  }
+/* ========== PROGRESS BAR FIX ========== */
+window.addEventListener("scroll", () => {
+    const scrollable = document.documentElement.scrollHeight - innerHeight;
+    let progress = 0;
+    if (scrollable > 0) progress = (scrollY / scrollable) * 100;
+    progressBar.style.width = progress + "%";
 });
 
-document.getElementById('adminForm').onsubmit = e => {
-  e.preventDefault();
-  const key = document.getElementById('problemKey').value.trim().toUpperCase();
-  const sol = document.getElementById('solutionText').value.trim();
-  const p = getProblem(key);
-  if (!p) return showNotification('المعرف غير موجود', 'warning');
-  p.solution = sol;
-  saveProblem(p);
-  showNotification('تم حفظ الحل', 'success');
-};
+/* ========== CHARACTER COUNT ========== */
+$("description").addEventListener("input", () => {
+    $("charCount").textContent = `${$("description").value.length}/250`;
+});
 
-document.getElementById('closeAdminBtn').onclick = () => {
-  adminArea.style.display = 'none';
-};
+/* ========== SUBMIT PROBLEM ========== */
+$("problemForm").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const type = $("type").value.trim();
+    const desc = $("description").value.trim();
+
+    if (!type || !desc) {
+        showToast("يرجى ملء الحقول المطلوبة");
+        return;
+    }
+
+    const id = makeId();
+    const p = {
+        id,
+        name: $("name").value.trim() || "مجهولة",
+        type,
+        desc,
+        created: new Date().toISOString(),
+        solution: null
+    };
+
+    saveProblem(p);
+
+    $("lastIdInput").value = id;
+    $("idModal").style.display = "flex";
+
+    showToast("تم الإرسال — احتفظي بالمعرّف!");
+});
+
+/* ========== COPY ID ========== */
+$("copyIdBtn").addEventListener("click", () => {
+    navigator.clipboard.writeText($("lastIdInput").value);
+    showToast("تم النسخ!");
+});
+
+/* ========== CLOSE MODAL ========== */
+$("closeIdBtn").addEventListener("click", () => {
+    $("idModal").style.display = "none";
+});
+
+/* ========== CHECK SOLUTION ========== */
+$("checkBtn").addEventListener("click", () => {
+    const key = $("checkKey").value.trim().toUpperCase();
+    if (!key) return showToast("اكتبي المعرف");
+
+    const p = getProblem(key);
+    const box = $("solutionDisplay");
+
+    if (!p) {
+        box.innerHTML = `<div class='solutionCard'>لا يوجد مشكلة بهذا المعرف.</div>`;
+        return;
+    }
+
+    if (!p.solution) {
+        box.innerHTML = `<div class='solutionCard'>لم يتم نشر حل بعد. احتفظي بالمعرف: <b>${p.id}</b></div>`;
+        return;
+    }
+
+    box.innerHTML = `
+        <div class="solutionCard">
+            <b>الحل:</b><br><br>
+            ${escapeHtml(p.solution)}
+        </div>
+    `;
+});
+
+/* ========== ADMIN PANEL (CTRL+SHIFT+A) ========== */
+document.addEventListener("keydown", e => {
+    if (e.ctrlKey && e.shiftKey && e.key === "A") {
+        $("adminArea").classList.toggle("hide");
+        showToast("تم فتح الإدارة (مؤقت للتطوير)");
+    }
+});
+
+$("adminForm").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const id = $("problemKey").value.trim().toUpperCase();
+    const sol = $("solutionText").value.trim();
+
+    if (!id || !sol) return showToast("أكملي الحقول");
+
+    const p = getProblem(id);
+    if (!p) return showToast("المشكلة غير موجودة");
+
+    p.solution = sol;
+    saveProblem(p);
+
+    showToast("تم نشر الحل");
+
+    $("checkKey").value = id;
+    $("checkBtn").click();
+});
+
+/* CLOSE ADMIN */
+$("closeAdminBtn").addEventListener("click", () => {
+    $("adminArea").classList.add("hide");
+});
+
 </script>
+
 </body>
 </html>
+
+
 
 
 
