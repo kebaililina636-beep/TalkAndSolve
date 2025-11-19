@@ -390,7 +390,6 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 </div>
 
 <!-- عنصر iframe مرئي/مخفي لتشغيل يوتيوب -->
-<!-- نترك الحاوية مخفية (عرض/ارتفاع صفر) لأنك لم تطلبي عرض الفيديو -->
 <div id="ytMusicPlayer" style="width:0;height:0;overflow:hidden;position:absolute;left:-9999px;top:-9999px;"></div>
 
 <!-- Firebase + التطبيق -->
@@ -434,11 +433,10 @@ const volumeControl = document.getElementById('volumeControl');
 const volumeLevel = document.getElementById('volumeLevel');
 
 /* ====== إعداد الموسيقى عبر يوتيوب (IFrame API) ====== */
-// سنستخدم YouTube IFrame API لتشغيل الفيديو عند نقر المستخدم على زر "ابدئي الآن".
-const YT_VIDEO_ID = 'AT_UG_VY-ks';
+const YT_VIDEO_ID = 'AT_UG_VY-ks'; // معرّف الفيديو الذي طلبتيه
 let ytPlayer = null;
 let isMusicPlaying = false;
-let autoplayMutedFallback = false; // true إذا نجحت طريقة التشغيل المكتوم كحل وقتي
+let autoplayMutedFallback = false;
 
 // تحميل مكتبة YouTube IFrame API برمجياً
 function loadYouTubeAPI() {
@@ -476,7 +474,7 @@ async function createYTPlayer() {
     events: {
       onReady: (event) => {
         try { event.target.setVolume(70); } catch(e){}
-        // محاولة التشغيل (ستنجح لأن الضغط على زر "ابدئي الآن" يعتبر تفاعل المستخدم)
+        // محاولة التشغيل داخل سياق نقرة المستخدم (تُستدعى من حدث startBtn)
         attemptAutoplay();
       },
       onStateChange: (e) => {
@@ -495,38 +493,34 @@ async function createYTPlayer() {
   return ytPlayer;
 }
 
-// محاولة التشغيل التلقائي (داخل سياق نقر المستخدم)
+// محاولة التشغيل التلقائي (يُستدعى بعد نقر المستخدم)
 async function attemptAutoplay() {
   try {
     if (!ytPlayer) return;
-    // نطلب التشغيل مباشرة؛ لأننا نستدعي هذه الدالة بعد نقر المستخدم على زر البدء، فغالباً سيُسمح بالتشغيل
     try {
+      // نطلب التشغيل مباشرة — لأنه سيتم استدعاؤه داخل نقرة المستخدم
       ytPlayer.playVideo();
     } catch(e) {
-      // إذا منع المتصفح التشغيل، نجرب التشغيل المكتوم
+      // لو منعه المتصفح، نجرب التشغيل مكتوماً
       try {
         ytPlayer.mute();
         ytPlayer.playVideo();
         autoplayMutedFallback = true;
         updateMusicUI(true);
         musicInfo.textContent = 'تشغيل تلقائي (مكتوم) — اضغطي لتشغيل الصوت';
-        showToast('تم تشغيل الموسيقى مكتومًا (قيود المتصفح)', 'success');
+        showToast('تم تشغيل الموسيقى مكتوًا (قيود المتصفح)', 'success');
       } catch(err){}
     }
 
-    // بعد لحظة نتأكد إن بدأ التشغيل وإلا نعرض الحالة المناسبة
+    // تأكد بعد قليل من حالة التشغيل
     setTimeout(() => {
       try {
         const state = ytPlayer.getPlayerState();
         const YTState = window.YT && window.YT.PlayerState;
         const isPlaying = (state === (YTState ? YTState.PLAYING : 1));
-        if (!isPlaying) {
-          updateMusicUI(false);
-        } else {
-          updateMusicUI(true);
-        }
+        if (!isPlaying) updateMusicUI(false); else updateMusicUI(true);
       } catch(e){}
-    }, 600);
+    }, 700);
   } catch (e) {
     console.warn('Autoplay attempt failed', e);
   }
@@ -546,7 +540,7 @@ function updateMusicUI(playing) {
   }
 }
 
-// التشغيل / الإيقاف عند الضغط (يبقى الزر الموسيقى أيضاً يعمل كتحكم)
+// تشغيل/إيقاف من زر الموسيقى (اختياري)
 async function toggleMusic() {
   try {
     await createYTPlayer();
@@ -598,7 +592,7 @@ function setVolumePlayer(level) {
   }
 }
 
-// تحميل API علي لاق بعد أول تفاعل عام (حفظًا للتحميل)
+// تحميل API بعد أول تفاعل عام (لتخفيف تحميل الصفحة)
 function initYouTubeLazy() {
   document.body.addEventListener('click', function oneTimeInit() {
     loadYouTubeAPI().catch(err => console.warn('YT API load failed', err));
@@ -675,13 +669,13 @@ function updateProgress(value) {
 }
 
 /* ====== مستمعات الأحداث ====== */
-// زر البدء - تم إضافة startYouTubeMusic() بحيث يبدأ تشغيل الموسيقى عند الضغط على "ابدئي الآن"
+// زر البدء - الآن ينشئ مشغل يوتيوب ويُحاول تشغيله لأن هذه دالة مستدعاة داخل نقرة المستخدم
 startBtn.addEventListener('click', async function() {
   formScreen.classList.remove('hide');
   this.classList.add('hide');
   window.scrollTo({ top: formScreen.offsetTop - 20, behavior: 'smooth' });
 
-  // تشغيل يوتيوب (يعمل لأن نقرة المستخدم تعد user gesture)
+  // تشغيل يوتيوب — هذا يحدث داخل نقرة المستخدم لذا غالبًا سيسمح المتصفح بالتشغيل
   try {
     await createYTPlayer();
   } catch (e) {
@@ -845,7 +839,7 @@ langBtn.addEventListener('click', function() {
   showToast('سيتم إضافة دعم اللغة الإنجليزية قريباً', 'success');
 });
 
-// تحكم الموسيقى (زر الموسيقى يظل كتحكم إضافي)
+// ربط زر الموسيقى بالتحكم (يبقى متاحًا)
 musicToggle.addEventListener('click', toggleMusic);
 
 // تحكم مستوى الصوت
@@ -870,6 +864,8 @@ createBubbles(25);
 </script>
 </body>
 </html>
+
+
 
 
 
