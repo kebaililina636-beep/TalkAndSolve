@@ -179,6 +179,59 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 
 /* إخفاء العناصر */
 .hide{display:none !important}
+
+/* زر الموسيقى */
+.music-btn.playing .fa-music {
+  color: var(--accent);
+  animation: musicPulse 1.5s infinite;
+}
+@keyframes musicPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* عنصر تحكم الموسيقى */
+.music-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(255,255,255,0.9);
+  padding: 10px 15px;
+  border-radius: 25px;
+  box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.music-info {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.volume-control {
+  width: 80px;
+  height: 4px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.volume-level {
+  position: absolute;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  width: 70%;
+}
 </style>
 </head>
 <body>
@@ -187,6 +240,17 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 <div class="bg-decor" aria-hidden="true"></div>
 <div class="bubbles" id="bubbles" aria-hidden="true"></div>
 <div class="floating-hearts" id="floatingHearts"></div>
+
+<!-- عنصر تحكم الموسيقى -->
+<div class="music-controls">
+  <button id="musicToggle" class="btn btn-ghost music-btn">
+    <i class="fas fa-music"></i>
+  </button>
+  <div class="music-info" id="musicInfo">Sing Loud - Speed up</div>
+  <div class="volume-control" id="volumeControl">
+    <div class="volume-level" id="volumeLevel"></div>
+  </div>
+</div>
 
 <!-- Hero -->
 <section class="hero" aria-label="Welcome">
@@ -236,7 +300,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
     <form id="problemForm" autocomplete="off">
       <div class="form-grid">
         <input id="name" class="input" placeholder="اسمك (اختياري)" />
-        <input id="type" class="input" placeholder="نوع المشكلة (مثلاً: تنمر، خوف، خلاف)" required />
+        <input id="type" class="input" placeholder="نوع المشكلة (أي مشكلة تريد حلها)" required />
       </div>
 
       <textarea id="description" class="input" placeholder="صف المشكلة بإيجاز (حتى 250 حرف)" maxlength="250" required></textarea>
@@ -355,6 +419,24 @@ const toggleModeBtn = document.getElementById('toggleModeBtn');
 const heartBtn = document.getElementById('heartBtn');
 const langBtn = document.getElementById('langBtn');
 const toast = document.getElementById('toast');
+const musicToggle = document.getElementById('musicToggle');
+const musicInfo = document.getElementById('musicInfo');
+const volumeControl = document.getElementById('volumeControl');
+const volumeLevel = document.getElementById('volumeLevel');
+
+/* ====== إعداد الموسيقى ====== */
+const backgroundMusic = new Audio('https://www.soundjay.com/music/sounds-346.mp3');
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5;
+
+let isMusicPlaying = false;
+
+// بدلاً من الرابط المباشر، سنستخدم رابط YouTube مضمن
+const youtubeEmbed = document.createElement('iframe');
+youtubeEmbed.style.display = 'none';
+youtubeEmbed.src = 'https://www.youtube.com/embed/AT_UG_VY-ks?autoplay=1&loop=1&playlist=AT_UG_VY-ks';
+youtubeEmbed.allow = 'autoplay';
+document.body.appendChild(youtubeEmbed);
 
 /* ====== دوال مساعدة ====== */
 // إنشاء فقاعات متحركة
@@ -420,6 +502,26 @@ function generateId() {
 function updateProgress(value) {
   const progressFill = document.getElementById('progressFill');
   progressFill.style.width = value + '%';
+}
+
+// تحكم الموسيقى
+function toggleMusic() {
+  if (isMusicPlaying) {
+    youtubeEmbed.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    musicToggle.classList.remove('playing');
+    musicInfo.textContent = 'الموسيقى متوقفة';
+  } else {
+    youtubeEmbed.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    musicToggle.classList.add('playing');
+    musicInfo.textContent = 'Sing Loud - Speed up';
+  }
+  isMusicPlaying = !isMusicPlaying;
+}
+
+// تحكم في مستوى الصوت
+function setVolume(level) {
+  backgroundMusic.volume = level;
+  volumeLevel.style.width = (level * 100) + '%';
 }
 
 /* ====== مستمعات الأحداث ====== */
@@ -586,6 +688,17 @@ langBtn.addEventListener('click', function() {
   showToast('سيتم إضافة دعم اللغة الإنجليزية قريباً', 'success');
 });
 
+// تحكم الموسيقى
+musicToggle.addEventListener('click', toggleMusic);
+
+// تحكم مستوى الصوت
+volumeControl.addEventListener('click', function(e) {
+  const rect = this.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const volume = Math.max(0, Math.min(1, clickX / rect.width));
+  setVolume(volume);
+});
+
 // تفعيل شريط التقدم عند التمرير
 window.addEventListener('scroll', () => {
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -596,9 +709,15 @@ window.addEventListener('scroll', () => {
 // تهيئة العناصر المتحركة
 createFloatingHearts();
 createBubbles(25);
+
+// بدء الموسيقى تلقائياً (اختياري)
+// setTimeout(() => {
+//   toggleMusic();
+// }, 2000);
 </script>
 </body>
 </html>
+
 
 
 
