@@ -232,9 +232,45 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   border-radius: 2px;
   width: 70%;
 }
+
+/* نافذة تفعيل الموسيقى */
+.music-permission {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  z-index: 10000;
+  max-width: 400px;
+  width: 90%;
+}
+
+.music-permission.hide {
+  display: none;
+}
 </style>
 </head>
 <body>
+
+<!-- نافذة طلب إذن الموسيقى -->
+<div class="music-permission" id="musicPermission">
+  <h3>🎵 تشغيل الموسيقى</h3>
+  <p>هل تريد تشغيل الموسيقى تلقائياً في الخلفية؟</p>
+  <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+    <button id="allowMusic" class="btn btn-primary">
+      <i class="fas fa-check"></i>
+      نعم، شغل الموسيقى
+    </button>
+    <button id="denyMusic" class="btn btn-ghost">
+      <i class="fas fa-times"></i>
+      لا، شغل يدوياً
+    </button>
+  </div>
+</div>
 
 <!-- background decorations and bubbles -->
 <div class="bg-decor" aria-hidden="true"></div>
@@ -246,7 +282,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   <button id="musicToggle" class="btn btn-ghost music-btn">
     <i class="fas fa-music"></i>
   </button>
-  <div class="music-info" id="musicInfo">جاري التشغيل...</div>
+  <div class="music-info" id="musicInfo">انقر للتشغيل</div>
   <div class="volume-control" id="volumeControl">
     <div class="volume-level" id="volumeLevel"></div>
   </div>
@@ -423,6 +459,9 @@ const musicToggle = document.getElementById('musicToggle');
 const musicInfo = document.getElementById('musicInfo');
 const volumeControl = document.getElementById('volumeControl');
 const volumeLevel = document.getElementById('volumeLevel');
+const musicPermission = document.getElementById('musicPermission');
+const allowMusic = document.getElementById('allowMusic');
+const denyMusic = document.getElementById('denyMusic');
 
 /* ====== إعداد الموسيقى ====== */
 const backgroundMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/11/22/audio_ebf97f5d4a.mp3?filename=relaxing-abstract-142819.mp3');
@@ -430,6 +469,7 @@ backgroundMusic.loop = true;
 backgroundMusic.volume = 0.5;
 
 let isMusicPlaying = false;
+let userInteracted = false;
 
 /* ====== دوال مساعدة ====== */
 // إنشاء فقاعات متحركة
@@ -518,19 +558,21 @@ function setVolume(level) {
   volumeLevel.style.width = (level * 100) + '%';
 }
 
-// تشغيل الموسيقى تلقائياً
-function autoPlayMusic() {
-  setTimeout(() => {
-    backgroundMusic.play().then(() => {
-      musicToggle.classList.add('playing');
-      musicInfo.textContent = 'Sing Loud - مسرعة';
-      isMusicPlaying = true;
-      showToast('الموسيقى تعمل تلقائياً 🎵', 'success');
-    }).catch(e => {
-      console.log('تعذر التشغيل التلقائي:', e);
-      musicInfo.textContent = 'انقر للتشغيل';
-    });
-  }, 1000);
+// تشغيل الموسيقى بعد تفاعل المستخدم
+function playMusicAfterInteraction() {
+  userInteracted = true;
+  musicPermission.classList.add('hide');
+  
+  backgroundMusic.play().then(() => {
+    musicToggle.classList.add('playing');
+    musicInfo.textContent = 'Sing Loud - مسرعة';
+    isMusicPlaying = true;
+    showToast('الموسيقى تعمل الآن 🎵', 'success');
+  }).catch(e => {
+    console.log('تعذر تشغيل الموسيقى:', e);
+    musicInfo.textContent = 'انقر للتشغيل';
+    showToast('انقر على زر الموسيقى للتشغيل', 'warning');
+  });
 }
 
 /* ====== مستمعات الأحداث ====== */
@@ -698,7 +740,13 @@ langBtn.addEventListener('click', function() {
 });
 
 // تحكم الموسيقى
-musicToggle.addEventListener('click', toggleMusic);
+musicToggle.addEventListener('click', function() {
+  if (!userInteracted) {
+    playMusicAfterInteraction();
+  } else {
+    toggleMusic();
+  }
+});
 
 // تحكم مستوى الصوت
 volumeControl.addEventListener('click', function(e) {
@@ -708,6 +756,16 @@ volumeControl.addEventListener('click', function(e) {
   setVolume(volume);
 });
 
+// إذن تشغيل الموسيقى
+allowMusic.addEventListener('click', playMusicAfterInteraction);
+
+// رفض تشغيل الموسيقى
+denyMusic.addEventListener('click', function() {
+  userInteracted = true;
+  musicPermission.classList.add('hide');
+  musicInfo.textContent = 'انقر للتشغيل';
+});
+
 // تفعيل شريط التقدم عند التمرير
 window.addEventListener('scroll', () => {
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -715,15 +773,29 @@ window.addEventListener('scroll', () => {
   updateProgress(scrolled);
 });
 
+// أي تفاعل مع الصفحة يمكن أن يسمح بتشغيل الموسيقى
+document.addEventListener('click', function() {
+  if (!userInteracted) {
+    userInteracted = true;
+    musicPermission.classList.add('hide');
+  }
+});
+
 // تهيئة العناصر المتحركة
 createFloatingHearts();
 createBubbles(25);
+setVolume(0.5);
 
-// تشغيل الموسيقى تلقائياً
-autoPlayMusic();
+// إظهار نافذة إذن الموسيقى بعد ثانيتين
+setTimeout(() => {
+  if (!userInteracted) {
+    musicPermission.classList.remove('hide');
+  }
+}, 2000);
 </script>
 </body>
 </html>
+
 
 
 
