@@ -79,12 +79,11 @@ a{color:inherit}
 .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s}
 .btn:hover::before{left:100%}
 
-.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff;filter:drop-shadow(0 8px 18px rgba(0,163,137,0.12))}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff}
 .btn-ghost{background:transparent;border:1px solid rgba(3,58,52,0.08);color:var(--accent-dark)}
-.btn:hover{transform:translateY(-8px) scale(1.04);box-shadow:0 28px 70px rgba(3,45,40,0.12)}
+.btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(3,45,40,0.15)}
 
-.btn-success{background:linear-gradient(90deg,var(--success),#45a049);color:white}
-.btn-warning{background:linear-gradient(90deg,var(--warning),#f57c00);color:white}
+.btn-small{padding:8px 14px;font-size:14px}
 
 /* preview */
 .preview{border-radius:14px;padding:16px;background:linear-gradient(180deg,#fbfffe,#eefefb);box-shadow:var(--soft-shadow);border:1px solid rgba(0,163,137,0.1);position:relative}
@@ -96,48 +95,50 @@ a{color:inherit}
 .main{max-width:980px;margin:28px auto 80px;padding:0 20px}
 .card{background:var(--card);border-radius:16px;padding:20px;box-shadow:var(--soft-shadow);margin-bottom:18px;transition:all .3s;border:1px solid rgba(255,255,255,0.8);position:relative}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:16px 16px 0 0)}
-.card:hover{transform:translateY(-6px);box-shadow:0 25px 60px rgba(3,30,26,0.15)}
+.card:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(3,30,26,0.15)}
 
 /* form grid */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:820px){.form-grid{grid-template-columns:1fr}}
 .input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(2,30,25,0.06);font-size:15px;background:#f8fffc;transition:all .3s;font-family:inherit}
-.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,163,137,0.1);outline:none;transform:translateY(-2px)}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,163,137,0.1);outline:none}
 textarea.input{min-height:120px;resize:vertical}
 
 /* controls and charcount */
-.controls{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-top:12px}
+.controls{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-top:12px;flex-wrap:wrap}
 .char-count{color:rgba(0,0,0,0.45);font-size:13px;transition:color .3s}
 .char-count.warning{color:var(--warning)}
 .char-count.danger{color:#f44336}
 
 /* solution card */
-.solutionCard{border-radius:12px;padding:14px;margin-top:16px;background:linear-gradient(180deg,#e9fff6,#d7fff0);color:#004a43;box-shadow:0 12px 30px rgba(2,45,40,0.06);animation:cardIn .45s ease;border-left:4px solid var(--success);position:relative}
+.solutionCard{border-radius:12px;padding:14px;margin-top:16px;background:linear-gradient(180deg,#e9fff6,#d7fff0);color:#004a43;box-shadow:0 8px 25px rgba(2,45,40,0.06);animation:cardIn .45s ease;border-left:4px solid var(--success);position:relative}
 .solutionCard::before{content:'💡';position:absolute;left:10px;top:10px}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* toast محسن */
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:var(--accent);color:white;padding:12px 20px;border-radius:20px;opacity:0;transition:all .3s;z-index:9999;box-shadow:0 10px 30px rgba(0,163,137,0.3);display:flex;align-items:center;gap:8px}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-10px)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:var(--accent);color:white;padding:12px 20px;border-radius:20px;opacity:0;transition:all .3s;z-index:9999;box-shadow:0 8px 25px rgba(0,163,137,0.3);display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-8px)}
 .toast.success{background:var(--success)}
 .toast.warning{background:var(--warning)}
+.toast.error{background:#f44336}
 
 /* modal id */
-#idModal{display:none;position:fixed;left:50%;top:14%;transform:translateX(-50%);z-index:99999}
-#idModal .box{min-width:320px;max-width:92vw;padding:18px;border-radius:12px;background:white;box-shadow:0 18px 60px rgba(2,30,25,0.18);text-align:center;border:2px solid var(--accent);position:relative}
-#idModal .box::before{content:'🎉';position:absolute;top:-20px;left:50%;transform:translateX(-50%);background:white;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:var(--soft-shadow);font-size:20px}
-#lastIdInput{width:100%;padding:12px;border-radius:10px;border:2px solid var(--accent);text-align:center;font-weight:700;background:#e9fff6;color:#004a43;user-select:all;font-size:18px;letter-spacing:2px}
+#idModal{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%, -50%);z-index:99999;background:rgba(0,0,0,0.5);width:100%;height:100%}
+#idModal .box{min-width:320px;max-width:92vw;padding:24px;border-radius:16px;background:white;box-shadow:0 20px 60px rgba(2,30,25,0.25);text-align:center;border:2px solid var(--accent);position:absolute;top:50%;left:50%;transform:translate(-50%, -50%)}
+#idModal .box::before{content:'🎉';position:absolute;top:-25px;left:50%;transform:translateX(-50%);background:white;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;box-shadow:var(--soft-shadow);font-size:24px}
+#lastIdInput{width:100%;padding:12px;border-radius:10px;border:2px solid var(--accent);text-align:center;font-weight:700;background:#e9fff6;color:#004a43;user-select:all;font-size:18px;letter-spacing:2px;margin:10px 0}
 
 /* admin note */
-.admin-note{background:linear-gradient(90deg,#fff8e1,#fff);padding:10px;border-radius:10px;border:1px solid #ffecb3;color:#6b4f00;font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.admin-note{background:linear-gradient(90deg,#fff8e1,#fff);padding:12px;border-radius:10px;border:1px solid #ffecb3;color:#6b4f00;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .admin-note::before{content:'⚡';font-size:16px}
 
 /* Dark mode */
 body.dark-mode{background:#071a19;color:#cfeee7}
-body.dark-mode .hero-card{background:linear-gradient(180deg, rgba(2,20,20,0.7), rgba(2,20,20,0.5))}
-body.dark-mode .card{background:rgba(2,20,20,0.6)}
-body.dark-mode .input{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#cfeee7}
+body.dark-mode .hero-card{background:linear-gradient(180deg, rgba(2,20,20,0.8), rgba(2,20,20,0.6)); color:#cfeee7}
+body.dark-mode .card{background:rgba(2,20,20,0.7); color:#cfeee7}
+body.dark-mode .input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#cfeee7}
 body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color:#cfeee7}
+body.dark-mode .admin-note{background:linear-gradient(90deg,#2d2a1a,#1a1a1a);color:#ffd54f}
 
 /* إشعارات متحركة */
 .notification{position:fixed;top:20px;right:20px;padding:12px 16px;border-radius:10px;background:white;box-shadow:var(--shadow);transform:translateX(150%);transition:transform .3s;z-index:10000;display:flex;align-items:center;gap:8px}
@@ -160,8 +161,9 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 @media(max-width:560px){
   .hero-left h1{font-size:28px}
   .hero-card{padding:18px;border-radius:16px}
-  #lastIdInput{font-size:15px}
-  .cta-row{justify-content:center}
+  #lastIdInput{font-size:16px}
+  .cta-row{justify-content:center; gap:8px}
+  .controls{flex-direction:column; align-items:flex-start; gap:8px}
 }
 
 /* شريط تقدم */
@@ -169,7 +171,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));width:0%;transition:width 0.3s}
 
 /* قلوب تفاعلية */
-.heart-btn{background:none;border:none;font-size:24px;cursor:pointer;transition:transform 0.3s;color:#ccc}
+.heart-btn{background:none;border:none;font-size:24px;cursor:pointer;transition:transform 0.3s;color:#ccc;padding:5px}
 .heart-btn:hover{transform:scale(1.2)}
 .heart-btn.liked{color:var(--heart);animation:heartBeat 0.6s}
 @keyframes heartBeat{
@@ -181,10 +183,9 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 .hide{display:none !important}
 
 /* زر الموسيقى */
-.music-btn.playing .fa-music {
-  color: var(--accent);
-  animation: musicPulse 1.5s infinite;
-}
+.music-btn.playing{color:var(--accent)}
+.music-btn.playing .fa-music{animation:musicPulse 1.5s infinite}
+
 @keyframes musicPulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
@@ -199,25 +200,29 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   display: flex;
   gap: 10px;
   align-items: center;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   padding: 10px 15px;
   border-radius: 25px;
   box-shadow: var(--soft-shadow);
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.8);
+}
+
+body.dark-mode .music-controls {
+  background: rgba(2,20,20,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 .music-info {
   font-size: 12px;
   color: var(--muted);
-  max-width: 150px;
+  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .volume-control {
-  width: 80px;
+  width: 60px;
   height: 4px;
   background: rgba(0,0,0,0.1);
   border-radius: 2px;
@@ -225,12 +230,16 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   cursor: pointer;
 }
 
+body.dark-mode .volume-control {
+  background: rgba(255,255,255,0.2);
+}
+
 .volume-level {
   position: absolute;
   height: 100%;
   background: var(--accent);
   border-radius: 2px;
-  width: 70%;
+  width: 50%;
 }
 </style>
 </head>
@@ -246,7 +255,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   <button id="musicToggle" class="btn btn-ghost music-btn">
     <i class="fas fa-music"></i>
   </button>
-  <div class="music-info" id="musicInfo">Sing Loud - Speed up</div>
+  <div class="music-info" id="musicInfo">انقر للتشغيل</div>
   <div class="volume-control" id="volumeControl">
     <div class="volume-level" id="volumeLevel"></div>
   </div>
@@ -257,18 +266,18 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   <div class="hero-card" role="region" aria-label="Intro">
     <div class="hero-left">
       <h1 id="titleText">مرحبا في <span style="color:var(--accent)">TalkAndSolve</span>!</h1>
-      <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول بسيطة ومفيدة. اكتبي مشكلتك واحصلي على معرف لتتبع الحل.</p>
+      <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول بسيطة ومفيدة. اكتب مشكلتك واحصل على معرف لتتبع الحل.</p>
 
       <div class="cta-row" style="margin-top:12px">
         <button id="startBtn" class="btn btn-primary" aria-controls="formScreen">
           <i class="fas fa-play-circle"></i>
-          ابدئي الآن
+          ابدأ الآن
         </button>
-        <button id="langBtn" class="btn btn-ghost small">
+        <button id="langBtn" class="btn btn-ghost btn-small">
           <i class="fas fa-language"></i>
           EN
         </button>
-        <button id="toggleModeBtn" class="btn btn-ghost small">
+        <button id="toggleModeBtn" class="btn btn-ghost btn-small">
           <i class="fas fa-moon"></i>
           الوضع: ليلي
         </button>
@@ -286,7 +295,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
       <div class="preview" aria-hidden="true">
         <div class="screen">
           <h3><i class="fas fa-magic"></i> كيف نعمل؟</h3>
-          <p>أرسلي مشكلتك بإيجاز، ستحصلين على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
+          <p>أرسل مشكلتك بإيجاز، ستحصل على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
         </div>
       </div>
     </div>
@@ -323,10 +332,10 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 
   <div class="card" style="margin-top:18px">
     <h3 id="checkTitle"><i class="fas fa-search"></i> عرض الحل</h3>
-    <p id="checkHint">أدخلي معرف مشكلتك لتحصلي على الحل:</p>
+    <p id="checkHint">أدخل معرف مشكلتك لتحصل على الحل:</p>
     <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
-      <input id="checkKey" class="input" placeholder="ادخلي معرف المشكلة (مثال: 4F7A2B)" />
-      <button id="checkBtn" class="btn btn-primary small">
+      <input id="checkKey" class="input" placeholder="أدخل معرف المشكلة (مثال: 4F7A2B)" />
+      <button id="checkBtn" class="btn btn-primary btn-small">
         <i class="fas fa-eye"></i>
         عرض الحل
       </button>
@@ -337,17 +346,17 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   <div class="card hide" id="adminArea" style="margin-top:18px">
     <div class="admin-note" id="adminNote">
       <i class="fas fa-shield-alt"></i>
-      حقل الإدارة خاص بالفريق الإداري فقط — لا تملئيه إن لم تكوني من الإدارة.
+      حقل الإدارة خاص بالفريق الإداري فقط — لا تملئه إن لم تكن من الإدارة.
     </div>
     <form id="adminForm">
       <input id="problemKey" class="input" placeholder="ضع معرف المشكلة هنا (مثال: 4F7A2B)" required />
-      <textarea id="solutionText" class="input" placeholder="اكتبي الحل هنا..." rows="3" required></textarea>
+      <textarea id="solutionText" class="input" placeholder="اكتب الحل هنا..." rows="3" required></textarea>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
-        <button type="submit" class="btn btn-primary small">
+        <button type="submit" class="btn btn-primary btn-small">
           <i class="fas fa-save"></i>
           تحديث الحل
         </button>
-        <button id="closeAdminBtn" type="button" class="btn btn-ghost small">
+        <button id="closeAdminBtn" type="button" class="btn btn-ghost btn-small">
           <i class="fas fa-times"></i>
           إخفاء
         </button>
@@ -369,14 +378,14 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 <div id="idModal">
   <div class="box">
     <h3 id="idModalTitle">تم الإرسال بنجاح!</h3>
-    <p id="idModalMsg">هذا هو معرف مشكلتك — احتفظي به للعودة لاحقاً:</p>
+    <p id="idModalMsg">هذا هو معرف مشكلتك — احتفظ به للعودة لاحقاً:</p>
     <input id="lastIdInput" readonly />
     <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
-      <button id="copyIdBtn" class="btn btn-primary small">
+      <button id="copyIdBtn" class="btn btn-primary btn-small">
         <i class="fas fa-copy"></i>
         نسخ المعرف
       </button>
-      <button id="closeIdBtn" class="btn btn-ghost small">
+      <button id="closeIdBtn" class="btn btn-ghost btn-small">
         <i class="fas fa-times"></i>
         إغلاق
       </button>
@@ -384,336 +393,303 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   </div>
 </div>
 
-<!-- Firebase + التطبيق -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-import { getDatabase, ref, push, get, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+<script>
+// ====== التطبيق الرئيسي ======
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // ====== متغيرات DOM ======
+  const startBtn = document.getElementById('startBtn');
+  const formScreen = document.getElementById('formScreen');
+  const problemForm = document.getElementById('problemForm');
+  const descriptionInput = document.getElementById('description');
+  const charCountEl = document.getElementById('charCount');
+  const checkBtn = document.getElementById('checkBtn');
+  const checkKeyInput = document.getElementById('checkKey');
+  const solutionDisplay = document.getElementById('solutionDisplay');
+  const idModal = document.getElementById('idModal');
+  const lastIdInput = document.getElementById('lastIdInput');
+  const copyIdBtn = document.getElementById('copyIdBtn');
+  const closeIdBtn = document.getElementById('closeIdBtn');
+  const toggleModeBtn = document.getElementById('toggleModeBtn');
+  const heartBtn = document.getElementById('heartBtn');
+  const langBtn = document.getElementById('langBtn');
+  const toast = document.getElementById('toast');
+  const musicToggle = document.getElementById('musicToggle');
+  const musicInfo = document.getElementById('musicInfo');
+  const volumeControl = document.getElementById('volumeControl');
+  const volumeLevel = document.getElementById('volumeLevel');
+  const closeAdminBtn = document.getElementById('closeAdminBtn');
+  const adminArea = document.getElementById('adminArea');
 
-/* ====== إعداد Firebase ====== */
-const firebaseConfig = {
-  apiKey: "AIzaSyD0TgGcjrNx4p9BrUg6RfADRcR7_7U92OI",
-  authDomain: "talkandsolve-4ca7d.firebaseapp.com",
-  databaseURL: "https://talkandsolve-4ca7d-default-rtdb.firebaseio.com",
-  projectId: "talkandsolve-4ca7d",
-  storageBucket: "talkandsolve-4ca7d.appspot.com",
-  messagingSenderId: "753365758409",
-  appId: "1:753365758409:web:8a84f0f11467d1f001b818"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+  // ====== إعداد الموسيقى ======
+  const backgroundMusic = new Audio();
+  backgroundMusic.loop = true;
+  backgroundMusic.volume = 0.5;
+  
+  // استخدام موسيقى بديلة (يمكن تغيير الرابط)
+  backgroundMusic.src = 'https://assets.codepen.io/1468070/ambient-pad.mp3';
+  
+  let isMusicPlaying = false;
 
-/* ====== متغيرات DOM ====== */
-const startBtn = document.getElementById('startBtn');
-const formScreen = document.getElementById('formScreen');
-const problemForm = document.getElementById('problemForm');
-const descriptionInput = document.getElementById('description');
-const charCountEl = document.getElementById('charCount');
-const checkBtn = document.getElementById('checkBtn');
-const checkKeyInput = document.getElementById('checkKey');
-const solutionDisplay = document.getElementById('solutionDisplay');
-const idModal = document.getElementById('idModal');
-const lastIdInput = document.getElementById('lastIdInput');
-const copyIdBtn = document.getElementById('copyIdBtn');
-const closeIdBtn = document.getElementById('closeIdBtn');
-const toggleModeBtn = document.getElementById('toggleModeBtn');
-const heartBtn = document.getElementById('heartBtn');
-const langBtn = document.getElementById('langBtn');
-const toast = document.getElementById('toast');
-const musicToggle = document.getElementById('musicToggle');
-const musicInfo = document.getElementById('musicInfo');
-const volumeControl = document.getElementById('volumeControl');
-const volumeLevel = document.getElementById('volumeLevel');
-
-/* ====== إعداد الموسيقى ====== */
-const backgroundMusic = new Audio('https://www.soundjay.com/music/sounds-346.mp3');
-backgroundMusic.loop = true;
-backgroundMusic.volume = 0.5;
-
-let isMusicPlaying = false;
-
-// بدلاً من الرابط المباشر، سنستخدم رابط YouTube مضمن
-const youtubeEmbed = document.createElement('iframe');
-youtubeEmbed.style.display = 'none';
-youtubeEmbed.src = 'https://www.youtube.com/embed/AT_UG_VY-ks?autoplay=1&loop=1&playlist=AT_UG_VY-ks';
-youtubeEmbed.allow = 'autoplay';
-document.body.appendChild(youtubeEmbed);
-
-/* ====== دوال مساعدة ====== */
-// إنشاء فقاعات متحركة
-function createBubbles(count) {
-  const bubblesContainer = document.getElementById('bubbles');
-  for (let i = 0; i < count; i++) {
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    const size = Math.random() * 100 + 50;
-    bubble.style.width = `${size}px`;
-    bubble.style.height = `${size}px`;
-    bubble.style.left = Math.random() * 100 + '%';
-    bubble.style.animationDuration = (Math.random() * 20 + 10) + 's';
-    bubble.style.animationDelay = Math.random() * 5 + 's';
-    bubblesContainer.appendChild(bubble);
+  // ====== دوال مساعدة ======
+  function createBubbles(count) {
+    const bubblesContainer = document.getElementById('bubbles');
+    for (let i = 0; i < count; i++) {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      const size = Math.random() * 100 + 50;
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.left = Math.random() * 100 + '%';
+      bubble.style.animationDuration = (Math.random() * 20 + 10) + 's';
+      bubble.style.animationDelay = Math.random() * 5 + 's';
+      bubblesContainer.appendChild(bubble);
+    }
   }
-}
 
-// دالة لإنشاء القلوب المتطايرة
-function createFloatingHearts() {
-  const heartsContainer = document.getElementById('floatingHearts');
-  for (let i = 0; i < 12; i++) {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.innerHTML = '💖';
-    heart.style.left = Math.random() * 100 + '%';
-    heart.style.animationDelay = Math.random() * 8 + 's';
-    heart.style.fontSize = (Math.random() * 20 + 16) + 'px';
-    heartsContainer.appendChild(heart);
+  function createFloatingHearts() {
+    const heartsContainer = document.getElementById('floatingHearts');
+    for (let i = 0; i < 12; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '💖';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDelay = Math.random() * 8 + 's';
+      heart.style.fontSize = (Math.random() * 20 + 16) + 'px';
+      heartsContainer.appendChild(heart);
+    }
   }
-}
 
-// دالة للإشعارات
-function showNotification(message, type = 'success') {
-  const notification = document.getElementById('notification');
-  const notificationText = document.getElementById('notificationText');
-  
-  notificationText.textContent = message;
-  notification.className = `notification ${type} show`;
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-  }, 3000);
-}
-
-// دالة لعرض رسائل Toast
-function showToast(message, type = 'success') {
-  toast.textContent = message;
-  toast.className = `toast ${type}`;
-  toast.classList.add('show');
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
-}
-
-// توليد معرف عشوائي
-function generateId() {
-  return Math.random().toString(36).substring(2, 8).toUpperCase();
-}
-
-// شريط التقدم التفاعلي
-function updateProgress(value) {
-  const progressFill = document.getElementById('progressFill');
-  progressFill.style.width = value + '%';
-}
-
-// تحكم الموسيقى
-function toggleMusic() {
-  if (isMusicPlaying) {
-    youtubeEmbed.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-    musicToggle.classList.remove('playing');
-    musicInfo.textContent = 'الموسيقى متوقفة';
-  } else {
-    youtubeEmbed.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-    musicToggle.classList.add('playing');
-    musicInfo.textContent = 'Sing Loud - Speed up';
+  function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    const notificationText = document.getElementById('notificationText');
+    
+    notificationText.textContent = message;
+    notification.className = `notification ${type} show`;
+    
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
   }
-  isMusicPlaying = !isMusicPlaying;
-}
 
-// تحكم في مستوى الصوت
-function setVolume(level) {
-  backgroundMusic.volume = level;
-  volumeLevel.style.width = (level * 100) + '%';
-}
-
-/* ====== مستمعات الأحداث ====== */
-// زر البدء
-startBtn.addEventListener('click', function() {
-  formScreen.classList.remove('hide');
-  this.classList.add('hide');
-  window.scrollTo({ top: formScreen.offsetTop - 20, behavior: 'smooth' });
-});
-
-// تحديث عداد الأحرف
-descriptionInput.addEventListener('input', function() {
-  const length = this.value.length;
-  charCountEl.textContent = `${length}/250`;
-  
-  if (length > 200) {
-    charCountEl.className = 'char-count warning';
-  } else if (length > 240) {
-    charCountEl.className = 'char-count danger';
-  } else {
-    charCountEl.className = 'char-count';
+  function showToast(message, type = 'success') {
+    toast.textContent = message;
+    toast.className = `toast ${type}`;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
   }
-});
 
-// إرسال المشكلة
-problemForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  if (!document.getElementById('agree').checked) {
-    showToast('يرجى الموافقة على الشروط أولاً', 'warning');
-    return;
+  function generateId() {
+    return Math.random().toString(36).substring(2, 8).toUpperCase();
   }
-  
-  const name = document.getElementById('name').value || 'مستخدم مجهول';
-  const type = document.getElementById('type').value;
-  const description = document.getElementById('description').value;
-  
-  if (!type || !description) {
-    showToast('يرجى ملء جميع الحقول المطلوبة', 'warning');
-    return;
+
+  function updateProgress(value) {
+    const progressFill = document.getElementById('progressFill');
+    progressFill.style.width = value + '%';
   }
-  
-  const problemId = generateId();
-  const problemData = {
-    name,
-    type,
-    description,
-    timestamp: Date.now(),
-    solved: false
-  };
-  
-  // حفظ البيانات في Firebase
-  push(ref(db, 'problems/' + problemId), problemData)
-    .then(() => {
-      // إظهار النافذة المنبثقة بالمعرف
-      lastIdInput.value = problemId;
-      idModal.style.display = 'block';
-      problemForm.reset();
-      charCountEl.textContent = '0/250';
+
+  function toggleMusic() {
+    if (isMusicPlaying) {
+      backgroundMusic.pause();
+      musicToggle.classList.remove('playing');
+      musicInfo.textContent = 'انقر للتشغيل';
+    } else {
+      backgroundMusic.play().catch(e => {
+        console.log('تعذر تشغيل الموسيقى:', e);
+        showToast('تعذر تشغيل الموسيقى', 'error');
+      });
+      musicToggle.classList.add('playing');
+      musicInfo.textContent = 'Sing Loud - مسرعة';
+    }
+    isMusicPlaying = !isMusicPlaying;
+  }
+
+  function setVolume(level) {
+    backgroundMusic.volume = level;
+    volumeLevel.style.width = (level * 100) + '%';
+  }
+
+  // ====== مستمعات الأحداث ======
+  startBtn.addEventListener('click', function() {
+    formScreen.classList.remove('hide');
+    this.classList.add('hide');
+    window.scrollTo({ top: formScreen.offsetTop - 20, behavior: 'smooth' });
+  });
+
+  descriptionInput.addEventListener('input', function() {
+    const length = this.value.length;
+    charCountEl.textContent = `${length}/250`;
+    
+    if (length > 200) {
+      charCountEl.className = 'char-count warning';
+    } else if (length > 240) {
+      charCountEl.className = 'char-count danger';
+    } else {
       charCountEl.className = 'char-count';
-    })
-    .catch((error) => {
-      console.error('Error saving problem:', error);
-      showToast('حدث خطأ أثناء حفظ المشكلة', 'error');
+    }
+  });
+
+  problemForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (!document.getElementById('agree').checked) {
+      showToast('يرجى الموافقة على الشروط أولاً', 'warning');
+      return;
+    }
+    
+    const name = document.getElementById('name').value || 'مستخدم مجهول';
+    const type = document.getElementById('type').value;
+    const description = document.getElementById('description').value;
+    
+    if (!type || !description) {
+      showToast('يرجى ملء جميع الحقول المطلوبة', 'warning');
+      return;
+    }
+    
+    const problemId = generateId();
+    
+    // محاكاة حفظ البيانات (بدلاً من Firebase)
+    const problems = JSON.parse(localStorage.getItem('talkAndSolveProblems') || '{}');
+    problems[problemId] = {
+      name,
+      type,
+      description,
+      timestamp: Date.now(),
+      solved: false
+    };
+    localStorage.setItem('talkAndSolveProblems', JSON.stringify(problems));
+    
+    // إظهار النافذة المنبثقة بالمعرف
+    lastIdInput.value = problemId;
+    idModal.style.display = 'block';
+    problemForm.reset();
+    charCountEl.textContent = '0/250';
+    charCountEl.className = 'char-count';
+    
+    showToast('تم إرسال مشكلتك بنجاح!', 'success');
+  });
+
+  copyIdBtn.addEventListener('click', function() {
+    lastIdInput.select();
+    navigator.clipboard.writeText(lastIdInput.value).then(() => {
+      showToast('تم نسخ المعرف بنجاح!', 'success');
+    }).catch(() => {
+      // طريقة بديلة للمتصفحات القديمة
+      document.execCommand('copy');
+      showToast('تم نسخ المعرف!', 'success');
     });
-});
+  });
 
-// نسخ المعرف
-copyIdBtn.addEventListener('click', function() {
-  lastIdInput.select();
-  document.execCommand('copy');
-  showToast('تم نسخ المعرف بنجاح!', 'success');
-});
+  closeIdBtn.addEventListener('click', function() {
+    idModal.style.display = 'none';
+  });
 
-// إغلاق نافذة المعرف
-closeIdBtn.addEventListener('click', function() {
-  idModal.style.display = 'none';
-});
-
-// البحث عن حل
-checkBtn.addEventListener('click', function() {
-  const problemId = checkKeyInput.value.trim().toUpperCase();
-  
-  if (!problemId) {
-    showToast('يرجى إدخال معرف المشكلة', 'warning');
-    return;
-  }
-  
-  // البحث في Firebase
-  get(ref(db, 'problems/' + problemId))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        // الحصول على المفتاح الأول (قد يكون هناك بيانات متعددة)
-        const key = Object.keys(data)[0];
-        const problem = data[key];
-        
-        let solutionHTML = '';
-        if (problem.solution) {
-          solutionHTML = `
-            <div class="solutionCard">
-              <h4>حل مشكلتك:</h4>
-              <p>${problem.solution}</p>
-              <small>تمت الإضافة في: ${new Date(problem.solutionTimestamp).toLocaleDateString('ar-EG')}</small>
-            </div>
-          `;
-        } else {
-          solutionHTML = `
-            <div class="solutionCard">
-              <p>لم يتم إضافة حل بعد. يرجى التحقق لاحقاً.</p>
-            </div>
-          `;
-        }
-        
-        solutionDisplay.innerHTML = solutionHTML;
+  checkBtn.addEventListener('click', function() {
+    const problemId = checkKeyInput.value.trim().toUpperCase();
+    
+    if (!problemId) {
+      showToast('يرجى إدخال معرف المشكلة', 'warning');
+      return;
+    }
+    
+    // البحث في localStorage
+    const problems = JSON.parse(localStorage.getItem('talkAndSolveProblems') || '{}');
+    const problem = problems[problemId];
+    
+    if (problem) {
+      let solutionHTML = '';
+      if (problem.solution) {
+        solutionHTML = `
+          <div class="solutionCard">
+            <h4>حل مشكلتك:</h4>
+            <p>${problem.solution}</p>
+            <small>تمت الإضافة في: ${new Date(problem.solutionTimestamp).toLocaleDateString('ar-EG')}</small>
+          </div>
+        `;
       } else {
-        solutionDisplay.innerHTML = `
-          <div class="solutionCard" style="border-left-color: var(--warning);">
-            <p>لم يتم العثور على مشكلة بهذا المعرف.</p>
+        solutionHTML = `
+          <div class="solutionCard">
+            <p>لم يتم إضافة حل بعد. يرجى التحقق لاحقاً.</p>
           </div>
         `;
       }
-    })
-    .catch((error) => {
-      console.error('Error fetching problem:', error);
-      showToast('حدث خطأ أثناء البحث عن المشكلة', 'error');
-    });
-});
+      
+      solutionDisplay.innerHTML = solutionHTML;
+    } else {
+      solutionDisplay.innerHTML = `
+        <div class="solutionCard" style="border-left-color: var(--warning);">
+          <p>لم يتم العثور على مشكلة بهذا المعرف.</p>
+        </div>
+      `;
+    }
+  });
 
-// تبديل الوضع الليلي/النهاري
-toggleModeBtn.addEventListener('click', function() {
-  document.body.classList.toggle('dark-mode');
-  const icon = this.querySelector('i');
-  const text = this.querySelector('span') || document.createElement('span');
+  toggleModeBtn.addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    const icon = this.querySelector('i');
+    const textElement = this.querySelector('span') || (() => {
+      const span = document.createElement('span');
+      this.appendChild(span);
+      return span;
+    })();
+    
+    if (document.body.classList.contains('dark-mode')) {
+      icon.className = 'fas fa-sun';
+      textElement.textContent = ' الوضع: نهاري';
+    } else {
+      icon.className = 'fas fa-moon';
+      textElement.textContent = ' الوضع: ليلي';
+    }
+  });
+
+  heartBtn.addEventListener('click', function() {
+    const icon = this.querySelector('i');
+    this.classList.toggle('liked');
+    
+    if (this.classList.contains('liked')) {
+      icon.className = 'fas fa-heart';
+      showNotification('شكراً لحسن ظنك! 🤍', 'success');
+    } else {
+      icon.className = 'far fa-heart';
+    }
+  });
+
+  langBtn.addEventListener('click', function() {
+    showToast('سيتم إضافة دعم اللغة الإنجليزية قريباً', 'success');
+  });
+
+  musicToggle.addEventListener('click', toggleMusic);
+
+  volumeControl.addEventListener('click', function(e) {
+    const rect = this.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const volume = Math.max(0, Math.min(1, clickX / rect.width));
+    setVolume(volume);
+  });
+
+  closeAdminBtn.addEventListener('click', function() {
+    adminArea.classList.add('hide');
+  });
+
+  window.addEventListener('scroll', () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (window.scrollY / scrollable) * 100;
+    updateProgress(scrolled);
+  });
+
+  // تهيئة العناصر المتحركة والموسيقى
+  createFloatingHearts();
+  createBubbles(25);
+  setVolume(0.5);
   
-  if (document.body.classList.contains('dark-mode')) {
-    icon.className = 'fas fa-sun';
-    text.textContent = ' الوضع: نهاري';
-  } else {
-    icon.className = 'fas fa-moon';
-    text.textContent = ' الوضع: ليلي';
-  }
-  
-  if (!this.contains(text)) {
-    this.appendChild(text);
-  }
+  // إظهار رسالة ترحيب
+  setTimeout(() => {
+    showNotification('مرحباً بك في TalkAndSolve! 🎉', 'success');
+  }, 1000);
 });
-
-// تفعيل زر القلب
-heartBtn.addEventListener('click', function() {
-  const icon = this.querySelector('i');
-  this.classList.toggle('liked');
-  
-  if (this.classList.contains('liked')) {
-    icon.className = 'fas fa-heart';
-    showNotification('شكراً لحسن ظنك! 🤍', 'success');
-  } else {
-    icon.className = 'far fa-heart';
-  }
-});
-
-// تبديل اللغة (وهمي في هذه المرحلة)
-langBtn.addEventListener('click', function() {
-  showToast('سيتم إضافة دعم اللغة الإنجليزية قريباً', 'success');
-});
-
-// تحكم الموسيقى
-musicToggle.addEventListener('click', toggleMusic);
-
-// تحكم مستوى الصوت
-volumeControl.addEventListener('click', function(e) {
-  const rect = this.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const volume = Math.max(0, Math.min(1, clickX / rect.width));
-  setVolume(volume);
-});
-
-// تفعيل شريط التقدم عند التمرير
-window.addEventListener('scroll', () => {
-  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-  const scrolled = (window.scrollY / scrollable) * 100;
-  updateProgress(scrolled);
-});
-
-// تهيئة العناصر المتحركة
-createFloatingHearts();
-createBubbles(25);
-
-// بدء الموسيقى تلقائياً (اختياري)
-// setTimeout(() => {
-//   toggleMusic();
-// }, 2000);
 </script>
 </body>
 </html>
