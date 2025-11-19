@@ -243,12 +243,17 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 
 <!-- عنصر تحكم الموسيقى -->
 <div class="music-controls">
-  <button id="musicToggle" class="btn btn-ghost music-btn">
+  <button id="musicToggle" class="btn btn-ghost music-btn" aria-pressed="false">
     <i class="fas fa-music"></i>
   </button>
   <div class="music-info" id="musicInfo">انقر للتشغيل</div>
-  <div class="volume-control" id="volumeControl">
-    <div class="volume-level" id="volumeLevel"></div>
+  <div class="volume-control" id="volumeControl" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+    <div class="volume-level" id="volumeLevel" style="width:70%"></div>
+  </div>
+
+  <!-- حاوية مشغّل يوتيوب (مخفية) -->
+  <div id="ytPlayerContainer" style="display:none; width:0; height:0; overflow:hidden;">
+    <div id="ytPlayer"></div>
   </div>
 </div>
 
@@ -424,43 +429,199 @@ const musicInfo = document.getElementById('musicInfo');
 const volumeControl = document.getElementById('volumeControl');
 const volumeLevel = document.getElementById('volumeLevel');
 
-/* ====== إعداد الموسيقى ====== */
-// استخدام ملف صوتي بسيط ومضمون
-const backgroundMusic = new Audio();
-backgroundMusic.loop = true;
-backgroundMusic.volume = 0.3;
+/* ====== إعداد الموسيقى عبر يوتيوب (IFrame API) ====== */
+// سنستخدم YouTube IFrame API لتشغيل الفيديو عند نقر المستخدم.
+// videoId الخاص بك:
+const YT_VIDEO_ID = 'AT_UG_VY-ks';
 
-// إنشاء ملف صوتي بسيط باستخدام base64 (موسيقى هادئة)
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let ytPlayer = null;
 let isMusicPlaying = false;
-let audioSource = null;
+let autoplayMutedFallback = false; // true إذا نجحت طريقة التشغيل المكتوم كحل وقتي
 
-// دالة لإنشاء نغمة بسيطة
-function createSimpleTone() {
+// تحميل مكتبة YouTube IFrame API برمجياً
+function loadYouTubeAPI() {
+  return new Promise((resolve) => {
+    if (window.YT && window.YT.Player) return resolve(window.YT);
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = function() {
+      resolve(window.YT);
+    };
+  });
+}
+
+// انشاء المشغل
+async function createYTPlayer() {
+  const YT = await loadYouTubeAPI();
+
+  if (ytPlayer) return ytPlayer;
+
+  ytPlayer = new YT.Player('ytPlayer', {
+    height: '0',
+    width: '0',
+    videoId: YT_VIDEO_ID,
+    playerVars: {
+      'playsinline': 1,
+      'controls': 0,
+      'rel': 0,
+      'modestbranding': 1,
+      'enablejsapi': 1,
+      'origin': window.location.origin,
+      'autoplay': 0 // نحاول التحكم بالـ autoplay برمجياً
+    },
+    events: {
+      onReady: (event) => {
+        try { event.target.setVolume(70); } catch(e){}
+        // نحاول التشغيل التلقائي الآن (أمام المستعرض)
+        attemptAutoplay();
+      },
+      onStateChange: (e) => {
+        const YTState = window.YT && window.YT.PlayerState;
+        if (e.data === (YTState ? YTState.ENDED : 0)) {
+          updateMusicUI(false);
+        } else if (e.data === (YTState ? YTState.PLAYING : 1)) {
+          updateMusicUI(true);
+        } else if (e.data === (YTState ? YTState.PAUSED : 2)) {
+          updateMusicUI(false);
+        }
+      }
+    }
+  });
+
+  return ytPlayer;
+}
+
+// محاولة التشغيل التلقائي بأفضل شكل ممكن
+async function attemptAutoplay() {
   try {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.type = 'sine';
-    oscillator.frequency.value = 330; // نغمة هادئة
-    gainNode.gain.value = 0.1; // صوت منخفض
-    
-    oscillator.start();
-    
-    // إيقاف النغمة بعد ثانية (ستعيد التشغيل تلقائياً بسبب loop)
+    if (!ytPlayer) return;
+    // نطلب التشغيل مباشرة
+    ytPlayer.playVideo();
+    // بعد فترة قصيرة نتحقق إن بدأ التشغيل؛ إن لم يبدأ نحاول التشغيل مكتوماً
     setTimeout(() => {
-      oscillator.stop();
-    }, 1000);
-    
-    return oscillator;
-  } catch (error) {
-    console.log('لا يمكن تشغيل الصوت:', error);
-    return null;
+      try {
+        const state = ytPlayer.getPlayerState();
+        const YTState = window.YT && window.YT.PlayerState;
+        const isPlaying = (state === (YTState ? YTState.PLAYING : 1));
+        if (!isPlaying) {
+          // نجرب تشغيل الفيديو مكتوماً (بعض المتصفحات تسمح بذلك)
+          try {
+            ytPlayer.mute();
+            ytPlayer.playVideo();
+            autoplayMutedFallback = true;
+            updateMusicUI(true);
+            musicInfo.textContent = 'تشغيل تلقائي (مكتوم) — اضغطي لتشغيل الصوت';
+            showToast('تم تشغيل الموسيقى مكتومًا (قيود المتصفح)', 'success');
+          } catch (err) {
+            // لا يمكن التشغيل تلقائياً
+            updateMusicUI(false);
+          }
+        } else {
+          updateMusicUI(true);
+        }
+      } catch (err) {
+        // fallback
+        updateMusicUI(false);
+      }
+    }, 700);
+  } catch (e) {
+    console.warn('Autoplay attempt failed', e);
   }
 }
+
+// تحديث واجهة المستخدم لحالة التشغيل
+function updateMusicUI(playing) {
+  isMusicPlaying = !!playing;
+  if (isMusicPlaying) {
+    musicToggle.classList.add('playing');
+    musicToggle.setAttribute('aria-pressed', 'true');
+    musicInfo.textContent = autoplayMutedFallback ? 'تشغيل (مكتوم) — اضغطي للتبديل' : 'موسيقى قيد التشغيل';
+  } else {
+    musicToggle.classList.remove('playing');
+    musicToggle.setAttribute('aria-pressed', 'false');
+    musicInfo.textContent = 'انقر للتشغيل';
+  }
+}
+
+// التشغيل / الإيقاف عند الضغط
+async function toggleMusic() {
+  try {
+    await createYTPlayer();
+    if (!ytPlayer) {
+      showToast('تعذر إنشاء مشغل يوتيوب', 'error');
+      return;
+    }
+
+    const YTState = window.YT && window.YT.PlayerState;
+    const state = ytPlayer.getPlayerState && ytPlayer.getPlayerState();
+
+    if (!isMusicPlaying) {
+      // إذا كان التشغيل سابقًا مكتومًا كـ fallback، نرفع الصوت أولًا
+      if (autoplayMutedFallback) {
+        try {
+          ytPlayer.unMute();
+          autoplayMutedFallback = false;
+        } catch(e){}
+      }
+      ytPlayer.playVideo();
+      updateMusicUI(true);
+      showToast('الموسيقى تعمل الآن 🎵', 'success');
+    } else {
+      ytPlayer.pauseVideo();
+      updateMusicUI(false);
+    }
+  } catch (err) {
+    console.error('YT toggle error:', err);
+    showToast('حدث خطأ أثناء تشغيل الموسيقى', 'error');
+  }
+}
+
+// ضبط مستوى الصوت البصري والفعلي (0..1)
+function setVolumePlayer(level) {
+  const vol = Math.round(Math.max(0, Math.min(1, level)) * 100);
+  const volumeLevelEl = document.getElementById('volumeLevel');
+  const volumeControlEl = document.getElementById('volumeControl');
+  volumeLevelEl.style.width = `${vol}%`;
+  volumeControlEl.setAttribute('aria-valuenow', vol);
+
+  try {
+    if (ytPlayer && ytPlayer.setVolume) {
+      ytPlayer.setVolume(vol);
+      if (vol === 0) {
+        try { ytPlayer.mute(); } catch(e){}
+      } else {
+        try { ytPlayer.unMute(); } catch(e){}
+      }
+    }
+    musicInfo.textContent = `الصوت: ${vol}%`;
+  } catch (e) {
+    console.warn('تعذر ضبط الصوت على المشغل:', e);
+  }
+}
+
+// تهيئة لود اليوتيوب بعد أول تفاعل عام (لتقليل تحميل بداية الصفحة)
+function initYouTubeLazy() {
+  document.body.addEventListener('click', function oneTimeInit() {
+    loadYouTubeAPI().catch(err => console.warn('YT API load failed', err));
+    document.body.removeEventListener('click', oneTimeInit);
+  }, { once: true });
+}
+
+initYouTubeLazy();
+
+// event bindings
+document.getElementById('musicToggle').addEventListener('click', async () => {
+  await toggleMusic();
+});
+
+document.getElementById('volumeControl').addEventListener('click', function(e) {
+  const rect = this.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const volume = Math.max(0, Math.min(1, clickX / rect.width));
+  setVolumePlayer(volume);
+});
 
 /* ====== دوال مساعدة ====== */
 // إنشاء فقاعات متحركة
@@ -526,56 +687,6 @@ function generateId() {
 function updateProgress(value) {
   const progressFill = document.getElementById('progressFill');
   progressFill.style.width = value + '%';
-}
-
-// تحكم الموسيقى
-function toggleMusic() {
-  if (isMusicPlaying) {
-    // إيقاف الموسيقى
-    if (audioSource) {
-      audioSource.stop();
-      audioSource = null;
-    }
-    musicToggle.classList.remove('playing');
-    musicInfo.textContent = 'انقر للتشغيل';
-    isMusicPlaying = false;
-  } else {
-    // تشغيل الموسيقى
-    audioSource = createSimpleTone();
-    if (audioSource) {
-      musicToggle.classList.add('playing');
-      musicInfo.textContent = 'موسيقى خلفية';
-      isMusicPlaying = true;
-      showToast('الموسيقى تعمل الآن 🎵', 'success');
-    } else {
-      showToast('تعذر تشغيل الموسيقى', 'error');
-    }
-  }
-}
-
-function setVolume(level) {
-  // لا يمكن تغيير مستوى الصوت في هذا النوع البسيط
-  musicInfo.textContent = `الصوت: ${Math.round(level * 100)}%`;
-}
-
-// تشغيل الموسيقى تلقائياً بعد تفاعل المستخدم
-function initMusic() {
-  // تشغيل الموسيقى عند أول نقر
-  document.body.addEventListener('click', function initMusicOnClick() {
-    if (!isMusicPlaying) {
-      setTimeout(() => {
-        audioSource = createSimpleTone();
-        if (audioSource) {
-          musicToggle.classList.add('playing');
-          musicInfo.textContent = 'موسيقى خلفية';
-          isMusicPlaying = true;
-          showToast('الموسيقى تعمل تلقائياً 🎵', 'success');
-        }
-      }, 1000);
-    }
-    // إزالة المستمع بعد الاستخدام
-    document.body.removeEventListener('click', initMusicOnClick);
-  }, { once: true });
 }
 
 /* ====== مستمعات الأحداث ====== */
@@ -742,17 +853,6 @@ langBtn.addEventListener('click', function() {
   showToast('سيتم إضافة دعم اللغة الإنجليزية قريباً', 'success');
 });
 
-// تحكم الموسيقى
-musicToggle.addEventListener('click', toggleMusic);
-
-// تحكم مستوى الصوت
-volumeControl.addEventListener('click', function(e) {
-  const rect = this.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const volume = Math.max(0, Math.min(1, clickX / rect.width));
-  setVolume(volume);
-});
-
 // تفعيل شريط التقدم عند التمرير
 window.addEventListener('scroll', () => {
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -764,11 +864,12 @@ window.addEventListener('scroll', () => {
 createFloatingHearts();
 createBubbles(25);
 
-// تهيئة الموسيقى
-initMusic();
 </script>
 </body>
 </html>
+
+
+
 
 
 
