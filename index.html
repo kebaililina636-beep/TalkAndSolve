@@ -79,11 +79,12 @@ a{color:inherit}
 .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s}
 .btn:hover::before{left:100%}
 
-.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff;filter:drop-shadow(0 8px 18px rgba(0,163,137,0.12))}
 .btn-ghost{background:transparent;border:1px solid rgba(3,58,52,0.08);color:var(--accent-dark)}
-.btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(3,45,40,0.15)}
+.btn:hover{transform:translateY(-8px) scale(1.04);box-shadow:0 28px 70px rgba(3,45,40,0.12)}
 
-.btn-small{padding:8px 14px;font-size:14px}
+.btn-success{background:linear-gradient(90deg,var(--success),#45a049);color:white}
+.btn-warning{background:linear-gradient(90deg,var(--warning),#f57c00);color:white}
 
 /* preview */
 .preview{border-radius:14px;padding:16px;background:linear-gradient(180deg,#fbfffe,#eefefb);box-shadow:var(--soft-shadow);border:1px solid rgba(0,163,137,0.1);position:relative}
@@ -95,50 +96,48 @@ a{color:inherit}
 .main{max-width:980px;margin:28px auto 80px;padding:0 20px}
 .card{background:var(--card);border-radius:16px;padding:20px;box-shadow:var(--soft-shadow);margin-bottom:18px;transition:all .3s;border:1px solid rgba(255,255,255,0.8);position:relative}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:16px 16px 0 0)}
-.card:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(3,30,26,0.15)}
+.card:hover{transform:translateY(-6px);box-shadow:0 25px 60px rgba(3,30,26,0.15)}
 
 /* form grid */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:820px){.form-grid{grid-template-columns:1fr}}
 .input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(2,30,25,0.06);font-size:15px;background:#f8fffc;transition:all .3s;font-family:inherit}
-.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,163,137,0.1);outline:none}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,163,137,0.1);outline:none;transform:translateY(-2px)}
 textarea.input{min-height:120px;resize:vertical}
 
 /* controls and charcount */
-.controls{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-top:12px;flex-wrap:wrap}
+.controls{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-top:12px}
 .char-count{color:rgba(0,0,0,0.45);font-size:13px;transition:color .3s}
 .char-count.warning{color:var(--warning)}
 .char-count.danger{color:#f44336}
 
 /* solution card */
-.solutionCard{border-radius:12px;padding:14px;margin-top:16px;background:linear-gradient(180deg,#e9fff6,#d7fff0);color:#004a43;box-shadow:0 8px 25px rgba(2,45,40,0.06);animation:cardIn .45s ease;border-left:4px solid var(--success);position:relative}
+.solutionCard{border-radius:12px;padding:14px;margin-top:16px;background:linear-gradient(180deg,#e9fff6,#d7fff0);color:#004a43;box-shadow:0 12px 30px rgba(2,45,40,0.06);animation:cardIn .45s ease;border-left:4px solid var(--success);position:relative}
 .solutionCard::before{content:'💡';position:absolute;left:10px;top:10px}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* toast محسن */
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:var(--accent);color:white;padding:12px 20px;border-radius:20px;opacity:0;transition:all .3s;z-index:9999;box-shadow:0 8px 25px rgba(0,163,137,0.3);display:flex;align-items:center;gap:8px}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-8px)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:var(--accent);color:white;padding:12px 20px;border-radius:20px;opacity:0;transition:all .3s;z-index:9999;box-shadow:0 10px 30px rgba(0,163,137,0.3);display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-10px)}
 .toast.success{background:var(--success)}
 .toast.warning{background:var(--warning)}
-.toast.error{background:#f44336}
 
 /* modal id */
-#idModal{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%, -50%);z-index:99999;background:rgba(0,0,0,0.5);width:100%;height:100%}
-#idModal .box{min-width:320px;max-width:92vw;padding:24px;border-radius:16px;background:white;box-shadow:0 20px 60px rgba(2,30,25,0.25);text-align:center;border:2px solid var(--accent);position:absolute;top:50%;left:50%;transform:translate(-50%, -50%)}
-#idModal .box::before{content:'🎉';position:absolute;top:-25px;left:50%;transform:translateX(-50%);background:white;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;box-shadow:var(--soft-shadow);font-size:24px}
-#lastIdInput{width:100%;padding:12px;border-radius:10px;border:2px solid var(--accent);text-align:center;font-weight:700;background:#e9fff6;color:#004a43;user-select:all;font-size:18px;letter-spacing:2px;margin:10px 0}
+#idModal{display:none;position:fixed;left:50%;top:14%;transform:translateX(-50%);z-index:99999}
+#idModal .box{min-width:320px;max-width:92vw;padding:18px;border-radius:12px;background:white;box-shadow:0 18px 60px rgba(2,30,25,0.18);text-align:center;border:2px solid var(--accent);position:relative}
+#idModal .box::before{content:'🎉';position:absolute;top:-20px;left:50%;transform:translateX(-50%);background:white;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:var(--soft-shadow);font-size:20px}
+#lastIdInput{width:100%;padding:12px;border-radius:10px;border:2px solid var(--accent);text-align:center;font-weight:700;background:#e9fff6;color:#004a43;user-select:all;font-size:18px;letter-spacing:2px}
 
 /* admin note */
-.admin-note{background:linear-gradient(90deg,#fff8e1,#fff);padding:12px;border-radius:10px;border:1px solid #ffecb3;color:#6b4f00;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.admin-note{background:linear-gradient(90deg,#fff8e1,#fff);padding:10px;border-radius:10px;border:1px solid #ffecb3;color:#6b4f00;font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .admin-note::before{content:'⚡';font-size:16px}
 
 /* Dark mode */
 body.dark-mode{background:#071a19;color:#cfeee7}
-body.dark-mode .hero-card{background:linear-gradient(180deg, rgba(2,20,20,0.8), rgba(2,20,20,0.6)); color:#cfeee7}
-body.dark-mode .card{background:rgba(2,20,20,0.7); color:#cfeee7}
-body.dark-mode .input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#cfeee7}
+body.dark-mode .hero-card{background:linear-gradient(180deg, rgba(2,20,20,0.7), rgba(2,20,20,0.5))}
+body.dark-mode .card{background:rgba(2,20,20,0.6)}
+body.dark-mode .input{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#cfeee7}
 body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color:#cfeee7}
-body.dark-mode .admin-note{background:linear-gradient(90deg,#2d2a1a,#1a1a1a);color:#ffd54f}
 
 /* إشعارات متحركة */
 .notification{position:fixed;top:20px;right:20px;padding:12px 16px;border-radius:10px;background:white;box-shadow:var(--shadow);transform:translateX(150%);transition:transform .3s;z-index:10000;display:flex;align-items:center;gap:8px}
@@ -161,9 +160,8 @@ body.dark-mode .admin-note{background:linear-gradient(90deg,#2d2a1a,#1a1a1a);col
 @media(max-width:560px){
   .hero-left h1{font-size:28px}
   .hero-card{padding:18px;border-radius:16px}
-  #lastIdInput{font-size:16px}
-  .cta-row{justify-content:center; gap:8px}
-  .controls{flex-direction:column; align-items:flex-start; gap:8px}
+  #lastIdInput{font-size:15px}
+  .cta-row{justify-content:center}
 }
 
 /* شريط تقدم */
@@ -171,7 +169,7 @@ body.dark-mode .admin-note{background:linear-gradient(90deg,#2d2a1a,#1a1a1a);col
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));width:0%;transition:width 0.3s}
 
 /* قلوب تفاعلية */
-.heart-btn{background:none;border:none;font-size:24px;cursor:pointer;transition:transform 0.3s;color:#ccc;padding:5px}
+.heart-btn{background:none;border:none;font-size:24px;cursor:pointer;transition:transform 0.3s;color:#ccc}
 .heart-btn:hover{transform:scale(1.2)}
 .heart-btn.liked{color:var(--heart);animation:heartBeat 0.6s}
 @keyframes heartBeat{
@@ -183,15 +181,6 @@ body.dark-mode .admin-note{background:linear-gradient(90deg,#2d2a1a,#1a1a1a);col
 .hide{display:none !important}
 
 /* زر الموسيقى */
-.music-btn.playing{color:var(--accent)}
-.music-btn.playing .fa-music{animation:musicPulse 1.5s infinite}
-
-@keyframes musicPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-}
-
-/* عنصر تحكم الموسيقى */
 .music-controls {
   position: fixed;
   bottom: 20px;
@@ -200,29 +189,35 @@ body.dark-mode .admin-note{background:linear-gradient(90deg,#2d2a1a,#1a1a1a);col
   display: flex;
   gap: 10px;
   align-items: center;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.9);
   padding: 10px 15px;
   border-radius: 25px;
   box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.8);
 }
 
-body.dark-mode .music-controls {
-  background: rgba(2,20,20,0.9);
-  border: 1px solid rgba(255,255,255,0.1);
+.music-btn.playing .fa-music {
+  color: var(--accent);
+  animation: musicPulse 1.5s infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
 
 .music-info {
   font-size: 12px;
   color: var(--muted);
-  max-width: 120px;
+  max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .volume-control {
-  width: 60px;
+  width: 80px;
   height: 4px;
   background: rgba(0,0,0,0.1);
   border-radius: 2px;
@@ -230,16 +225,12 @@ body.dark-mode .music-controls {
   cursor: pointer;
 }
 
-body.dark-mode .volume-control {
-  background: rgba(255,255,255,0.2);
-}
-
 .volume-level {
   position: absolute;
   height: 100%;
   background: var(--accent);
   border-radius: 2px;
-  width: 50%;
+  width: 70%;
 }
 </style>
 </head>
@@ -255,7 +246,7 @@ body.dark-mode .volume-control {
   <button id="musicToggle" class="btn btn-ghost music-btn">
     <i class="fas fa-music"></i>
   </button>
-  <div class="music-info" id="musicInfo">انقر للتشغيل</div>
+  <div class="music-info" id="musicInfo">Sing Loud - Speed up</div>
   <div class="volume-control" id="volumeControl">
     <div class="volume-level" id="volumeLevel"></div>
   </div>
@@ -266,18 +257,18 @@ body.dark-mode .volume-control {
   <div class="hero-card" role="region" aria-label="Intro">
     <div class="hero-left">
       <h1 id="titleText">مرحبا في <span style="color:var(--accent)">TalkAndSolve</span>!</h1>
-      <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول بسيطة ومفيدة. اكتب مشكلتك واحصل على معرف لتتبع الحل.</p>
+      <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول بسيطة ومفيدة. اكتبي مشكلتك واحصلي على معرف لتتبع الحل.</p>
 
       <div class="cta-row" style="margin-top:12px">
         <button id="startBtn" class="btn btn-primary" aria-controls="formScreen">
           <i class="fas fa-play-circle"></i>
-          ابدأ الآن
+          ابدئي الآن
         </button>
-        <button id="langBtn" class="btn btn-ghost btn-small">
+        <button id="langBtn" class="btn btn-ghost">
           <i class="fas fa-language"></i>
           EN
         </button>
-        <button id="toggleModeBtn" class="btn btn-ghost btn-small">
+        <button id="toggleModeBtn" class="btn btn-ghost">
           <i class="fas fa-moon"></i>
           الوضع: ليلي
         </button>
@@ -295,7 +286,7 @@ body.dark-mode .volume-control {
       <div class="preview" aria-hidden="true">
         <div class="screen">
           <h3><i class="fas fa-magic"></i> كيف نعمل؟</h3>
-          <p>أرسل مشكلتك بإيجاز، ستحصل على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
+          <p>أرسلي مشكلتك بإيجاز، ستحصلين على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
         </div>
       </div>
     </div>
@@ -332,10 +323,10 @@ body.dark-mode .volume-control {
 
   <div class="card" style="margin-top:18px">
     <h3 id="checkTitle"><i class="fas fa-search"></i> عرض الحل</h3>
-    <p id="checkHint">أدخل معرف مشكلتك لتحصل على الحل:</p>
+    <p id="checkHint">أدخلي معرف مشكلتك لتحصلي على الحل:</p>
     <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
-      <input id="checkKey" class="input" placeholder="أدخل معرف المشكلة (مثال: 4F7A2B)" />
-      <button id="checkBtn" class="btn btn-primary btn-small">
+      <input id="checkKey" class="input" placeholder="ادخلي معرف المشكلة (مثال: 4F7A2B)" />
+      <button id="checkBtn" class="btn btn-primary">
         <i class="fas fa-eye"></i>
         عرض الحل
       </button>
@@ -346,17 +337,17 @@ body.dark-mode .volume-control {
   <div class="card hide" id="adminArea" style="margin-top:18px">
     <div class="admin-note" id="adminNote">
       <i class="fas fa-shield-alt"></i>
-      حقل الإدارة خاص بالفريق الإداري فقط — لا تملئه إن لم تكن من الإدارة.
+      حقل الإدارة خاص بالفريق الإداري فقط — لا تملئيه إن لم تكوني من الإدارة.
     </div>
     <form id="adminForm">
       <input id="problemKey" class="input" placeholder="ضع معرف المشكلة هنا (مثال: 4F7A2B)" required />
-      <textarea id="solutionText" class="input" placeholder="اكتب الحل هنا..." rows="3" required></textarea>
+      <textarea id="solutionText" class="input" placeholder="اكتبي الحل هنا..." rows="3" required></textarea>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
-        <button type="submit" class="btn btn-primary btn-small">
+        <button type="submit" class="btn btn-primary">
           <i class="fas fa-save"></i>
           تحديث الحل
         </button>
-        <button id="closeAdminBtn" type="button" class="btn btn-ghost btn-small">
+        <button id="closeAdminBtn" type="button" class="btn btn-ghost">
           <i class="fas fa-times"></i>
           إخفاء
         </button>
@@ -378,14 +369,14 @@ body.dark-mode .volume-control {
 <div id="idModal">
   <div class="box">
     <h3 id="idModalTitle">تم الإرسال بنجاح!</h3>
-    <p id="idModalMsg">هذا هو معرف مشكلتك — احتفظ به للعودة لاحقاً:</p>
+    <p id="idModalMsg">هذا هو معرف مشكلتك — احتفظي به للعودة لاحقاً:</p>
     <input id="lastIdInput" readonly />
     <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
-      <button id="copyIdBtn" class="btn btn-primary btn-small">
+      <button id="copyIdBtn" class="btn btn-primary">
         <i class="fas fa-copy"></i>
         نسخ المعرف
       </button>
-      <button id="closeIdBtn" class="btn btn-ghost btn-small">
+      <button id="closeIdBtn" class="btn btn-ghost">
         <i class="fas fa-times"></i>
         إغلاق
       </button>
@@ -418,16 +409,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const musicInfo = document.getElementById('musicInfo');
   const volumeControl = document.getElementById('volumeControl');
   const volumeLevel = document.getElementById('volumeLevel');
-  const closeAdminBtn = document.getElementById('closeAdminBtn');
-  const adminArea = document.getElementById('adminArea');
 
   // ====== إعداد الموسيقى ======
-  const backgroundMusic = new Audio();
+  const backgroundMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/11/22/audio_ebf97f5d4a.mp3?filename=relaxing-abstract-142819.mp3');
   backgroundMusic.loop = true;
   backgroundMusic.volume = 0.5;
-  
-  // استخدام موسيقى بديلة (يمكن تغيير الرابط)
-  backgroundMusic.src = 'https://assets.codepen.io/1468070/ambient-pad.mp3';
   
   let isMusicPlaying = false;
 
@@ -498,7 +484,6 @@ document.addEventListener('DOMContentLoaded', function() {
       musicInfo.textContent = 'انقر للتشغيل';
     } else {
       backgroundMusic.play().catch(e => {
-        console.log('تعذر تشغيل الموسيقى:', e);
         showToast('تعذر تشغيل الموسيقى', 'error');
       });
       musicToggle.classList.add('playing');
@@ -551,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const problemId = generateId();
     
-    // محاكاة حفظ البيانات (بدلاً من Firebase)
+    // محاكاة حفظ البيانات
     const problems = JSON.parse(localStorage.getItem('talkAndSolveProblems') || '{}');
     problems[problemId] = {
       name,
@@ -577,7 +562,7 @@ document.addEventListener('DOMContentLoaded', function() {
     navigator.clipboard.writeText(lastIdInput.value).then(() => {
       showToast('تم نسخ المعرف بنجاح!', 'success');
     }).catch(() => {
-      // طريقة بديلة للمتصفحات القديمة
+      // طريقة بديلة
       document.execCommand('copy');
       showToast('تم نسخ المعرف!', 'success');
     });
@@ -630,18 +615,13 @@ document.addEventListener('DOMContentLoaded', function() {
   toggleModeBtn.addEventListener('click', function() {
     document.body.classList.toggle('dark-mode');
     const icon = this.querySelector('i');
-    const textElement = this.querySelector('span') || (() => {
-      const span = document.createElement('span');
-      this.appendChild(span);
-      return span;
-    })();
     
     if (document.body.classList.contains('dark-mode')) {
       icon.className = 'fas fa-sun';
-      textElement.textContent = ' الوضع: نهاري';
+      this.innerHTML = '<i class="fas fa-sun"></i> الوضع: نهاري';
     } else {
       icon.className = 'fas fa-moon';
-      textElement.textContent = ' الوضع: ليلي';
+      this.innerHTML = '<i class="fas fa-moon"></i> الوضع: ليلي';
     }
   });
 
@@ -668,10 +648,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const clickX = e.clientX - rect.left;
     const volume = Math.max(0, Math.min(1, clickX / rect.width));
     setVolume(volume);
-  });
-
-  closeAdminBtn.addEventListener('click', function() {
-    adminArea.classList.add('hide');
   });
 
   window.addEventListener('scroll', () => {
