@@ -389,6 +389,10 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   </div>
 </div>
 
+<!-- عنصر iframe مرئي/مخفي لتشغيل يوتيوب -->
+<!-- نترك الحاوية مخفية (عرض/ارتفاع صفر) لأنك لم تطلبي عرض الفيديو -->
+<div id="ytMusicPlayer" style="width:0;height:0;overflow:hidden;position:absolute;left:-9999px;top:-9999px;"></div>
+
 <!-- Firebase + التطبيق -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -430,10 +434,8 @@ const volumeControl = document.getElementById('volumeControl');
 const volumeLevel = document.getElementById('volumeLevel');
 
 /* ====== إعداد الموسيقى عبر يوتيوب (IFrame API) ====== */
-// سنستخدم YouTube IFrame API لتشغيل الفيديو عند نقر المستخدم.
-// videoId الخاص بك:
+// سنستخدم YouTube IFrame API لتشغيل الفيديو عند نقر المستخدم على زر "ابدئي الآن".
 const YT_VIDEO_ID = 'AT_UG_VY-ks';
-
 let ytPlayer = null;
 let isMusicPlaying = false;
 let autoplayMutedFallback = false; // true إذا نجحت طريقة التشغيل المكتوم كحل وقتي
@@ -458,7 +460,7 @@ async function createYTPlayer() {
 
   if (ytPlayer) return ytPlayer;
 
-  ytPlayer = new YT.Player('ytPlayer', {
+  ytPlayer = new YT.Player('ytMusicPlayer', {
     height: '0',
     width: '0',
     videoId: YT_VIDEO_ID,
@@ -469,12 +471,12 @@ async function createYTPlayer() {
       'modestbranding': 1,
       'enablejsapi': 1,
       'origin': window.location.origin,
-      'autoplay': 0 // نحاول التحكم بالـ autoplay برمجياً
+      'autoplay': 0
     },
     events: {
       onReady: (event) => {
         try { event.target.setVolume(70); } catch(e){}
-        // نحاول التشغيل التلقائي الآن (أمام المستعرض)
+        // محاولة التشغيل (ستنجح لأن الضغط على زر "ابدئي الآن" يعتبر تفاعل المستخدم)
         attemptAutoplay();
       },
       onStateChange: (e) => {
@@ -493,39 +495,38 @@ async function createYTPlayer() {
   return ytPlayer;
 }
 
-// محاولة التشغيل التلقائي بأفضل شكل ممكن
+// محاولة التشغيل التلقائي (داخل سياق نقر المستخدم)
 async function attemptAutoplay() {
   try {
     if (!ytPlayer) return;
-    // نطلب التشغيل مباشرة
-    ytPlayer.playVideo();
-    // بعد فترة قصيرة نتحقق إن بدأ التشغيل؛ إن لم يبدأ نحاول التشغيل مكتوماً
+    // نطلب التشغيل مباشرة؛ لأننا نستدعي هذه الدالة بعد نقر المستخدم على زر البدء، فغالباً سيُسمح بالتشغيل
+    try {
+      ytPlayer.playVideo();
+    } catch(e) {
+      // إذا منع المتصفح التشغيل، نجرب التشغيل المكتوم
+      try {
+        ytPlayer.mute();
+        ytPlayer.playVideo();
+        autoplayMutedFallback = true;
+        updateMusicUI(true);
+        musicInfo.textContent = 'تشغيل تلقائي (مكتوم) — اضغطي لتشغيل الصوت';
+        showToast('تم تشغيل الموسيقى مكتومًا (قيود المتصفح)', 'success');
+      } catch(err){}
+    }
+
+    // بعد لحظة نتأكد إن بدأ التشغيل وإلا نعرض الحالة المناسبة
     setTimeout(() => {
       try {
         const state = ytPlayer.getPlayerState();
         const YTState = window.YT && window.YT.PlayerState;
         const isPlaying = (state === (YTState ? YTState.PLAYING : 1));
         if (!isPlaying) {
-          // نجرب تشغيل الفيديو مكتوماً (بعض المتصفحات تسمح بذلك)
-          try {
-            ytPlayer.mute();
-            ytPlayer.playVideo();
-            autoplayMutedFallback = true;
-            updateMusicUI(true);
-            musicInfo.textContent = 'تشغيل تلقائي (مكتوم) — اضغطي لتشغيل الصوت';
-            showToast('تم تشغيل الموسيقى مكتومًا (قيود المتصفح)', 'success');
-          } catch (err) {
-            // لا يمكن التشغيل تلقائياً
-            updateMusicUI(false);
-          }
+          updateMusicUI(false);
         } else {
           updateMusicUI(true);
         }
-      } catch (err) {
-        // fallback
-        updateMusicUI(false);
-      }
-    }, 700);
+      } catch(e){}
+    }, 600);
   } catch (e) {
     console.warn('Autoplay attempt failed', e);
   }
@@ -545,7 +546,7 @@ function updateMusicUI(playing) {
   }
 }
 
-// التشغيل / الإيقاف عند الضغط
+// التشغيل / الإيقاف عند الضغط (يبقى الزر الموسيقى أيضاً يعمل كتحكم)
 async function toggleMusic() {
   try {
     await createYTPlayer();
@@ -558,12 +559,8 @@ async function toggleMusic() {
     const state = ytPlayer.getPlayerState && ytPlayer.getPlayerState();
 
     if (!isMusicPlaying) {
-      // إذا كان التشغيل سابقًا مكتومًا كـ fallback، نرفع الصوت أولًا
       if (autoplayMutedFallback) {
-        try {
-          ytPlayer.unMute();
-          autoplayMutedFallback = false;
-        } catch(e){}
+        try { ytPlayer.unMute(); autoplayMutedFallback = false; } catch(e){}
       }
       ytPlayer.playVideo();
       updateMusicUI(true);
@@ -601,7 +598,7 @@ function setVolumePlayer(level) {
   }
 }
 
-// تهيئة لود اليوتيوب بعد أول تفاعل عام (لتقليل تحميل بداية الصفحة)
+// تحميل API علي لاق بعد أول تفاعل عام (حفظًا للتحميل)
 function initYouTubeLazy() {
   document.body.addEventListener('click', function oneTimeInit() {
     loadYouTubeAPI().catch(err => console.warn('YT API load failed', err));
@@ -610,18 +607,6 @@ function initYouTubeLazy() {
 }
 
 initYouTubeLazy();
-
-// event bindings
-document.getElementById('musicToggle').addEventListener('click', async () => {
-  await toggleMusic();
-});
-
-document.getElementById('volumeControl').addEventListener('click', function(e) {
-  const rect = this.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const volume = Math.max(0, Math.min(1, clickX / rect.width));
-  setVolumePlayer(volume);
-});
 
 /* ====== دوال مساعدة ====== */
 // إنشاء فقاعات متحركة
@@ -690,11 +675,18 @@ function updateProgress(value) {
 }
 
 /* ====== مستمعات الأحداث ====== */
-// زر البدء
-startBtn.addEventListener('click', function() {
+// زر البدء - تم إضافة startYouTubeMusic() بحيث يبدأ تشغيل الموسيقى عند الضغط على "ابدئي الآن"
+startBtn.addEventListener('click', async function() {
   formScreen.classList.remove('hide');
   this.classList.add('hide');
   window.scrollTo({ top: formScreen.offsetTop - 20, behavior: 'smooth' });
+
+  // تشغيل يوتيوب (يعمل لأن نقرة المستخدم تعد user gesture)
+  try {
+    await createYTPlayer();
+  } catch (e) {
+    console.warn('Failed to init YT player on start:', e);
+  }
 });
 
 // تحديث عداد الأحرف
@@ -853,6 +845,17 @@ langBtn.addEventListener('click', function() {
   showToast('سيتم إضافة دعم اللغة الإنجليزية قريباً', 'success');
 });
 
+// تحكم الموسيقى (زر الموسيقى يظل كتحكم إضافي)
+musicToggle.addEventListener('click', toggleMusic);
+
+// تحكم مستوى الصوت
+volumeControl.addEventListener('click', function(e) {
+  const rect = this.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const volume = Math.max(0, Math.min(1, clickX / rect.width));
+  setVolumePlayer(volume);
+});
+
 // تفعيل شريط التقدم عند التمرير
 window.addEventListener('scroll', () => {
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -867,6 +870,7 @@ createBubbles(25);
 </script>
 </body>
 </html>
+
 
 
 
