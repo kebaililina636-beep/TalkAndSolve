@@ -162,6 +162,8 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   .hero-card{padding:18px;border-radius:16px}
   #lastIdInput{font-size:15px}
   .cta-row{justify-content:center}
+  .controls{flex-direction:column;align-items:flex-start}
+  .controls > div{width:100%;justify-content:space-between}
 }
 
 /* شريط تقدم */
@@ -232,6 +234,23 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   border-radius: 2px;
   width: 70%;
 }
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 480px) {
+  .music-controls {
+    bottom: 10px;
+    left: 10px;
+    padding: 8px 12px;
+  }
+  
+  .music-info {
+    max-width: 100px;
+  }
+  
+  .volume-control {
+    width: 60px;
+  }
+}
 </style>
 </head>
 <body>
@@ -243,11 +262,11 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 
 <!-- عنصر تحكم الموسيقى -->
 <div class="music-controls">
-  <button id="musicToggle" class="btn btn-ghost music-btn" aria-pressed="false">
+  <button id="musicToggle" class="btn btn-ghost music-btn" aria-pressed="false" aria-label="تشغيل/إيقاف الموسيقى">
     <i class="fas fa-music"></i>
   </button>
   <div class="music-info" id="musicInfo">انقر للتشغيل</div>
-  <div class="volume-control" id="volumeControl" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+  <div class="volume-control" id="volumeControl" role="slider" aria-label="مستوى الصوت" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" tabindex="0">
     <div class="volume-level" id="volumeLevel" style="width:70%"></div>
   </div>
 
@@ -258,16 +277,16 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 </div>
 
 <!-- Hero -->
-<section class="hero" aria-label="Welcome">
-  <div class="hero-card" role="region" aria-label="Intro">
+<section class="hero" aria-label="مرحباً بك في TalkAndSolve">
+  <div class="hero-card" role="region" aria-label="مقدمة الموقع">
     <div class="hero-left">
-      <h1 id="titleText">مرحبا في <span style="color:var(--accent)">TalkAndSolve</span>!</h1>
-      <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول بسيطة ومفيدة. اكتبي مشكلتك واحصلي على معرف لتتبع الحل.</p>
+      <h1 id="titleText">مرحباً في <span style="color:var(--accent)">TalkAndSolve</span>!</h1>
+      <p id="subtitle">مكان هادئ وآمن لمشاركة مشاكلك والحصول على حلول بسيطة ومفيدة. اكتب مشكلتك واحصل على معرف لتتبع الحل.</p>
 
       <div class="cta-row" style="margin-top:12px">
         <button id="startBtn" class="btn btn-primary" aria-controls="formScreen">
           <i class="fas fa-play-circle"></i>
-          ابدئي الآن
+          ابدأ الآن
         </button>
         <button id="langBtn" class="btn btn-ghost small">
           <i class="fas fa-language"></i>
@@ -277,7 +296,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
           <i class="fas fa-moon"></i>
           الوضع: ليلي
         </button>
-        <button class="heart-btn" id="heartBtn" title="أعجبني">
+        <button class="heart-btn" id="heartBtn" title="أعجبني" aria-label="إعجاب بالموقع">
           <i class="far fa-heart"></i>
         </button>
       </div>
@@ -291,7 +310,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
       <div class="preview" aria-hidden="true">
         <div class="screen">
           <h3><i class="fas fa-magic"></i> كيف نعمل؟</h3>
-          <p>أرسلي مشكلتك بإيجاز، ستحصلين على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
+          <p>أرسل مشكلتك بإيجاز، ستحصل على معرف للمتابعة، والإدارة ستضيف حلاً يظهر هنا لاحقًا.</p>
         </div>
       </div>
     </div>
@@ -304,15 +323,15 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
     <h2 id="formTitle"><i class="fas fa-paper-plane"></i> أرسل مشكلتك</h2>
     <form id="problemForm" autocomplete="off">
       <div class="form-grid">
-        <input id="name" class="input" placeholder="اسمك (اختياري)" />
-        <input id="type" class="input" placeholder="نوع المشكلة (أي مشكلة تريد حلها)" required />
+        <input id="name" class="input" placeholder="اسمك (اختياري)" aria-label="اسمك (اختياري)" />
+        <input id="type" class="input" placeholder="نوع المشكلة (أي مشكلة تريد حلها)" required aria-label="نوع المشكلة" />
       </div>
 
-      <textarea id="description" class="input" placeholder="صف المشكلة بإيجاز (حتى 250 حرف)" maxlength="250" required></textarea>
+      <textarea id="description" class="input" placeholder="صف المشكلة بإيجاز (حتى 250 حرف)" maxlength="250" required aria-label="وصف المشكلة"></textarea>
 
       <div class="controls">
         <label style="display:flex;align-items:center;gap:8px">
-          <input id="agree" type="checkbox" />
+          <input id="agree" type="checkbox" aria-label="الموافقة على الشروط" />
           <span id="agreeText">أوافق على الشروط</span>
         </label>
         <div style="display:flex;gap:12px;align-items:center">
@@ -328,9 +347,9 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 
   <div class="card" style="margin-top:18px">
     <h3 id="checkTitle"><i class="fas fa-search"></i> عرض الحل</h3>
-    <p id="checkHint">أدخلي معرف مشكلتك لتحصلي على الحل:</p>
+    <p id="checkHint">أدخل معرف مشكلتك لتحصل على الحل:</p>
     <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
-      <input id="checkKey" class="input" placeholder="ادخلي معرف المشكلة (مثال: 4F7A2B)" />
+      <input id="checkKey" class="input" placeholder="ادخل معرف المشكلة (مثال: 4F7A2B)" aria-label="معرف المشكلة" />
       <button id="checkBtn" class="btn btn-primary small">
         <i class="fas fa-eye"></i>
         عرض الحل
@@ -342,11 +361,11 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
   <div class="card hide" id="adminArea" style="margin-top:18px">
     <div class="admin-note" id="adminNote">
       <i class="fas fa-shield-alt"></i>
-      حقل الإدارة خاص بالفريق الإداري فقط — لا تملئيه إن لم تكوني من الإدارة.
+      حقل الإدارة خاص بالفريق الإداري فقط — لا تملئه إن لم تكن من الإدارة.
     </div>
     <form id="adminForm">
-      <input id="problemKey" class="input" placeholder="ضع معرف المشكلة هنا (مثال: 4F7A2B)" required />
-      <textarea id="solutionText" class="input" placeholder="اكتبي الحل هنا..." rows="3" required></textarea>
+      <input id="problemKey" class="input" placeholder="ضع معرف المشكلة هنا (مثال: 4F7A2B)" required aria-label="معرف المشكلة للإدارة" />
+      <textarea id="solutionText" class="input" placeholder="اكتب الحل هنا..." rows="3" required aria-label="نص الحل"></textarea>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
         <button type="submit" class="btn btn-primary small">
           <i class="fas fa-save"></i>
@@ -374,8 +393,8 @@ body.dark-mode .preview{background:linear-gradient(180deg,#033a36,#01302e);color
 <div id="idModal">
   <div class="box">
     <h3 id="idModalTitle">تم الإرسال بنجاح!</h3>
-    <p id="idModalMsg">هذا هو معرف مشكلتك — احتفظي به للعودة لاحقاً:</p>
-    <input id="lastIdInput" readonly />
+    <p id="idModalMsg">هذا هو معرف مشكلتك — احتفظ به للعودة لاحقاً:</p>
+    <input id="lastIdInput" readonly aria-label="معرف المشكلة" />
     <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
       <button id="copyIdBtn" class="btn btn-primary small">
         <i class="fas fa-copy"></i>
@@ -407,6 +426,13 @@ const firebaseConfig = {
   messagingSenderId: "753365758409",
   appId: "1:753365758409:web:8a84f0f11467d1f001b818"
 };
+
+// التحقق من صحة بيانات Firebase
+if (!firebaseConfig.apiKey || !firebaseConfig.databaseURL) {
+  console.error('بيانات Firebase غير صحيحة');
+  showToast('خطأ في إعدادات التطبيق', 'error');
+}
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
@@ -433,70 +459,102 @@ const volumeControl = document.getElementById('volumeControl');
 const volumeLevel = document.getElementById('volumeLevel');
 
 /* ====== إعداد الموسيقى عبر يوتيوب (IFrame API) ====== */
-const YT_VIDEO_ID = 'AT_UG_VY-ks'; // معرّف الفيديو الذي طلبتيه
+const YT_VIDEO_ID = 'AT_UG_VY-ks'; // معرّف الفيديو الذي طلبته
 let ytPlayer = null;
 let isMusicPlaying = false;
 let autoplayMutedFallback = false;
 
 // تحميل مكتبة YouTube IFrame API برمجياً
 function loadYouTubeAPI() {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (window.YT && window.YT.Player) return resolve(window.YT);
+    
+    // التحقق مما إذا كانت المكتبة قيد التحميل بالفعل
+    if (window.onYouTubeIframeAPIReady) {
+      const existingCallback = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function() {
+        existingCallback();
+        resolve(window.YT);
+      };
+      return;
+    }
+    
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
+    tag.onerror = () => reject(new Error('فشل تحميل YouTube API'));
     document.head.appendChild(tag);
 
     window.onYouTubeIframeAPIReady = function() {
       resolve(window.YT);
     };
+    
+    // مهلة للتحميل
+    setTimeout(() => {
+      if (!window.YT) reject(new Error('مهلة تحميل YouTube API'));
+    }, 10000);
   });
 }
 
-// انشاء المشغل
+// إنشاء المشغل
 async function createYTPlayer() {
-  const YT = await loadYouTubeAPI();
+  try {
+    const YT = await loadYouTubeAPI();
 
-  if (ytPlayer) return ytPlayer;
+    if (ytPlayer) return ytPlayer;
 
-  ytPlayer = new YT.Player('ytMusicPlayer', {
-    height: '0',
-    width: '0',
-    videoId: YT_VIDEO_ID,
-    playerVars: {
-      'playsinline': 1,
-      'controls': 0,
-      'rel': 0,
-      'modestbranding': 1,
-      'enablejsapi': 1,
-      'origin': window.location.origin,
-      'autoplay': 0
-    },
-    events: {
-      onReady: (event) => {
-        try { event.target.setVolume(70); } catch(e){}
-        // محاولة التشغيل داخل سياق نقرة المستخدم (تُستدعى من حدث startBtn)
-        attemptAutoplay();
+    ytPlayer = new YT.Player('ytMusicPlayer', {
+      height: '0',
+      width: '0',
+      videoId: YT_VIDEO_ID,
+      playerVars: {
+        'playsinline': 1,
+        'controls': 0,
+        'rel': 0,
+        'modestbranding': 1,
+        'enablejsapi': 1,
+        'origin': window.location.origin,
+        'autoplay': 0
       },
-      onStateChange: (e) => {
-        const YTState = window.YT && window.YT.PlayerState;
-        if (e.data === (YTState ? YTState.ENDED : 0)) {
-          updateMusicUI(false);
-        } else if (e.data === (YTState ? YTState.PLAYING : 1)) {
-          updateMusicUI(true);
-        } else if (e.data === (YTState ? YTState.PAUSED : 2)) {
-          updateMusicUI(false);
+      events: {
+        onReady: (event) => {
+          try { 
+            event.target.setVolume(70); 
+          } catch(e) {
+            console.warn('تعذر ضبط مستوى الصوت الافتراضي:', e);
+          }
+          // محاولة التشغيل داخل سياق نقرة المستخدم (تُستدعى من حدث startBtn)
+          attemptAutoplay();
+        },
+        onStateChange: (e) => {
+          const YTState = window.YT && window.YT.PlayerState;
+          if (e.data === (YTState ? YTState.ENDED : 0)) {
+            updateMusicUI(false);
+          } else if (e.data === (YTState ? YTState.PLAYING : 1)) {
+            updateMusicUI(true);
+          } else if (e.data === (YTState ? YTState.PAUSED : 2)) {
+            updateMusicUI(false);
+          }
+        },
+        onError: (e) => {
+          console.error('خطأ في مشغل يوتيوب:', e);
+          showToast('حدث خطأ في تشغيل الموسيقى', 'error');
         }
       }
-    }
-  });
+    });
 
-  return ytPlayer;
+    return ytPlayer;
+  } catch (error) {
+    console.error('فشل إنشاء مشغل يوتيوب:', error);
+    showToast('تعذر تحميل مشغل الموسيقى', 'error');
+    return null;
+  }
 }
 
 // محاولة التشغيل التلقائي (يُستدعى بعد نقر المستخدم)
 async function attemptAutoplay() {
   try {
     if (!ytPlayer) return;
+    
     try {
       // نطلب التشغيل مباشرة — لأنه سيتم استدعاؤه داخل نقرة المستخدم
       ytPlayer.playVideo();
@@ -507,9 +565,11 @@ async function attemptAutoplay() {
         ytPlayer.playVideo();
         autoplayMutedFallback = true;
         updateMusicUI(true);
-        musicInfo.textContent = 'تشغيل تلقائي (مكتوم) — اضغطي لتشغيل الصوت';
-        showToast('تم تشغيل الموسيقى مكتوًا (قيود المتصفح)', 'success');
-      } catch(err){}
+        musicInfo.textContent = 'تشغيل تلقائي (مكتوم) — اضغط لتشغيل الصوت';
+        showToast('تم تشغيل الموسيقى مكتومًا (قيود المتصفح)', 'success');
+      } catch(err){
+        console.warn('فشل التشغيل المكتوم:', err);
+      }
     }
 
     // تأكد بعد قليل من حالة التشغيل
@@ -519,10 +579,12 @@ async function attemptAutoplay() {
         const YTState = window.YT && window.YT.PlayerState;
         const isPlaying = (state === (YTState ? YTState.PLAYING : 1));
         if (!isPlaying) updateMusicUI(false); else updateMusicUI(true);
-      } catch(e){}
+      } catch(e){
+        console.warn('تعذر التحقق من حالة التشغيل:', e);
+      }
     }, 700);
   } catch (e) {
-    console.warn('Autoplay attempt failed', e);
+    console.warn('فشلت محاولة التشغيل التلقائي', e);
   }
 }
 
@@ -532,7 +594,7 @@ function updateMusicUI(playing) {
   if (isMusicPlaying) {
     musicToggle.classList.add('playing');
     musicToggle.setAttribute('aria-pressed', 'true');
-    musicInfo.textContent = autoplayMutedFallback ? 'تشغيل (مكتوم) — اضغطي للتبديل' : 'موسيقى قيد التشغيل';
+    musicInfo.textContent = autoplayMutedFallback ? 'تشغيل (مكتوم) — اضغط للتبديل' : 'موسيقى قيد التشغيل';
   } else {
     musicToggle.classList.remove('playing');
     musicToggle.setAttribute('aria-pressed', 'false');
@@ -543,8 +605,8 @@ function updateMusicUI(playing) {
 // تشغيل/إيقاف من زر الموسيقى (اختياري)
 async function toggleMusic() {
   try {
-    await createYTPlayer();
-    if (!ytPlayer) {
+    const player = await createYTPlayer();
+    if (!player) {
       showToast('تعذر إنشاء مشغل يوتيوب', 'error');
       return;
     }
@@ -554,7 +616,12 @@ async function toggleMusic() {
 
     if (!isMusicPlaying) {
       if (autoplayMutedFallback) {
-        try { ytPlayer.unMute(); autoplayMutedFallback = false; } catch(e){}
+        try { 
+          ytPlayer.unMute(); 
+          autoplayMutedFallback = false; 
+        } catch(e){
+          console.warn('تعذر إلغاء كتم الصوت:', e);
+        }
       }
       ytPlayer.playVideo();
       updateMusicUI(true);
@@ -564,7 +631,7 @@ async function toggleMusic() {
       updateMusicUI(false);
     }
   } catch (err) {
-    console.error('YT toggle error:', err);
+    console.error('خطأ في تبديل يوتيوب:', err);
     showToast('حدث خطأ أثناء تشغيل الموسيقى', 'error');
   }
 }
@@ -595,7 +662,10 @@ function setVolumePlayer(level) {
 // تحميل API بعد أول تفاعل عام (لتخفيف تحميل الصفحة)
 function initYouTubeLazy() {
   document.body.addEventListener('click', function oneTimeInit() {
-    loadYouTubeAPI().catch(err => console.warn('YT API load failed', err));
+    loadYouTubeAPI().catch(err => {
+      console.warn('فشل تحميل YT API:', err);
+      showToast('تعذر تحميل مشغل الموسيقى', 'error');
+    });
     document.body.removeEventListener('click', oneTimeInit);
   }, { once: true });
 }
@@ -668,6 +738,11 @@ function updateProgress(value) {
   progressFill.style.width = value + '%';
 }
 
+// التحقق من صحة المعرف
+function isValidId(id) {
+  return /^[A-Z0-9]{6}$/.test(id);
+}
+
 /* ====== مستمعات الأحداث ====== */
 // زر البدء - الآن ينشئ مشغل يوتيوب ويُحاول تشغيله لأن هذه دالة مستدعاة داخل نقرة المستخدم
 startBtn.addEventListener('click', async function() {
@@ -679,7 +754,7 @@ startBtn.addEventListener('click', async function() {
   try {
     await createYTPlayer();
   } catch (e) {
-    console.warn('Failed to init YT player on start:', e);
+    console.warn('فشل تهيئة مشغل يوتيوب عند البدء:', e);
   }
 });
 
@@ -707,11 +782,16 @@ problemForm.addEventListener('submit', function(e) {
   }
   
   const name = document.getElementById('name').value || 'مستخدم مجهول';
-  const type = document.getElementById('type').value;
-  const description = document.getElementById('description').value;
+  const type = document.getElementById('type').value.trim();
+  const description = document.getElementById('description').value.trim();
   
   if (!type || !description) {
     showToast('يرجى ملء جميع الحقول المطلوبة', 'warning');
+    return;
+  }
+  
+  if (description.length < 10) {
+    showToast('يرجى كتابة وصف أكثر تفصيلاً للمشكلة', 'warning');
     return;
   }
   
@@ -733,9 +813,10 @@ problemForm.addEventListener('submit', function(e) {
       problemForm.reset();
       charCountEl.textContent = '0/250';
       charCountEl.className = 'char-count';
+      showToast('تم إرسال مشكلتك بنجاح!', 'success');
     })
     .catch((error) => {
-      console.error('Error saving problem:', error);
+      console.error('خطأ في حفظ المشكلة:', error);
       showToast('حدث خطأ أثناء حفظ المشكلة', 'error');
     });
 });
@@ -760,6 +841,18 @@ checkBtn.addEventListener('click', function() {
     showToast('يرجى إدخال معرف المشكلة', 'warning');
     return;
   }
+  
+  if (!isValidId(problemId)) {
+    showToast('معرف المشكلة غير صحيح. يجب أن يتكون من 6 أحرف/أرقام', 'warning');
+    return;
+  }
+  
+  // إظهار رسالة تحميل
+  solutionDisplay.innerHTML = `
+    <div class="solutionCard" style="border-left-color: var(--accent);">
+      <p>جاري البحث عن الحل <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></p>
+    </div>
+  `;
   
   // البحث في Firebase
   get(ref(db, 'problems/' + problemId))
@@ -797,8 +890,12 @@ checkBtn.addEventListener('click', function() {
       }
     })
     .catch((error) => {
-      console.error('Error fetching problem:', error);
-      showToast('حدث خطأ أثناء البحث عن المشكلة', 'error');
+      console.error('خطأ في جلب المشكلة:', error);
+      solutionDisplay.innerHTML = `
+        <div class="solutionCard" style="border-left-color: #f44336;">
+          <p>حدث خطأ أثناء البحث عن المشكلة. يرجى المحاولة مرة أخرى.</p>
+        </div>
+      `;
     });
 });
 
@@ -819,6 +916,9 @@ toggleModeBtn.addEventListener('click', function() {
   if (!this.contains(text)) {
     this.appendChild(text);
   }
+  
+  // حفظ التفضيل في localStorage
+  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 });
 
 // تفعيل زر القلب
@@ -848,6 +948,24 @@ volumeControl.addEventListener('click', function(e) {
   const clickX = e.clientX - rect.left;
   const volume = Math.max(0, Math.min(1, clickX / rect.width));
   setVolumePlayer(volume);
+  
+  // حفظ مستوى الصوت في localStorage
+  localStorage.setItem('volumeLevel', volume);
+});
+
+// تحكم مستوى الصوت باللوحة
+volumeControl.addEventListener('keydown', function(e) {
+  let currentVolume = parseInt(this.getAttribute('aria-valuenow')) / 100;
+  
+  if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+    currentVolume = Math.min(1, currentVolume + 0.1);
+    setVolumePlayer(currentVolume);
+    localStorage.setItem('volumeLevel', currentVolume);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+    currentVolume = Math.max(0, currentVolume - 0.1);
+    setVolumePlayer(currentVolume);
+    localStorage.setItem('volumeLevel', currentVolume);
+  }
 });
 
 // تفعيل شريط التقدم عند التمرير
@@ -857,13 +975,36 @@ window.addEventListener('scroll', () => {
   updateProgress(scrolled);
 });
 
-// تهيئة العناصر المتحركة
+// استعادة التفضيلات من localStorage
+function restorePreferences() {
+  // الوضع الليلي
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    const icon = toggleModeBtn.querySelector('i');
+    const text = toggleModeBtn.querySelector('span') || document.createElement('span');
+    icon.className = 'fas fa-sun';
+    text.textContent = ' الوضع: نهاري';
+    if (!toggleModeBtn.contains(text)) {
+      toggleModeBtn.appendChild(text);
+    }
+  }
+  
+  // مستوى الصوت
+  const savedVolume = localStorage.getItem('volumeLevel');
+  if (savedVolume !== null) {
+    setVolumePlayer(parseFloat(savedVolume));
+  }
+}
+
+// تهيئة العناصر المتحركة واستعادة التفضيلات
 createFloatingHearts();
 createBubbles(25);
+restorePreferences();
 
 </script>
 </body>
 </html>
+
 
 
 
