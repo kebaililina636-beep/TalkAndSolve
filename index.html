@@ -544,6 +544,348 @@
             50% { transform: scale(1.2); }
         }
 
+        /* Search Results */
+        .search-results {
+            display: none;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: 1px solid var(--card-border);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .result-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .result-info {
+            padding: 1rem;
+        }
+
+        .result-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Anime Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border-radius: 15px;
+            max-width: 1000px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--card-border);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-header {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .modal-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-header-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: linear-gradient(transparent, var(--dark));
+            padding: 2rem;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-info {
+            display: flex;
+            gap: 1rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-section {
+            margin-bottom: 2rem;
+        }
+
+        .modal-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .modal-description {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .modal-tag {
+            background: rgba(108, 77, 246, 0.3);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* AI Chat Section */
+        .ai-chat {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .ai-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .ai-response {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 1rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* Settings Modal */
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .settings-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-content {
+            background: var(--dark);
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .settings-close {
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .settings-option {
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-option label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .settings-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .music-controls {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .music-controls.active {
+            display: block;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+        }
+
         /* عناصر التحكم في الرأس */
         .header-controls {
             display: flex;
@@ -579,49 +921,10 @@
             transform: translateY(-2px);
         }
 
-        /* إعدادات الموسيقى */
-        .music-controls {
-            display: none;
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            border: 1px solid var(--card-border);
-        }
-
-        .music-controls.active {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-        }
-
-        .volume-slider {
-            flex: 1;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--cyan);
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--cyan);
+        /* Load More Button */
+        .load-more {
+            text-align: center;
+            margin-top: 3rem;
         }
 
         /* Footer سحري */
@@ -816,7 +1119,20 @@
         </div>
     </section>
 
-    <!-- Trending Section -->
+    <!-- Search Results -->
+    <section class="search-results" id="searchResults">
+        <div class="section-header">
+            <h2 class="section-title">🔍 نتائج البحث</h2>
+        </div>
+        <div class="results-grid" id="resultsGrid">
+            <!-- سيتم تعبئة نتائج البحث هنا -->
+        </div>
+        <div class="load-more">
+            <button class="btn btn-secondary" id="loadMoreResults">عرض المزيد</button>
+        </div>
+    </section>
+
+    <!-- Trending Anime Section -->
     <section class="section" id="trendingSection">
         <div class="section-header">
             <h2 class="section-title">🌟 الأنمي الساحر هذا الأسبوع</h2>
@@ -828,9 +1144,12 @@
         <div class="anime-grid" id="trendingGrid">
             <!-- البطاقات سيتم إضافتها بالجافاسكريبت -->
         </div>
+        <div class="load-more">
+            <button class="btn btn-secondary" id="loadMoreTrending">عرض المزيد</button>
+        </div>
     </section>
 
-    <!-- Drama Section -->
+    <!-- Popular Dramas Section -->
     <section class="section" id="dramaSection">
         <div class="section-header">
             <h2 class="section-title">💖 درامات لا تُنسى</h2>
@@ -842,7 +1161,103 @@
         <div class="anime-grid" id="dramaGrid">
             <!-- البطاقات سيتم إضافتها بالجافاسكريبت -->
         </div>
+        <div class="load-more">
+            <button class="btn btn-secondary" id="loadMoreDrama">عرض المزيد</button>
+        </div>
     </section>
+
+    <!-- Anime Movies Section -->
+    <section class="section" id="movieSection">
+        <div class="section-header">
+            <h2 class="section-title">🎬 أفلام أنمي ساحرة</h2>
+            <a href="#" class="view-all">
+                <span>اكتشف المزيد</span>
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="anime-grid" id="movieGrid">
+            <!-- البطاقات سيتم إضافتها بالجافاسكريبت -->
+        </div>
+        <div class="load-more">
+            <button class="btn btn-secondary" id="loadMoreMovies">عرض المزيد</button>
+        </div>
+    </section>
+
+    <!-- Anime Detail Modal -->
+    <div class="modal" id="animeModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <img id="modalImage" src="" alt="">
+                <div class="modal-header-overlay">
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-info" id="modalInfo"></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>📖 القصة</h3>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <div class="modal-tags" id="modalTags"></div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>ℹ️ التفاصيل</h3>
+                    <div id="modalDetails"></div>
+                </div>
+                
+                <div class="ai-chat">
+                    <div class="ai-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="ai-title">مساعد AnimeVerse الذكي</div>
+                    </div>
+                    <div class="ai-response" id="aiResponse">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h2 class="settings-title">⚙️ الإعدادات</h2>
+                <button class="settings-close" id="settingsClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="settings-option">
+                <label>
+                    <input type="checkbox" id="musicToggle" checked>
+                    <span>🎵 تشغيل الموسيقى التلقائي</span>
+                </label>
+                <div class="music-controls active" id="musicControls">
+                    <div class="volume-control">
+                        <i class="fas fa-volume-up"></i>
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube Player (Hidden) -->
+    <iframe id="youtube-player"
+        src="https://www.youtube.com/embed/BjCqdWOXjxY?enablejsapi=1&controls=0&disablekb=1&modestbranding=1&rel=0&autoplay=1"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+    </iframe>
 
     <!-- Footer -->
     <footer>
@@ -860,30 +1275,30 @@
             <div class="footer-column">
                 <h3>استكشف</h3>
                 <ul class="footer-links">
-                    <li><a href="#">الرئيسية</a></li>
-                    <li><a href="#">الأنمي الجديد</a></li>
-                    <li><a href="#">الدراما</a></li>
-                    <li><a href="#">الأفلام</a></li>
-                    <li><a href="#">الأكثر تقييماً</a></li>
+                    <li><a href="#">🏠 الرئيسية</a></li>
+                    <li><a href="#">🆕 الأنمي الجديد</a></li>
+                    <li><a href="#">💖 الدراما</a></li>
+                    <li><a href="#">🎬 الأفلام</a></li>
+                    <li><a href="#">👑 الأكثر تقييماً</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3>التصنيفات</h3>
                 <ul class="footer-links">
-                    <li><a href="#">أكشن</a></li>
-                    <li><a href="#">رومانسي</a></li>
-                    <li><a href="#">كوميدي</a></li>
-                    <li><a href="#">فانتازيا</a></li>
-                    <li><a href="#">غموض</a></li>
+                    <li><a href="#">⚡ أكشن</a></li>
+                    <li><a href="#">💕 رومانسي</a></li>
+                    <li><a href="#">😂 كوميدي</a></li>
+                    <li><a href="#">🔮 فانتازيا</a></li>
+                    <li><a href="#">🕵️ غموض</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3>الدعم</h3>
                 <ul class="footer-links">
-                    <li><a href="#">المساعدة</a></li>
-                    <li><a href="#">اتصل بنا</a></li>
-                    <li><a href="#">الخصوصية</a></li>
-                    <li><a href="#">الشروط</a></li>
+                    <li><a href="#">❓ المساعدة</a></li>
+                    <li><a href="#">📞 اتصل بنا</a></li>
+                    <li><a href="#">🔒 الخصوصية</a></li>
+                    <li><a href="#">📝 الشروط</a></li>
                 </ul>
             </div>
         </div>
@@ -893,6 +1308,101 @@
     </footer>
 
     <script>
+        // قاعدة بيانات الأنمي الموسعة (120+ أنمي ودراما)
+        const animeDatabase = {
+            trending: [],
+            anime: [],
+            drama: [],
+            movie: []
+        };
+
+        // تعبئة قاعدة البيانات
+        function populateAnimeDatabase() {
+            // الأنمي الشائع - 30 أنمي
+            for (let i = 1; i <= 30; i++) {
+                animeDatabase.trending.push({
+                    id: i,
+                    title: `أنمي سحري ${i}`,
+                    image: `https://picsum.photos/400/600?random=${i}`,
+                    type: "مسلسل تلفزيوني",
+                    year: "2024",
+                    rating: (8 + Math.random() * 2).toFixed(1),
+                    description: `قصة سحرية رائعة عن مغامرات لا تصدق في عالم الخيال. الأنمي ${i} يقدم تجربة فريدة للمشاهدين.`,
+                    tags: ["سحر", "مغامرة", "فانتازيا", "أكشن"],
+                    details: {
+                        episodes: "12-24",
+                        status: "مستمر",
+                        studio: `Studio ${i}`,
+                        duration: "24 دقيقة"
+                    },
+                    fullDescription: `قصة عميقة ومثيرة تتبع رحلة البطل في عالم مليء بالسحر والأسرار. كل حلقة تقدم مفاجآت جديدة وتطورات في القصة.`
+                });
+            }
+
+            // الأنمي العادي - 30 أنمي
+            for (let i = 31; i <= 60; i++) {
+                animeDatabase.anime.push({
+                    id: i,
+                    title: `مغامرة الأنمي ${i}`,
+                    image: `https://picsum.photos/400/600?random=${i+100}`,
+                    type: "مسلسل تلفزيوني",
+                    year: "2023-2024",
+                    rating: (7.5 + Math.random() * 2).toFixed(1),
+                    description: `مغامرة شيقة في عالم الأنمي مع شخصيات لا تنسى وأحداث مشوقة.`,
+                    tags: ["مغامرة", "كوميدي", "دراما"],
+                    details: {
+                        episodes: "12-50",
+                        status: "مكتمل",
+                        studio: `Anime Studio ${i}`,
+                        duration: "24 دقيقة"
+                    },
+                    fullDescription: `سلسلة أنمي رائعة تجمع بين الكوميديا والمغامرة في قصة متطورة بشخصيات محبوبة.`
+                });
+            }
+
+            // الدراما - 30 دراما
+            for (let i = 61; i <= 90; i++) {
+                animeDatabase.drama.push({
+                    id: i,
+                    title: `دراما مؤثرة ${i}`,
+                    image: `https://picsum.photos/400/600?random=${i+200}`,
+                    type: "مسلسل تلفزيوني",
+                    year: "2021-2024",
+                    rating: (8.0 + Math.random() * 1.5).toFixed(1),
+                    description: `دراما عاطفية عميقة تلامس القلب وتترك أثراً لا ينسى.`,
+                    tags: ["رومانسي", "دراما", "عائلي"],
+                    details: {
+                        episodes: "16-20",
+                        status: "مكتمل",
+                        studio: `Drama Production ${i}`,
+                        duration: "60 دقيقة"
+                    },
+                    fullDescription: `دراما إنسانية رائعة تبحث في عمق العلاقات الإنسانية والمشاعر الإنسانية.`
+                });
+            }
+
+            // الأفلام - 30 فيلم
+            for (let i = 91; i <= 120; i++) {
+                animeDatabase.movie.push({
+                    id: i,
+                    title: `فيلم أنمي ${i}`,
+                    image: `https://picsum.photos/400/600?random=${i+300}`,
+                    type: "فيلم",
+                    year: "2015-2024",
+                    rating: (7.8 + Math.random() * 1.7).toFixed(1),
+                    description: `فيلم أنمي مذهل برسوم جميلة وقصة مؤثرة تلامس القلب.`,
+                    tags: ["فانتازيا", "مغامرة", "عائلي"],
+                    details: {
+                        episodes: "فيلم",
+                        status: "مكتمل",
+                        studio: `Movie Studio ${i}`,
+                        duration: "90-120 دقيقة"
+                    },
+                    fullDescription: `فيلم أنمي استثنائي يجمع بين الرسوم الرائعة والقصة المؤثرة في تجربة سينمائية فريدة.`
+                });
+            }
+        }
+
         // إنشاء الخلفية السحرية
         function createMagicBackground() {
             const magicBg = document.getElementById('magicBg');
@@ -932,92 +1442,176 @@
             }
         }
 
-        // بيانات الأنمي المبدئية
-        const sampleAnime = [
-            {
-                title: "فتاة السحر القمري",
-                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-                type: "أنمي سحري",
-                year: "2024",
-                rating: 9.2,
-                description: "قصة فتاة تكتشف قواها السحرية في عالم مليء بالعجائب والأسرار.",
-                tags: ["سحر", "مغامرة", "فتاة قوية"]
-            },
-            {
-                title: "أميرة الزهور",
-                image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-                type: "دراما رومانسية",
-                year: "2024",
-                rating: 8.9,
-                description: "رحلة أميرة شابة في البحث عن الحب الحقيقي بين بساتين الزهور.",
-                tags: ["رومانسي", "دراما", "أميرة"]
-            },
-            {
-                title: "فرسان الأحلام",
-                image: "https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-                type: "أنمي أكشن",
-                year: "2024",
-                rating: 9.0,
-                description: "فرسان أبطال يدافعون عن عالم الأحلام من القوى الشريرة.",
-                tags: ["أكشن", "فانتازيا", "أبطال"]
-            },
-            {
-                title: "حديقة الأسرار",
-                image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-                type: "دراما غامضة",
-                year: "2024",
-                rating: 8.7,
-                description: "حديقة سحرية تخفي أسراراً عميقة تغير حياة من يكتشفها.",
-                tags: ["غموض", "سحر", "دراما"]
-            }
-        ];
-
         // إنشاء بطاقات الأنمي
-        function createAnimeCards() {
-            const containers = ['trendingGrid', 'dramaGrid'];
-            
-            containers.forEach(containerId => {
-                const container = document.getElementById(containerId);
+        function createAnimeCards(animeList, containerId, showMore = false) {
+            const container = document.getElementById(containerId);
+            if (!showMore) {
                 container.innerHTML = '';
-                
-                sampleAnime.forEach(anime => {
-                    const card = document.createElement('div');
-                    card.className = 'anime-card';
-                    card.innerHTML = `
-                        <div class="card-image">
-                            <img src="${anime.image}" alt="${anime.title}">
-                            <div class="card-overlay">
-                                <div class="card-title">${anime.title}</div>
-                                <div class="card-info">
-                                    <span>${anime.type}</span>
-                                    <span>${anime.year}</span>
-                                </div>
+            }
+            
+            const displayCount = showMore ? animeList.length : 8;
+            const itemsToShow = animeList.slice(0, displayCount);
+            
+            itemsToShow.forEach(anime => {
+                const card = document.createElement('div');
+                card.className = 'anime-card';
+                card.innerHTML = `
+                    <div class="card-image">
+                        <img src="${anime.image}" alt="${anime.title}">
+                        <div class="card-overlay">
+                            <div class="card-title">${anime.title}</div>
+                            <div class="card-info">
+                                <span>${anime.type}</span>
+                                <span>${anime.year}</span>
                             </div>
                         </div>
-                        <div class="card-content">
-                            <div class="card-description">${anime.description}</div>
-                            <div class="card-tags">
-                                ${anime.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                            </div>
-                            <div class="card-actions">
-                                <div class="rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>${anime.rating}</span>
-                                </div>
-                                <button class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
-                                    <i class="fas fa-play"></i>
-                                    شاهد الآن
-                                </button>
-                            </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-description">${anime.description}</div>
+                        <div class="card-tags">
+                            ${anime.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                         </div>
-                    `;
-                    container.appendChild(card);
+                        <div class="card-actions">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <span>${anime.rating}</span>
+                            </div>
+                            <button class="btn btn-primary view-details" data-id="${anime.id}" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+                                <i class="fas fa-play"></i>
+                                شاهد الآن
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            // إضافة مستمعي الأحداث لأزرار عرض التفاصيل
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', function() {
+                    const animeId = parseInt(this.getAttribute('data-id'));
+                    showAnimeDetails(animeId);
                 });
             });
         }
 
-        // جعل الأزرار تفاعلية
+        // عرض تفاصيل الأنمي
+        function showAnimeDetails(animeId) {
+            let anime = null;
+            for (const category in animeDatabase) {
+                const found = animeDatabase[category].find(item => item.id === animeId);
+                if (found) {
+                    anime = found;
+                    break;
+                }
+            }
+            
+            if (!anime) return;
+            
+            // تحديث محتوى النافذة المنبثقة
+            document.getElementById('modalImage').src = anime.image;
+            document.getElementById('modalTitle').textContent = anime.title;
+            document.getElementById('modalInfo').innerHTML = `
+                <span>${anime.type}</span>
+                <span>${anime.year}</span>
+                <span>التقييم: ${anime.rating}/10</span>
+            `;
+            document.getElementById('modalDescription').textContent = anime.fullDescription;
+            
+            // تحديث التصنيفات
+            const tagsContainer = document.getElementById('modalTags');
+            tagsContainer.innerHTML = '';
+            anime.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'modal-tag';
+                tagElement.textContent = tag;
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            // تحديث التفاصيل
+            const detailsContainer = document.getElementById('modalDetails');
+            detailsContainer.innerHTML = `
+                <p><strong>الحلقات:</strong> ${anime.details.episodes}</p>
+                <p><strong>الحالة:</strong> ${anime.details.status}</p>
+                <p><strong>الاستوديو:</strong> ${anime.details.studio}</p>
+                <p><strong>المدة:</strong> ${anime.details.duration}</p>
+            `;
+            
+            // توليد رد الذكاء الاصطناعي
+            const aiResponse = document.getElementById('aiResponse');
+            aiResponse.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+            
+            setTimeout(() => {
+                aiResponse.innerHTML = `<p>هذا الأنمي رائع! ${anime.title} يتميز بـ${anime.tags.slice(0, 2).join(' و')} مما يجعله خياراً ممتازاً للمشاهدة. التقييم ${anime.rating} يعكس جودته العالية!</p>`;
+            }, 2000);
+            
+            // عرض النافذة المنبثقة
+            document.getElementById('animeModal').classList.add('active');
+        }
+
+        // وظيفة البحث
+        function performSearch(query) {
+            const results = [];
+            const lowerQuery = query.toLowerCase();
+            
+            for (const category in animeDatabase) {
+                animeDatabase[category].forEach(anime => {
+                    if (anime.title.toLowerCase().includes(lowerQuery) || 
+                        anime.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
+                        anime.description.toLowerCase().includes(lowerQuery)) {
+                        results.push(anime);
+                    }
+                });
+            }
+            
+            return results;
+        }
+
+        // عرض نتائج البحث
+        function displaySearchResults(results, showMore = false) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            if (!showMore) {
+                resultsGrid.innerHTML = '';
+            }
+            
+            const displayCount = showMore ? results.length : 20;
+            const itemsToShow = results.slice(0, displayCount);
+            
+            if (itemsToShow.length === 0 && !showMore) {
+                resultsGrid.innerHTML = '<p>لم يتم العثور على نتائج. جرب مصطلح بحث مختلف.</p>';
+                return;
+            }
+            
+            itemsToShow.forEach(anime => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-image">
+                        <img src="${anime.image}" alt="${anime.title}">
+                    </div>
+                    <div class="result-info">
+                        <div class="result-title">${anime.title}</div>
+                        <div class="card-info">
+                            <span>${anime.type}</span>
+                            <span>${anime.year}</span>
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => showAnimeDetails(anime.id));
+                resultsGrid.appendChild(card);
+            });
+        }
+
+        // إعداد التفاعلات
         function setupInteractions() {
+            let displayCounts = {
+                trending: 8,
+                anime: 8,
+                drama: 8,
+                movie: 8,
+                search: 20
+            };
+
             // زر الاستكشاف
             document.getElementById('exploreBtn').addEventListener('click', function() {
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحضير...';
@@ -1034,31 +1628,44 @@
             document.getElementById('topRatedBtn').addEventListener('click', function() {
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري البحث...';
                 setTimeout(() => {
-                    alert('✨ هنا ستعرض أفضل الأنميات تقييماً!');
+                    const allAnime = [...animeDatabase.trending, ...animeDatabase.anime, ...animeDatabase.drama, ...animeDatabase.movie];
+                    const topRated = allAnime.sort((a, b) => b.rating - a.rating).slice(0, 50);
+                    displaySearchResults(topRated);
+                    document.getElementById('searchResults').classList.add('active');
+                    document.getElementById('searchInput').value = 'الأعلى تقييماً';
+                    document.getElementById('trendingSection').style.display = 'none';
+                    document.getElementById('dramaSection').style.display = 'none';
+                    document.getElementById('movieSection').style.display = 'none';
                     this.innerHTML = '<i class="fas fa-crown"></i> الأكثر روعة';
                 }, 800);
             });
 
+            // زر البحث
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    const results = performSearch(query);
+                    displaySearchResults(results);
+                    document.getElementById('searchResults').classList.add('active');
+                    document.getElementById('trendingSection').style.display = 'none';
+                    document.getElementById('dramaSection').style.display = 'none';
+                    document.getElementById('movieSection').style.display = 'none';
+                }
+            });
+
             // زر الإعدادات
             document.getElementById('settingsBtn').addEventListener('click', function() {
-                const musicControls = document.querySelector('.music-controls');
-                if (!musicControls) {
-                    const settingsDiv = document.createElement('div');
-                    settingsDiv.className = 'music-controls active';
-                    settingsDiv.innerHTML = `
-                        <h4 style="margin-bottom: 1rem; color: var(--cyan);">🎵 إعدادات الموسيقى</h4>
-                        <div class="volume-control">
-                            <i class="fas fa-volume-up" style="color: var(--cyan);"></i>
-                            <input type="range" class="volume-slider" min="0" max="100" value="70">
-                        </div>
-                        <p style="margin-top: 1rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
-                            الموسيقى تعمل تلقائياً في الخلفية 🎶
-                        </p>
-                    `;
-                    this.parentNode.appendChild(settingsDiv);
-                } else {
-                    musicControls.remove();
-                }
+                document.getElementById('settingsModal').classList.add('active');
+            });
+
+            // إغلاق الإعدادات
+            document.getElementById('settingsClose').addEventListener('click', function() {
+                document.getElementById('settingsModal').classList.remove('active');
+            });
+
+            // إغلاق النافذة المنبثقة
+            document.getElementById('modalClose').addEventListener('click', function() {
+                document.getElementById('animeModal').classList.remove('active');
             });
 
             // روابط التنقل
@@ -1082,21 +1689,38 @@
                 });
             });
 
-            // تأثيرات عند التمرير
-            let scrollTimeout;
-            window.addEventListener('scroll', () => {
-                document.body.style.pointerEvents = 'none';
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    document.body.style.pointerEvents = 'auto';
-                }, 100);
+            // أزرار "عرض المزيد"
+            document.getElementById('loadMoreTrending').addEventListener('click', function() {
+                createAnimeCards(animeDatabase.trending, 'trendingGrid', true);
+                this.style.display = 'none';
+            });
+
+            document.getElementById('loadMoreDrama').addEventListener('click', function() {
+                createAnimeCards(animeDatabase.drama, 'dramaGrid', true);
+                this.style.display = 'none';
+            });
+
+            document.getElementById('loadMoreMovies').addEventListener('click', function() {
+                createAnimeCards(animeDatabase.movie, 'movieGrid', true);
+                this.style.display = 'none';
+            });
+
+            document.getElementById('loadMoreResults').addEventListener('click', function() {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    const results = performSearch(query);
+                    displaySearchResults(results, true);
+                }
             });
         }
 
         // تهيئة كل شيء عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
+            populateAnimeDatabase();
             createMagicBackground();
-            createAnimeCards();
+            createAnimeCards(animeDatabase.trending, 'trendingGrid');
+            createAnimeCards(animeDatabase.drama, 'dramaGrid');
+            createAnimeCards(animeDatabase.movie, 'movieGrid');
             setupInteractions();
             
             // بدء الموسيقى تلقائياً
@@ -1107,6 +1731,7 @@
     </script>
 </body>
 </html>
+
 
 
 
