@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimeVerse - Your Gateway to Anime & Drama World</title>
+    <title>AnimeVerse - بوابتك إلى عالم الأنمي والدراما</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #8a2be2;
@@ -28,7 +28,7 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Cairo', sans-serif;
             background: linear-gradient(135deg, var(--darker), var(--dark));
             color: var(--light);
             line-height: 1.6;
@@ -118,7 +118,7 @@
             content: '';
             position: absolute;
             bottom: -5px;
-            left: 0;
+            right: 0;
             width: 0;
             height: 2px;
             background: var(--secondary);
@@ -145,6 +145,7 @@
             width: 100%;
             padding: 0.5rem;
             outline: none;
+            font-family: 'Cairo', sans-serif;
         }
 
         .search-bar input::placeholder {
@@ -202,6 +203,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-family: 'Cairo', sans-serif;
         }
 
         .btn-primary {
@@ -248,7 +250,7 @@
             content: '';
             position: absolute;
             bottom: -10px;
-            left: 0;
+            right: 0;
             width: 60px;
             height: 4px;
             background: linear-gradient(90deg, var(--secondary), var(--primary));
@@ -310,8 +312,8 @@
         .card-overlay {
             position: absolute;
             bottom: 0;
-            left: 0;
             right: 0;
+            left: 0;
             background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
             padding: 1.5rem 1rem 1rem;
             color: white;
@@ -429,7 +431,7 @@
             display: none;
             position: fixed;
             top: 0;
-            left: 0;
+            right: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
@@ -457,7 +459,7 @@
         .modal-close {
             position: absolute;
             top: 15px;
-            right: 15px;
+            left: 15px;
             background: rgba(0, 0, 0, 0.5);
             border: none;
             color: white;
@@ -486,8 +488,8 @@
         .modal-header-overlay {
             position: absolute;
             bottom: 0;
-            left: 0;
             right: 0;
+            left: 0;
             background: linear-gradient(transparent, var(--dark));
             padding: 2rem;
             color: white;
@@ -617,7 +619,7 @@
         .music-player {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             background: rgba(26, 26, 46, 0.95);
             border-radius: 15px;
             padding: 1rem;
@@ -760,7 +762,7 @@
             content: '';
             position: absolute;
             bottom: -8px;
-            left: 0;
+            right: 0;
             width: 40px;
             height: 3px;
             background: var(--secondary);
@@ -826,6 +828,20 @@
             opacity: 0;
         }
 
+        /* Language Toggle */
+        .lang-toggle {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Cairo', sans-serif;
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .navbar {
@@ -869,8 +885,8 @@
 
             .music-player {
                 width: calc(100% - 40px);
-                right: 20px;
                 left: 20px;
+                right: 20px;
             }
 
             .modal-content {
@@ -925,13 +941,13 @@
                 <span>AnimeVerse</span>
             </a>
             <div class="nav-links">
-                <a href="#" class="nav-link" data-category="trending">Trending</a>
-                <a href="#" class="nav-link" data-category="anime">Anime</a>
-                <a href="#" class="nav-link" data-category="drama">Dramas</a>
-                <a href="#" class="nav-link" data-category="movie">Movies</a>
+                <a href="#" class="nav-link" data-category="trending">الأكثر مشاهدة</a>
+                <a href="#" class="nav-link" data-category="anime">الأنمي</a>
+                <a href="#" class="nav-link" data-category="drama">الدراما</a>
+                <a href="#" class="nav-link" data-category="movie">الأفلام</a>
             </div>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search anime, dramas...">
+                <input type="text" id="searchInput" placeholder="ابحث عن الأنمي أو الدراما...">
                 <button id="searchBtn"><i class="fas fa-search"></i></button>
             </div>
         </nav>
@@ -939,14 +955,14 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>Discover Your Next Favorite Anime & Drama</h1>
-        <p>Explore a vast collection of anime series, dramas, and movies with detailed summaries and recommendations to fuel your binge-watching sessions.</p>
+        <h1>اكتشف الأنمي والدراما المفضلة لديك</h1>
+        <p>استكشف مجموعة واسعة من مسلسلات الأنمي والدراما والأفلام مع ملخصات مفصلة وتوصيات لتغذية جلسات المشاهدة الخاصة بك.</p>
         <div class="cta-buttons">
             <button class="btn btn-primary" id="exploreBtn">
-                <i class="fas fa-play"></i> Explore Now
+                <i class="fas fa-play"></i> استكشف الآن
             </button>
             <button class="btn btn-secondary" id="topRatedBtn">
-                <i class="fas fa-star"></i> Top Rated
+                <i class="fas fa-star"></i> الأعلى تقييماً
             </button>
         </div>
     </section>
@@ -954,43 +970,43 @@
     <!-- Search Results -->
     <section class="search-results" id="searchResults">
         <div class="section-header">
-            <h2 class="section-title">Search Results</h2>
+            <h2 class="section-title">نتائج البحث</h2>
         </div>
         <div class="results-grid" id="resultsGrid">
-            <!-- Search results will be populated here -->
+            <!-- سيتم تعبئة نتائج البحث هنا -->
         </div>
     </section>
 
     <!-- Trending Anime Section -->
     <section class="section" id="trendingSection">
         <div class="section-header">
-            <h2 class="section-title">Trending Anime</h2>
-            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            <h2 class="section-title">الأنمي الشائع</h2>
+            <a href="#" class="view-all">عرض الكل <i class="fas fa-arrow-left"></i></a>
         </div>
         <div class="anime-grid" id="trendingGrid">
-            <!-- Trending anime will be populated here -->
+            <!-- سيتم تعبئة الأنمي الشائع هنا -->
         </div>
     </section>
 
     <!-- Popular Dramas Section -->
     <section class="section" id="dramaSection">
         <div class="section-header">
-            <h2 class="section-title">Popular Dramas</h2>
-            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            <h2 class="section-title">الدراما الشائعة</h2>
+            <a href="#" class="view-all">عرض الكل <i class="fas fa-arrow-left"></i></a>
         </div>
         <div class="anime-grid" id="dramaGrid">
-            <!-- Dramas will be populated here -->
+            <!-- سيتم تعبئة الدراما هنا -->
         </div>
     </section>
 
     <!-- Anime Movies Section -->
     <section class="section" id="movieSection">
         <div class="section-header">
-            <h2 class="section-title">Anime Movies</h2>
-            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            <h2 class="section-title">أفلام الأنمي</h2>
+            <a href="#" class="view-all">عرض الكل <i class="fas fa-arrow-left"></i></a>
         </div>
         <div class="anime-grid" id="movieGrid">
-            <!-- Movies will be populated here -->
+            <!-- سيتم تعبئة الأفلام هنا -->
         </div>
     </section>
 
@@ -1009,13 +1025,13 @@
             </div>
             <div class="modal-body">
                 <div class="modal-section">
-                    <h3>Synopsis</h3>
+                    <h3>القصة</h3>
                     <p class="modal-description" id="modalDescription"></p>
                     <div class="modal-tags" id="modalTags"></div>
                 </div>
                 
                 <div class="modal-section">
-                    <h3>Details</h3>
+                    <h3>التفاصيل</h3>
                     <div id="modalDetails"></div>
                 </div>
                 
@@ -1024,7 +1040,7 @@
                         <div class="ai-avatar">
                             <i class="fas fa-robot"></i>
                         </div>
-                        <div class="ai-title">AnimeVerse AI Assistant</div>
+                        <div class="ai-title">مساعد AnimeVerse الذكي</div>
                     </div>
                     <div class="ai-response" id="aiResponse">
                         <div class="typing-indicator">
@@ -1041,11 +1057,11 @@
     <!-- Music Player -->
     <div class="music-player">
         <div class="player-header">
-            <div class="player-title">Now Playing: Epic Anime Mix</div>
+            <div class="player-title">قيد التشغيل: مزيج الأنمي الرائع</div>
             <div class="player-controls">
                 <button class="control-btn" id="prevBtn"><i class="fas fa-step-backward"></i></button>
                 <button class="control-btn play-pause" id="playPauseBtn">
-                    <i class="fas fa-play" id="playIcon"></i>
+                    <i class="fas fa-pause" id="playIcon"></i>
                 </button>
                 <button class="control-btn" id="nextBtn"><i class="fas fa-step-forward"></i></button>
             </div>
@@ -1061,13 +1077,13 @@
         </div>
         <div class="volume-control">
             <i class="fas fa-volume-up"></i>
-            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
         </div>
     </div>
 
     <!-- YouTube Player (Hidden) -->
     <iframe id="youtube-player"
-        src="https://www.youtube.com/embed/BjCqdWOXjxY?enablejsapi=1&controls=0&disablekb=1&modestbranding=1&rel=0"
+        src="https://www.youtube.com/embed/BjCqdWOXjxY?enablejsapi=1&controls=0&disablekb=1&modestbranding=1&rel=0&autoplay=1"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
@@ -1078,7 +1094,7 @@
         <div class="footer-content">
             <div class="footer-column">
                 <h3>AnimeVerse</h3>
-                <p>Your ultimate destination for anime, dramas, and movies. Discover, explore, and enjoy the best content from around the world.</p>
+                <p>وجهتك النهائية للأنمي والدراما والأفلام. اكتشف واستكشف واستمتع بأفضل المحتويات من حول العالم.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
@@ -1087,193 +1103,125 @@
                 </div>
             </div>
             <div class="footer-column">
-                <h3>Explore</h3>
+                <h3>استكشف</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Anime Series</a></li>
-                    <li><a href="#">Dramas</a></li>
-                    <li><a href="#">Movies</a></li>
-                    <li><a href="#">Top Picks</a></li>
+                    <li><a href="#">الرئيسية</a></li>
+                    <li><a href="#">مسلسلات الأنمي</a></li>
+                    <li><a href="#">الدراما</a></li>
+                    <li><a href="#">الأفلام</a></li>
+                    <li><a href="#">الأعلى تقييماً</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h3>Categories</h3>
+                <h3>التصنيفات</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Romance</a></li>
-                    <li><a href="#">Comedy</a></li>
-                    <li><a href="#">Fantasy</a></li>
-                    <li><a href="#">Thriller</a></li>
+                    <li><a href="#">أكشن</a></li>
+                    <li><a href="#">رومانسي</a></li>
+                    <li><a href="#">كوميدي</a></li>
+                    <li><a href="#">فانتازيا</a></li>
+                    <li><a href="#">إثارة</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h3>Support</h3>
+                <h3>الدعم</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">مركز المساعدة</a></li>
+                    <li><a href="#">اتصل بنا</a></li>
+                    <li><a href="#">سياسة الخصوصية</a></li>
+                    <li><a href="#">شروط الخدمة</a></li>
                 </ul>
             </div>
         </div>
         <div class="copyright">
-            &copy; 2023 AnimeVerse. All rights reserved.
+            &copy; 2023 AnimeVerse. جميع الحقوق محفوظة.
         </div>
     </footer>
 
     <script>
-        // Anime Database
+        // قاعدة بيانات الأنمي
         const animeDatabase = {
             trending: [
                 {
                     id: 1,
-                    title: "Attack on Titan",
+                    title: "هجوم العمالقة",
                     image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "TV Series",
+                    type: "مسلسل تلفزيوني",
                     year: "2023",
                     rating: 9.0,
-                    description: "Humanity resides within enormous walled cities to protect themselves from Titans, gigantic humanoid creatures who devour humans.",
-                    tags: ["Action", "Drama", "Fantasy", "Dark"],
+                    description: "تعيش البشرية داخل مدن محاطة بجدران ضخمة لحماية أنفسهم من العمالقة، المخلوقات البشرية العملاقة التي تلتهم البشر.",
+                    tags: ["أكشن", "دراما", "فانتازيا", "مظلم"],
                     details: {
                         episodes: "75+",
-                        status: "Completed",
+                        status: "مكتمل",
                         studio: "Wit Studio, MAPPA",
-                        duration: "24 min"
+                        duration: "24 دقيقة"
                     },
-                    fullDescription: "In a world where humanity lives inside cities surrounded by enormous walls due to the Titans, gigantic humanoid creatures who devour humans, the story follows Eren Yeager, who vows to exterminate the Titans after they destroy his hometown and kill his mother. As the series progresses, the truth about the Titans and the world outside the walls is revealed, leading to shocking revelations and moral complexities."
+                    fullDescription: "في عالم تعيش فيه البشرية داخل مدن محاطة بجدران ضخمة بسبب العمالقة، المخلوقات البشرية العملاقة التي تلتهم البشر، تتبع القصة إيرين ييغر الذي يتعهد بإبادة العمالقة بعد أن دمروا مسقط رأسه وقتلوا والدته. مع تقدم المسلسل، يتم الكشف عن الحقيقة حول العمالقة والعالم خارج الجدران، مما يؤدي إلى كشف صادم وتعقيدات أخلاقية."
                 },
                 {
                     id: 2,
-                    title: "Demon Slayer",
+                    title: "قاتل الشياطين",
                     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "TV Series",
+                    type: "مسلسل تلفزيوني",
                     year: "2023",
                     rating: 8.7,
-                    description: "A family is attacked by demons and only two members survive - Tanjiro and his sister Nezuko, who is turning into a demon slowly.",
-                    tags: ["Action", "Supernatural", "Adventure", "Swordsmanship"],
+                    description: "تعرضت عائلة لهجوم من الشياطين ولم ينجو سوى عضوان - تانجيرو وأخته نيزوكو، التي تتحول ببطء إلى شيطان.",
+                    tags: ["أكشن", "خارق للطبيعة", "مغامرة", "قتال بالسيف"],
                     details: {
                         episodes: "55+",
-                        status: "Ongoing",
+                        status: "مستمر",
                         studio: "Ufotable",
-                        duration: "24 min"
+                        duration: "24 دقيقة"
                     },
-                    fullDescription: "Tanjiro Kamado is a kind-hearted boy who becomes a demon slayer after his family is slaughtered by demons and his sister Nezuko is turned into a demon. Determined to find a cure for his sister and avenge his family, Tanjiro joins the Demon Slayer Corps. The series is renowned for its breathtaking animation, emotional storytelling, and intense sword-fighting sequences."
-                },
-                {
-                    id: 3,
-                    title: "Jujutsu Kaisen",
-                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "TV Series",
-                    year: "2023",
-                    rating: 8.6,
-                    description: "A boy swallows a cursed talisman and finds himself enrolled in a secret organization of Jujutsu Sorcerers.",
-                    tags: ["Action", "Supernatural", "Horror", "School"],
-                    details: {
-                        episodes: "47+",
-                        status: "Ongoing",
-                        studio: "MAPPA",
-                        duration: "24 min"
-                    },
-                    fullDescription: "Yuji Itadori is a high school student with exceptional physical abilities who becomes involved in the world of curses after swallowing a powerful cursed object to protect his friends. He enrolls in Tokyo Metropolitan Curse Technical College to learn how to control his new powers and exorcise curses. The series combines intense action with dark humor and complex character relationships."
-                },
-                {
-                    id: 4,
-                    title: "My Hero Academia",
-                    image: "https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "TV Series",
-                    year: "2023",
-                    rating: 8.4,
-                    description: "A boy born without superpowers in a world where they are the norm, but still dreams of becoming a superhero himself.",
-                    tags: ["Action", "School", "Superhero", "Shounen"],
-                    details: {
-                        episodes: "138+",
-                        status: "Ongoing",
-                        studio: "Bones",
-                        duration: "24 min"
-                    },
-                    fullDescription: "In a world where most of the population has superpowers known as 'Quirks', Izuku Midoriya dreams of becoming a hero despite being born without any powers. His fate changes when he meets the world's greatest hero, All Might, who chooses Izuku to inherit his powerful Quirk. The series follows Izuku's journey at U.A. High School, a prestigious academy for aspiring heroes."
+                    fullDescription: "تانجيرو كامادو هو فتى طيب القلب يصبح قاتل شياطين بعد أن ذبحت عائلته على يد الشياطين وتحولت أخته نيزوكو إلى شيطان. مصممًا على إيجاد علاج لأخته والانتقام لعائلته، ينضم تانجيرو إلى فيلق قتالي الشياطين. يشتهر المسلسل برسومه المتحركة المذهلة وسرد القصص العاطفي ومشاهد القتال بالسيف المكثفة."
                 }
             ],
             drama: [
                 {
                     id: 5,
-                    title: "Squid Game",
+                    title: "لعبة الحبار",
                     image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "TV Series",
+                    type: "مسلسل تلفزيوني",
                     year: "2021",
                     rating: 8.3,
-                    description: "Hundreds of cash-strapped players accept a strange invitation to compete in children's games for a tempting prize.",
-                    tags: ["Thriller", "Drama", "Survival", "Psychological"],
+                    description: "مئات اللاعبين الذين يعانون من ضائقة مالية يقبلون دعوة غريبة للمنافسة في ألعاب أطفال للحصول على جائزة مغرية.",
+                    tags: ["إثارة", "دراما", "بقاء", "نفسي"],
                     details: {
                         episodes: "9",
-                        status: "Season 2 Announced",
+                        status: "الموسم الثاني أعلن",
                         studio: "Siren Pictures",
-                        duration: "50-60 min"
+                        duration: "50-60 دقيقة"
                     },
-                    fullDescription: "Hundreds of cash-strapped contestants accept an invitation to compete in children's games for a tempting prize, but the stakes are deadly. The series explores themes of economic inequality, human desperation, and morality through its intense survival game format. Each game is a Korean traditional children's game with a deadly twist, testing the limits of human nature."
-                },
-                {
-                    id: 6,
-                    title: "Crash Landing on You",
-                    image: "https://images.unsplash.com/photo-1598880940086-4b1de1e4725f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "TV Series",
-                    year: "2019",
-                    rating: 8.7,
-                    description: "A South Korean heiress accidentally crash-lands in North Korea and falls in love with an army officer.",
-                    tags: ["Romance", "Drama", "Comedy", "Political"],
-                    details: {
-                        episodes: "16",
-                        status: "Completed",
-                        studio: "Studio Dragon",
-                        duration: "70-110 min"
-                    },
-                    fullDescription: "A South Korean chaebol heiress accidentally paraglides into North Korea and meets an army officer who decides to help her hide. The series beautifully portrays the unlikely romance that blossoms between them, crossing political boundaries and cultural differences. It offers a rare glimpse into life in North Korea while delivering a heartwarming love story filled with humor, tension, and emotional moments."
+                    fullDescription: "مئات المتسابقين الذين يعانون من ضائقة مالية يقبلون دعوة للمنافسة في ألعاب أطفال للحصول على جائزة مغرية، لكن المخاطر قاتلة. يستكشف المسلسل موضوعات عدم المساواة الاقتصادية واليأس البشري والأخلاق من خلال تنسيق لعبة البقاء المكثفة. كل لعبة هي لعبة أطفال كورية تقليدية مع لمسة مميتة، تختبر حدود الطبيعة البشرية."
                 }
             ],
             movie: [
                 {
                     id: 7,
-                    title: "Spirited Away",
+                    title: "رحلة تشيهيرو",
                     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "Movie",
+                    type: "فيلم",
                     year: "2001",
                     rating: 8.6,
-                    description: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits.",
-                    tags: ["Fantasy", "Adventure", "Family", "Spirits"],
+                    description: "خلال انتقال عائلتها إلى الضواحي، تتجول فتاة متجهمة تبلغ من العمر 10 سنوات في عالم يحكمه الآلهة والسحرة والأرواح.",
+                    tags: ["فانتازيا", "مغامرة", "عائلي", "أرواح"],
                     details: {
-                        episodes: "Movie",
-                        status: "Completed",
+                        episodes: "فيلم",
+                        status: "مكتمل",
                         studio: "Studio Ghibli",
-                        duration: "125 min"
+                        duration: "125 دقيقة"
                     },
-                    fullDescription: "Chihiro Ogino, a sullen 10-year-old girl, enters the world of Kami (spirits of Japanese Shinto folklore) after her family is transformed into pigs. To save herself and her parents, she must work at a bathhouse owned by the witch Yubaba. The film is a masterpiece of animation that explores themes of identity, greed, and environmentalism through breathtaking visuals and a compelling narrative."
-                },
-                {
-                    id: 8,
-                    title: "Your Name",
-                    image: "https://images.unsplash.com/photo-1489599809505-fc6c1e3c6c19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                    type: "Movie",
-                    year: "2016",
-                    rating: 8.2,
-                    description: "Two teenagers share a profound, magical connection upon discovering they are swapping bodies.",
-                    tags: ["Romance", "Fantasy", "Drama", "Body Swap"],
-                    details: {
-                        episodes: "Movie",
-                        status: "Completed",
-                        studio: "CoMix Wave Films",
-                        duration: "106 min"
-                    },
-                    fullDescription: "Mitsuha Miyamizu, a high school girl living in the countryside, and Taki Tachibana, a high school boy living in Tokyo, suddenly begin to swap bodies randomly. As they navigate each other's lives and form a connection, they realize they're separated not just by distance but by time itself. The film is a beautiful exploration of love, fate, and memory with stunning animation and an emotionally powerful story."
+                    fullDescription: "تشيهيرو أوجينو، فتاة متجهمة تبلغ من العمر 10 سنوات، تدخل عالم كامي (أرواح الفلكلور الشنتو الياباني) بعد أن تتحول عائلتها إلى خنازير. لإنقاذ نفسها ووالديها، يجب أن تعمل في حمام مملوك للساحرة يوبابا. الفيلم هو تحفة في الرسوم المتحركة تستكشف موضوعات الهوية والجشع والبيئية من خلال الصور المرئية المذهلة والسرد المقنع."
                 }
             ]
         };
 
         // YouTube Player API
         let player;
-        let isPlaying = false;
+        let isPlaying = true; // الموسيقى تعمل تلقائياً
         let updateTimer;
 
-        // Load YouTube API
+        // تحميل YouTube API
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', {
                 events: {
@@ -1284,9 +1232,15 @@
         }
 
         function onPlayerReady(event) {
-            // Player is ready
+            // المشغل جاهز
             updateTimer = setInterval(updateProgress, 1000);
             document.getElementById('duration').textContent = formatTime(player.getDuration());
+            
+            // تشغيل الموسيقى تلقائياً
+            player.playVideo();
+            isPlaying = true;
+            document.getElementById('playIcon').classList.remove('fa-play');
+            document.getElementById('playIcon').classList.add('fa-pause');
         }
 
         function onPlayerStateChange(event) {
@@ -1342,7 +1296,7 @@
             }
         }
 
-        // Create floating background elements
+        // إنشاء العناصر العائمة في الخلفية
         function createFloatingElements() {
             const bgAnime = document.getElementById('bgAnime');
             const count = 15;
@@ -1354,7 +1308,7 @@
                 const size = Math.random() * 100 + 50;
                 element.style.width = `${size}px`;
                 element.style.height = `${size}px`;
-                element.style.left = `${Math.random() * 100}%`;
+                element.style.right = `${Math.random() * 100}%`;
                 element.style.animationDuration = `${Math.random() * 20 + 10}s`;
                 element.style.animationDelay = `${Math.random() * 5}s`;
                 
@@ -1362,22 +1316,22 @@
             }
         }
 
-        // Generate AI response for anime
+        // توليد رد الذكاء الاصطناعي للأنمي
         function generateAIResponse(anime) {
             const responses = [
-                `Based on my analysis, ${anime.title} is an exceptional ${anime.type.toLowerCase()} that has captivated audiences worldwide. The ${anime.tags.join(', ')} elements create a unique viewing experience that balances intense action with deep emotional moments. I'd highly recommend this to fans of quality storytelling and breathtaking animation.`,
+                `بناءً على تحليلي، ${anime.title} هو ${anime.type.toLowerCase()} استثنائي أسر الجماهير في جميع أنحاء العالم. عناصر ${anime.tags.join(', ')} تخلق تجربة مشاهدة فريدة توازن بين الأكشن المكثف واللحظات العاطفية العميقة. أوصي بشدة بهذا لعشاق سرد القصص الجودة والرسوم المتحركة المذهلة.`,
                 
-                `From my perspective, ${anime.title} stands out for its ${anime.tags.slice(0, 2).join(' and ')} themes. The character development is particularly noteworthy, with protagonists that undergo significant growth throughout the series. The ${anime.details.studio} studio has done an incredible job bringing this story to life.`,
+                `من وجهة نظري، ${anime.title} يتميز بمواضيعه ${anime.tags.slice(0, 2).join(' و')}. تطور الشخصيات جدير بالملاحظة بشكل خاص، مع أبطال يخضعون لنمو كبير طوال المسلسل. استوديو ${anime.details.studio} قام بعمل رائع في إحياء هذه القصة.`,
                 
-                `After processing the data on ${anime.title}, I can confirm it's a masterpiece in the ${anime.tags[0]} genre. The narrative structure is meticulously crafted, with plot twists that will keep you engaged from start to finish. The animation quality and soundtrack work in perfect harmony to create an immersive experience.`,
+                `بعد معالجة البيانات حول ${anime.title}، يمكنني تأكيد أنها تحفة في نوع ${anime.tags[0]}. هيكل السرد مصمم بدقة، مع مفاجآت في الحبكة ستبقيك منخرطًا من البداية إلى النهاية. جودة الرسوم المتحركة والموسيقى التصويرية تعمل بتناغم مثالي لخلق تجربة غامرة.`,
                 
-                `My assessment of ${anime.title} indicates it's a must-watch for any anime enthusiast. The way it handles ${anime.tags.join(' and ')} themes is both innovative and respectful to the genre traditions. The ${anime.rating}/10 rating is well-deserved, reflecting both critical and audience appreciation.`
+                `تقييمي لـ ${anime.title} يشير إلى أنه يجب مشاهدته لأي متحمس للأنمي. الطريقة التي يتعامل بها مع موضوعات ${anime.tags.join(' و')} هي مبتكرة ومحترمة لتقاليد النوع في نفس الوقت. التقييم ${anime.rating}/10 مستحق، ويعكس تقدير النقاد والجمهور على حد سواء.`
             ];
             
             return responses[Math.floor(Math.random() * responses.length)];
         }
 
-        // Display anime in grid
+        // عرض الأنمي في الشبكة
         function displayAnimeInGrid(animeList, containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
@@ -1406,14 +1360,14 @@
                                 <i class="fas fa-star"></i>
                                 <span>${anime.rating}</span>
                             </div>
-                            <button class="btn btn-primary view-details" data-id="${anime.id}">View Details</button>
+                            <button class="btn btn-primary view-details" data-id="${anime.id}">عرض التفاصيل</button>
                         </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
             
-            // Add event listeners to view details buttons
+            // إضافة مستمعي الأحداث لأزرار عرض التفاصيل
             document.querySelectorAll('.view-details').forEach(button => {
                 button.addEventListener('click', function() {
                     const animeId = parseInt(this.getAttribute('data-id'));
@@ -1422,9 +1376,9 @@
             });
         }
 
-        // Show anime details in modal
+        // عرض تفاصيل الأنمي في النافذة المنبثقة
         function showAnimeDetails(animeId) {
-            // Find anime in database
+            // البحث عن الأنمي في قاعدة البيانات
             let anime = null;
             for (const category in animeDatabase) {
                 const found = animeDatabase[category].find(item => item.id === animeId);
@@ -1436,17 +1390,17 @@
             
             if (!anime) return;
             
-            // Update modal content
+            // تحديث محتوى النافذة المنبثقة
             document.getElementById('modalImage').src = anime.image;
             document.getElementById('modalTitle').textContent = anime.title;
             document.getElementById('modalInfo').innerHTML = `
                 <span>${anime.type}</span>
                 <span>${anime.year}</span>
-                <span>Rating: ${anime.rating}/10</span>
+                <span>التقييم: ${anime.rating}/10</span>
             `;
             document.getElementById('modalDescription').textContent = anime.fullDescription;
             
-            // Update tags
+            // تحديث التصنيفات
             const tagsContainer = document.getElementById('modalTags');
             tagsContainer.innerHTML = '';
             anime.tags.forEach(tag => {
@@ -1456,16 +1410,16 @@
                 tagsContainer.appendChild(tagElement);
             });
             
-            // Update details
+            // تحديث التفاصيل
             const detailsContainer = document.getElementById('modalDetails');
             detailsContainer.innerHTML = `
-                <p><strong>Episodes:</strong> ${anime.details.episodes}</p>
-                <p><strong>Status:</strong> ${anime.details.status}</p>
-                <p><strong>Studio:</strong> ${anime.details.studio}</p>
-                <p><strong>Duration:</strong> ${anime.details.duration}</p>
+                <p><strong>الحلقات:</strong> ${anime.details.episodes}</p>
+                <p><strong>الحالة:</strong> ${anime.details.status}</p>
+                <p><strong>الاستوديو:</strong> ${anime.details.studio}</p>
+                <p><strong>المدة:</strong> ${anime.details.duration}</p>
             `;
             
-            // Generate AI response
+            // توليد رد الذكاء الاصطناعي
             const aiResponse = document.getElementById('aiResponse');
             aiResponse.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
             
@@ -1473,11 +1427,11 @@
                 aiResponse.innerHTML = `<p>${generateAIResponse(anime)}</p>`;
             }, 2000);
             
-            // Show modal
+            // عرض النافذة المنبثقة
             document.getElementById('animeModal').classList.add('active');
         }
 
-        // Search functionality
+        // وظيفة البحث
         function performSearch(query) {
             const results = [];
             const lowerQuery = query.toLowerCase();
@@ -1495,13 +1449,13 @@
             return results;
         }
 
-        // Display search results
+        // عرض نتائج البحث
         function displaySearchResults(results) {
             const resultsGrid = document.getElementById('resultsGrid');
             resultsGrid.innerHTML = '';
             
             if (results.length === 0) {
-                resultsGrid.innerHTML = '<p>No results found. Try a different search term.</p>';
+                resultsGrid.innerHTML = '<p>لم يتم العثور على نتائج. جرب مصطلح بحث مختلف.</p>';
                 return;
             }
             
@@ -1525,27 +1479,27 @@
             });
         }
 
-        // Initialize everything when page loads
+        // تهيئة كل شيء عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             createFloatingElements();
             
-            // Add YouTube API script
+            // إضافة سكريبت YouTube API
             const tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
             const firstScriptTag = document.getElementsByTagName('script')[0];
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-            // Music player event listeners
+            // مستمعي الأحداث لمشغل الموسيقى
             document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
             document.getElementById('progressBar').addEventListener('click', setProgress);
             document.getElementById('volumeSlider').addEventListener('input', setVolume);
 
-            // Display anime in grids
+            // عرض الأنمي في الشبكات
             displayAnimeInGrid(animeDatabase.trending, 'trendingGrid');
             displayAnimeInGrid(animeDatabase.drama, 'dramaGrid');
             displayAnimeInGrid(animeDatabase.movie, 'movieGrid');
 
-            // Search functionality
+            // وظيفة البحث
             document.getElementById('searchBtn').addEventListener('click', function() {
                 const query = document.getElementById('searchInput').value.trim();
                 if (query) {
@@ -1553,69 +1507,69 @@
                     displaySearchResults(results);
                     document.getElementById('searchResults').classList.add('active');
                     
-                    // Hide other sections
+                    // إخفاء الأقسام الأخرى
                     document.getElementById('trendingSection').style.display = 'none';
                     document.getElementById('dramaSection').style.display = 'none';
                     document.getElementById('movieSection').style.display = 'none';
                 }
             });
 
-            // Enter key for search
+            // مفتاح الإدخال للبحث
             document.getElementById('searchInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     document.getElementById('searchBtn').click();
                 }
             });
 
-            // Navigation links
+            // روابط التنقل
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const category = this.getAttribute('data-category');
                     
-                    // Show search results for this category
+                    // عرض نتائج البحث لهذا التصنيف
                     const results = animeDatabase[category] || [];
                     displaySearchResults(results);
                     document.getElementById('searchResults').classList.add('active');
                     
-                    // Update search input
-                    document.getElementById('searchInput').value = category.charAt(0).toUpperCase() + category.slice(1);
+                    // تحديث إدخال البحث
+                    document.getElementById('searchInput').value = this.textContent;
                     
-                    // Hide other sections
+                    // إخفاء الأقسام الأخرى
                     document.getElementById('trendingSection').style.display = 'none';
                     document.getElementById('dramaSection').style.display = 'none';
                     document.getElementById('movieSection').style.display = 'none';
                 });
             });
 
-            // Explore button
+            // زر الاستكشاف
             document.getElementById('exploreBtn').addEventListener('click', function() {
                 document.getElementById('trendingSection').scrollIntoView({ behavior: 'smooth' });
             });
 
-            // Top rated button
+            // زر الأعلى تقييماً
             document.getElementById('topRatedBtn').addEventListener('click', function() {
-                // Sort all anime by rating and display
+                // ترتيب كل الأنمي حسب التقييم وعرضه
                 const allAnime = [...animeDatabase.trending, ...animeDatabase.drama, ...animeDatabase.movie];
                 const topRated = allAnime.sort((a, b) => b.rating - a.rating).slice(0, 8);
                 displaySearchResults(topRated);
                 document.getElementById('searchResults').classList.add('active');
                 
-                // Update search input
-                document.getElementById('searchInput').value = 'Top Rated';
+                // تحديث إدخال البحث
+                document.getElementById('searchInput').value = 'الأعلى تقييماً';
                 
-                // Hide other sections
+                // إخفاء الأقسام الأخرى
                 document.getElementById('trendingSection').style.display = 'none';
                 document.getElementById('dramaSection').style.display = 'none';
                 document.getElementById('movieSection').style.display = 'none';
             });
 
-            // Modal close
+            // إغلاق النافذة المنبثقة
             document.getElementById('modalClose').addEventListener('click', function() {
                 document.getElementById('animeModal').classList.remove('active');
             });
 
-            // Close modal when clicking outside
+            // إغلاق النافذة المنبثقة عند النقر خارجها
             document.getElementById('animeModal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     this.classList.remove('active');
@@ -1625,6 +1579,7 @@
     </script>
 </body>
 </html>
+
 
 
 
