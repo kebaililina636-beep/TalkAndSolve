@@ -282,6 +282,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
             border: 1px solid var(--card-border);
             backdrop-filter: blur(10px);
+            cursor: pointer;
         }
 
         .anime-card:hover {
@@ -368,6 +369,248 @@
             align-items: center;
             gap: 0.3rem;
             color: gold;
+        }
+
+        /* Search Results */
+        .search-results {
+            display: none;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: 1px solid var(--card-border);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .result-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .result-info {
+            padding: 1rem;
+        }
+
+        .result-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Anime Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border-radius: 15px;
+            max-width: 1000px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--card-border);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-header {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .modal-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-header-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, var(--dark));
+            padding: 2rem;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-info {
+            display: flex;
+            gap: 1rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-section {
+            margin-bottom: 2rem;
+        }
+
+        .modal-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .modal-description {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .modal-tag {
+            background: rgba(108, 77, 246, 0.3);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* AI Chat Section */
+        .ai-chat {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .ai-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .ai-response {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 1rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
         }
 
         /* Music Player */
@@ -629,6 +872,14 @@
                 right: 20px;
                 left: 20px;
             }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .modal-title {
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 576px) {
@@ -651,6 +902,14 @@
             .footer-content {
                 grid-template-columns: 1fr;
             }
+
+            .modal-header {
+                height: 300px;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -666,15 +925,14 @@
                 <span>AnimeVerse</span>
             </a>
             <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">Anime</a>
-                <a href="#">Dramas</a>
-                <a href="#">Movies</a>
-                <a href="#">Top Picks</a>
+                <a href="#" class="nav-link" data-category="trending">Trending</a>
+                <a href="#" class="nav-link" data-category="anime">Anime</a>
+                <a href="#" class="nav-link" data-category="drama">Dramas</a>
+                <a href="#" class="nav-link" data-category="movie">Movies</a>
             </div>
             <div class="search-bar">
-                <input type="text" placeholder="Search anime, dramas...">
-                <button><i class="fas fa-search"></i></button>
+                <input type="text" id="searchInput" placeholder="Search anime, dramas...">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
             </div>
         </nav>
     </header>
@@ -684,280 +942,101 @@
         <h1>Discover Your Next Favorite Anime & Drama</h1>
         <p>Explore a vast collection of anime series, dramas, and movies with detailed summaries and recommendations to fuel your binge-watching sessions.</p>
         <div class="cta-buttons">
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" id="exploreBtn">
                 <i class="fas fa-play"></i> Explore Now
             </button>
-            <button class="btn btn-secondary">
+            <button class="btn btn-secondary" id="topRatedBtn">
                 <i class="fas fa-star"></i> Top Rated
             </button>
         </div>
     </section>
 
+    <!-- Search Results -->
+    <section class="search-results" id="searchResults">
+        <div class="section-header">
+            <h2 class="section-title">Search Results</h2>
+        </div>
+        <div class="results-grid" id="resultsGrid">
+            <!-- Search results will be populated here -->
+        </div>
+    </section>
+
     <!-- Trending Anime Section -->
-    <section class="section">
+    <section class="section" id="trendingSection">
         <div class="section-header">
             <h2 class="section-title">Trending Anime</h2>
             <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
         </div>
-        <div class="anime-grid">
-            <!-- Anime Card 1 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Attack on Titan">
-                    <div class="card-overlay">
-                        <div class="card-title">Attack on Titan</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2023</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        Humanity resides within enormous walled cities to protect themselves from Titans, gigantic humanoid creatures who devour humans.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Action</span>
-                        <span class="tag">Drama</span>
-                        <span class="tag">Fantasy</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>9.0</span>
-                        </div>
-                        <button class="btn btn-primary">Read More</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anime Card 2 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Demon Slayer">
-                    <div class="card-overlay">
-                        <div class="card-title">Demon Slayer</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2023</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        A family is attacked by demons and only two members survive - Tanjiro and his sister Nezuko, who is turning into a demon slowly.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Action</span>
-                        <span class="tag">Supernatural</span>
-                        <span class="tag">Adventure</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.7</span>
-                        </div>
-                        <button class="btn btn-primary">Read More</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anime Card 3 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="My Hero Academia">
-                    <div class="card-overlay">
-                        <div class="card-title">My Hero Academia</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2023</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        A boy born without superpowers in a world where they are the norm, but still dreams of becoming a superhero himself.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Action</span>
-                        <span class="tag">School</span>
-                        <span class="tag">Superhero</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.4</span>
-                        </div>
-                        <button class="btn btn-primary">Read More</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anime Card 4 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Jujutsu Kaisen">
-                    <div class="card-overlay">
-                        <div class="card-title">Jujutsu Kaisen</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2023</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        A boy swallows a cursed talisman and finds himself enrolled in a secret organization of Jujutsu Sorcerers.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Action</span>
-                        <span class="tag">Supernatural</span>
-                        <span class="tag">Horror</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.6</span>
-                        </div>
-                        <button class="btn btn-primary">Read More</button>
-                    </div>
-                </div>
-            </div>
+        <div class="anime-grid" id="trendingGrid">
+            <!-- Trending anime will be populated here -->
         </div>
     </section>
 
     <!-- Popular Dramas Section -->
-    <section class="section">
+    <section class="section" id="dramaSection">
         <div class="section-header">
             <h2 class="section-title">Popular Dramas</h2>
             <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
         </div>
-        <div class="anime-grid">
-            <!-- Drama Card 1 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Squid Game">
-                    <div class="card-overlay">
-                        <div class="card-title">Squid Game</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2021</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        Hundreds of cash-strapped players accept a strange invitation to compete in children's games for a tempting prize.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Thriller</span>
-                        <span class="tag">Drama</span>
-                        <span class="tag">Survival</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.3</span>
-                        </div>
-                        <button class="btn btn-primary">Read More</button>
-                    </div>
+        <div class="anime-grid" id="dramaGrid">
+            <!-- Dramas will be populated here -->
+        </div>
+    </section>
+
+    <!-- Anime Movies Section -->
+    <section class="section" id="movieSection">
+        <div class="section-header">
+            <h2 class="section-title">Anime Movies</h2>
+            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="anime-grid" id="movieGrid">
+            <!-- Movies will be populated here -->
+        </div>
+    </section>
+
+    <!-- Anime Detail Modal -->
+    <div class="modal" id="animeModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <img id="modalImage" src="" alt="">
+                <div class="modal-header-overlay">
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-info" id="modalInfo"></div>
                 </div>
             </div>
-
-            <!-- Drama Card 2 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1598880940086-4b1de1e4725f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Crash Landing on You">
-                    <div class="card-overlay">
-                        <div class="card-title">Crash Landing on You</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2019</span>
-                        </div>
-                    </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>Synopsis</h3>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <div class="modal-tags" id="modalTags"></div>
                 </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        A South Korean heiress accidentally crash-lands in North Korea and falls in love with an army officer.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Romance</span>
-                        <span class="tag">Drama</span>
-                        <span class="tag">Comedy</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.7</span>
-                        </div>
-                        <button class="btn btn-primary">Read More</button>
-                    </div>
+                
+                <div class="modal-section">
+                    <h3>Details</h3>
+                    <div id="modalDetails"></div>
                 </div>
-            </div>
-
-            <!-- Drama Card 3 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1489599809505-fc6c1e3c6c19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Vincenzo">
-                    <div class="card-overlay">
-                        <div class="card-title">Vincenzo</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2021</span>
+                
+                <div class="ai-chat">
+                    <div class="ai-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
                         </div>
+                        <div class="ai-title">AnimeVerse AI Assistant</div>
                     </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        A Korean-Italian mafia lawyer gives a conglomerate a taste of its own medicine with a side of justice.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Crime</span>
-                        <span class="tag">Drama</span>
-                        <span class="tag">Comedy</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.5</span>
+                    <div class="ai-response" id="aiResponse">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
                         </div>
-                        <button class="btn btn-primary">Read More</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Drama Card 4 -->
-            <div class="anime-card">
-                <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Itaewon Class">
-                    <div class="card-overlay">
-                        <div class="card-title">Itaewon Class</div>
-                        <div class="card-info">
-                            <span>TV Series</span>
-                            <span>2020</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-description">
-                        An ex-con and his friends fight to make their ambitious dreams for their street bar a reality.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">Drama</span>
-                        <span class="tag">Business</span>
-                        <span class="tag">Revenge</span>
-                    </div>
-                    <div class="card-actions">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>8.2</span>
-                        </div>
-                        <button class="btn btn-primary">Read More</button>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Music Player -->
     <div class="music-player">
@@ -1043,6 +1122,152 @@
     </footer>
 
     <script>
+        // Anime Database
+        const animeDatabase = {
+            trending: [
+                {
+                    id: 1,
+                    title: "Attack on Titan",
+                    image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "TV Series",
+                    year: "2023",
+                    rating: 9.0,
+                    description: "Humanity resides within enormous walled cities to protect themselves from Titans, gigantic humanoid creatures who devour humans.",
+                    tags: ["Action", "Drama", "Fantasy", "Dark"],
+                    details: {
+                        episodes: "75+",
+                        status: "Completed",
+                        studio: "Wit Studio, MAPPA",
+                        duration: "24 min"
+                    },
+                    fullDescription: "In a world where humanity lives inside cities surrounded by enormous walls due to the Titans, gigantic humanoid creatures who devour humans, the story follows Eren Yeager, who vows to exterminate the Titans after they destroy his hometown and kill his mother. As the series progresses, the truth about the Titans and the world outside the walls is revealed, leading to shocking revelations and moral complexities."
+                },
+                {
+                    id: 2,
+                    title: "Demon Slayer",
+                    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "TV Series",
+                    year: "2023",
+                    rating: 8.7,
+                    description: "A family is attacked by demons and only two members survive - Tanjiro and his sister Nezuko, who is turning into a demon slowly.",
+                    tags: ["Action", "Supernatural", "Adventure", "Swordsmanship"],
+                    details: {
+                        episodes: "55+",
+                        status: "Ongoing",
+                        studio: "Ufotable",
+                        duration: "24 min"
+                    },
+                    fullDescription: "Tanjiro Kamado is a kind-hearted boy who becomes a demon slayer after his family is slaughtered by demons and his sister Nezuko is turned into a demon. Determined to find a cure for his sister and avenge his family, Tanjiro joins the Demon Slayer Corps. The series is renowned for its breathtaking animation, emotional storytelling, and intense sword-fighting sequences."
+                },
+                {
+                    id: 3,
+                    title: "Jujutsu Kaisen",
+                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "TV Series",
+                    year: "2023",
+                    rating: 8.6,
+                    description: "A boy swallows a cursed talisman and finds himself enrolled in a secret organization of Jujutsu Sorcerers.",
+                    tags: ["Action", "Supernatural", "Horror", "School"],
+                    details: {
+                        episodes: "47+",
+                        status: "Ongoing",
+                        studio: "MAPPA",
+                        duration: "24 min"
+                    },
+                    fullDescription: "Yuji Itadori is a high school student with exceptional physical abilities who becomes involved in the world of curses after swallowing a powerful cursed object to protect his friends. He enrolls in Tokyo Metropolitan Curse Technical College to learn how to control his new powers and exorcise curses. The series combines intense action with dark humor and complex character relationships."
+                },
+                {
+                    id: 4,
+                    title: "My Hero Academia",
+                    image: "https://images.unsplash.com/photo-1541562232579-512a21360020?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "TV Series",
+                    year: "2023",
+                    rating: 8.4,
+                    description: "A boy born without superpowers in a world where they are the norm, but still dreams of becoming a superhero himself.",
+                    tags: ["Action", "School", "Superhero", "Shounen"],
+                    details: {
+                        episodes: "138+",
+                        status: "Ongoing",
+                        studio: "Bones",
+                        duration: "24 min"
+                    },
+                    fullDescription: "In a world where most of the population has superpowers known as 'Quirks', Izuku Midoriya dreams of becoming a hero despite being born without any powers. His fate changes when he meets the world's greatest hero, All Might, who chooses Izuku to inherit his powerful Quirk. The series follows Izuku's journey at U.A. High School, a prestigious academy for aspiring heroes."
+                }
+            ],
+            drama: [
+                {
+                    id: 5,
+                    title: "Squid Game",
+                    image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "TV Series",
+                    year: "2021",
+                    rating: 8.3,
+                    description: "Hundreds of cash-strapped players accept a strange invitation to compete in children's games for a tempting prize.",
+                    tags: ["Thriller", "Drama", "Survival", "Psychological"],
+                    details: {
+                        episodes: "9",
+                        status: "Season 2 Announced",
+                        studio: "Siren Pictures",
+                        duration: "50-60 min"
+                    },
+                    fullDescription: "Hundreds of cash-strapped contestants accept an invitation to compete in children's games for a tempting prize, but the stakes are deadly. The series explores themes of economic inequality, human desperation, and morality through its intense survival game format. Each game is a Korean traditional children's game with a deadly twist, testing the limits of human nature."
+                },
+                {
+                    id: 6,
+                    title: "Crash Landing on You",
+                    image: "https://images.unsplash.com/photo-1598880940086-4b1de1e4725f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "TV Series",
+                    year: "2019",
+                    rating: 8.7,
+                    description: "A South Korean heiress accidentally crash-lands in North Korea and falls in love with an army officer.",
+                    tags: ["Romance", "Drama", "Comedy", "Political"],
+                    details: {
+                        episodes: "16",
+                        status: "Completed",
+                        studio: "Studio Dragon",
+                        duration: "70-110 min"
+                    },
+                    fullDescription: "A South Korean chaebol heiress accidentally paraglides into North Korea and meets an army officer who decides to help her hide. The series beautifully portrays the unlikely romance that blossoms between them, crossing political boundaries and cultural differences. It offers a rare glimpse into life in North Korea while delivering a heartwarming love story filled with humor, tension, and emotional moments."
+                }
+            ],
+            movie: [
+                {
+                    id: 7,
+                    title: "Spirited Away",
+                    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "Movie",
+                    year: "2001",
+                    rating: 8.6,
+                    description: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits.",
+                    tags: ["Fantasy", "Adventure", "Family", "Spirits"],
+                    details: {
+                        episodes: "Movie",
+                        status: "Completed",
+                        studio: "Studio Ghibli",
+                        duration: "125 min"
+                    },
+                    fullDescription: "Chihiro Ogino, a sullen 10-year-old girl, enters the world of Kami (spirits of Japanese Shinto folklore) after her family is transformed into pigs. To save herself and her parents, she must work at a bathhouse owned by the witch Yubaba. The film is a masterpiece of animation that explores themes of identity, greed, and environmentalism through breathtaking visuals and a compelling narrative."
+                },
+                {
+                    id: 8,
+                    title: "Your Name",
+                    image: "https://images.unsplash.com/photo-1489599809505-fc6c1e3c6c19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    type: "Movie",
+                    year: "2016",
+                    rating: 8.2,
+                    description: "Two teenagers share a profound, magical connection upon discovering they are swapping bodies.",
+                    tags: ["Romance", "Fantasy", "Drama", "Body Swap"],
+                    details: {
+                        episodes: "Movie",
+                        status: "Completed",
+                        studio: "CoMix Wave Films",
+                        duration: "106 min"
+                    },
+                    fullDescription: "Mitsuha Miyamizu, a high school girl living in the countryside, and Taki Tachibana, a high school boy living in Tokyo, suddenly begin to swap bodies randomly. As they navigate each other's lives and form a connection, they realize they're separated not just by distance but by time itself. The film is a beautiful exploration of love, fate, and memory with stunning animation and an emotionally powerful story."
+                }
+            ]
+        };
+
         // YouTube Player API
         let player;
         let isPlaying = false;
@@ -1137,6 +1362,169 @@
             }
         }
 
+        // Generate AI response for anime
+        function generateAIResponse(anime) {
+            const responses = [
+                `Based on my analysis, ${anime.title} is an exceptional ${anime.type.toLowerCase()} that has captivated audiences worldwide. The ${anime.tags.join(', ')} elements create a unique viewing experience that balances intense action with deep emotional moments. I'd highly recommend this to fans of quality storytelling and breathtaking animation.`,
+                
+                `From my perspective, ${anime.title} stands out for its ${anime.tags.slice(0, 2).join(' and ')} themes. The character development is particularly noteworthy, with protagonists that undergo significant growth throughout the series. The ${anime.details.studio} studio has done an incredible job bringing this story to life.`,
+                
+                `After processing the data on ${anime.title}, I can confirm it's a masterpiece in the ${anime.tags[0]} genre. The narrative structure is meticulously crafted, with plot twists that will keep you engaged from start to finish. The animation quality and soundtrack work in perfect harmony to create an immersive experience.`,
+                
+                `My assessment of ${anime.title} indicates it's a must-watch for any anime enthusiast. The way it handles ${anime.tags.join(' and ')} themes is both innovative and respectful to the genre traditions. The ${anime.rating}/10 rating is well-deserved, reflecting both critical and audience appreciation.`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Display anime in grid
+        function displayAnimeInGrid(animeList, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            animeList.forEach(anime => {
+                const card = document.createElement('div');
+                card.className = 'anime-card';
+                card.innerHTML = `
+                    <div class="card-image">
+                        <img src="${anime.image}" alt="${anime.title}">
+                        <div class="card-overlay">
+                            <div class="card-title">${anime.title}</div>
+                            <div class="card-info">
+                                <span>${anime.type}</span>
+                                <span>${anime.year}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-description">${anime.description}</div>
+                        <div class="card-tags">
+                            ${anime.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="card-actions">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <span>${anime.rating}</span>
+                            </div>
+                            <button class="btn btn-primary view-details" data-id="${anime.id}">View Details</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            // Add event listeners to view details buttons
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', function() {
+                    const animeId = parseInt(this.getAttribute('data-id'));
+                    showAnimeDetails(animeId);
+                });
+            });
+        }
+
+        // Show anime details in modal
+        function showAnimeDetails(animeId) {
+            // Find anime in database
+            let anime = null;
+            for (const category in animeDatabase) {
+                const found = animeDatabase[category].find(item => item.id === animeId);
+                if (found) {
+                    anime = found;
+                    break;
+                }
+            }
+            
+            if (!anime) return;
+            
+            // Update modal content
+            document.getElementById('modalImage').src = anime.image;
+            document.getElementById('modalTitle').textContent = anime.title;
+            document.getElementById('modalInfo').innerHTML = `
+                <span>${anime.type}</span>
+                <span>${anime.year}</span>
+                <span>Rating: ${anime.rating}/10</span>
+            `;
+            document.getElementById('modalDescription').textContent = anime.fullDescription;
+            
+            // Update tags
+            const tagsContainer = document.getElementById('modalTags');
+            tagsContainer.innerHTML = '';
+            anime.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'modal-tag';
+                tagElement.textContent = tag;
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            // Update details
+            const detailsContainer = document.getElementById('modalDetails');
+            detailsContainer.innerHTML = `
+                <p><strong>Episodes:</strong> ${anime.details.episodes}</p>
+                <p><strong>Status:</strong> ${anime.details.status}</p>
+                <p><strong>Studio:</strong> ${anime.details.studio}</p>
+                <p><strong>Duration:</strong> ${anime.details.duration}</p>
+            `;
+            
+            // Generate AI response
+            const aiResponse = document.getElementById('aiResponse');
+            aiResponse.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+            
+            setTimeout(() => {
+                aiResponse.innerHTML = `<p>${generateAIResponse(anime)}</p>`;
+            }, 2000);
+            
+            // Show modal
+            document.getElementById('animeModal').classList.add('active');
+        }
+
+        // Search functionality
+        function performSearch(query) {
+            const results = [];
+            const lowerQuery = query.toLowerCase();
+            
+            for (const category in animeDatabase) {
+                animeDatabase[category].forEach(anime => {
+                    if (anime.title.toLowerCase().includes(lowerQuery) || 
+                        anime.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
+                        anime.description.toLowerCase().includes(lowerQuery)) {
+                        results.push(anime);
+                    }
+                });
+            }
+            
+            return results;
+        }
+
+        // Display search results
+        function displaySearchResults(results) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = '';
+            
+            if (results.length === 0) {
+                resultsGrid.innerHTML = '<p>No results found. Try a different search term.</p>';
+                return;
+            }
+            
+            results.forEach(anime => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-image">
+                        <img src="${anime.image}" alt="${anime.title}">
+                    </div>
+                    <div class="result-info">
+                        <div class="result-title">${anime.title}</div>
+                        <div class="card-info">
+                            <span>${anime.type}</span>
+                            <span>${anime.year}</span>
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => showAnimeDetails(anime.id));
+                resultsGrid.appendChild(card);
+            });
+        }
+
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
             createFloatingElements();
@@ -1152,16 +1540,86 @@
             document.getElementById('progressBar').addEventListener('click', setProgress);
             document.getElementById('volumeSlider').addEventListener('input', setVolume);
 
-            // Add hover effect to anime cards
-            const animeCards = document.querySelectorAll('.anime-card');
-            animeCards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-10px)';
+            // Display anime in grids
+            displayAnimeInGrid(animeDatabase.trending, 'trendingGrid');
+            displayAnimeInGrid(animeDatabase.drama, 'dramaGrid');
+            displayAnimeInGrid(animeDatabase.movie, 'movieGrid');
+
+            // Search functionality
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    const results = performSearch(query);
+                    displaySearchResults(results);
+                    document.getElementById('searchResults').classList.add('active');
+                    
+                    // Hide other sections
+                    document.getElementById('trendingSection').style.display = 'none';
+                    document.getElementById('dramaSection').style.display = 'none';
+                    document.getElementById('movieSection').style.display = 'none';
+                }
+            });
+
+            // Enter key for search
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('searchBtn').click();
+                }
+            });
+
+            // Navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    
+                    // Show search results for this category
+                    const results = animeDatabase[category] || [];
+                    displaySearchResults(results);
+                    document.getElementById('searchResults').classList.add('active');
+                    
+                    // Update search input
+                    document.getElementById('searchInput').value = category.charAt(0).toUpperCase() + category.slice(1);
+                    
+                    // Hide other sections
+                    document.getElementById('trendingSection').style.display = 'none';
+                    document.getElementById('dramaSection').style.display = 'none';
+                    document.getElementById('movieSection').style.display = 'none';
                 });
+            });
+
+            // Explore button
+            document.getElementById('exploreBtn').addEventListener('click', function() {
+                document.getElementById('trendingSection').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Top rated button
+            document.getElementById('topRatedBtn').addEventListener('click', function() {
+                // Sort all anime by rating and display
+                const allAnime = [...animeDatabase.trending, ...animeDatabase.drama, ...animeDatabase.movie];
+                const topRated = allAnime.sort((a, b) => b.rating - a.rating).slice(0, 8);
+                displaySearchResults(topRated);
+                document.getElementById('searchResults').classList.add('active');
                 
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
+                // Update search input
+                document.getElementById('searchInput').value = 'Top Rated';
+                
+                // Hide other sections
+                document.getElementById('trendingSection').style.display = 'none';
+                document.getElementById('dramaSection').style.display = 'none';
+                document.getElementById('movieSection').style.display = 'none';
+            });
+
+            // Modal close
+            document.getElementById('modalClose').addEventListener('click', function() {
+                document.getElementById('animeModal').classList.remove('active');
+            });
+
+            // Close modal when clicking outside
+            document.getElementById('animeModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
             });
         });
     </script>
