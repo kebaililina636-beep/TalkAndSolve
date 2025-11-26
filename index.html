@@ -26,6 +26,8 @@
             --card-bg: rgba(255, 255, 255, 0.08);
             --card-border: rgba(255, 255, 255, 0.15);
             --neon-glow: 0 0 20px rgba(255, 107, 203, 0.5);
+            --transition-slow: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition-fast: 0.3s ease;
         }
 
         * {
@@ -284,7 +286,7 @@
             border-radius: 50px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all var(--transition-slow);
             border: none;
             font-size: 1.1rem;
             display: flex;
@@ -411,7 +413,7 @@
             background: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all var(--transition-slow);
             border: 1px solid var(--card-border);
             backdrop-filter: blur(10px);
             cursor: pointer;
@@ -690,7 +692,7 @@
         .modal-section h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: var(--secondary);
+            color: var(--cyan);
         }
 
         .modal-description {
@@ -707,7 +709,7 @@
 
         .modal-tag {
             background: rgba(108, 77, 246, 0.3);
-            color: var(--accent);
+            color: var(--blue-light);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-size: 0.9rem;
@@ -732,7 +734,7 @@
         .ai-avatar {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, var(--pink), var(--blue));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -762,7 +764,7 @@
         .typing-dot {
             width: 8px;
             height: 8px;
-            background: var(--secondary);
+            background: var(--cyan);
             border-radius: 50%;
             animation: typing 1.4s infinite ease-in-out;
         }
@@ -828,7 +830,7 @@
         .settings-close {
             background: transparent;
             border: none;
-            color: var(--light);
+            color: white;
             font-size: 1.5rem;
             cursor: pointer;
         }
@@ -882,7 +884,7 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: var(--secondary);
+            background: var(--cyan);
             cursor: pointer;
         }
 
@@ -1037,6 +1039,96 @@
             100% { transform: translate(0, 0) rotate(360deg); }
         }
 
+        /* تحسينات جديدة */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--pink);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transform: translateX(300px);
+            transition: transform 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 107, 203, 0.3);
+            border-top: 5px solid var(--pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .favorite-btn {
+            background: transparent;
+            border: none;
+            color: #ccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-btn.active {
+            color: var(--pink);
+            transform: scale(1.2);
+        }
+
+        .favorite-btn:hover {
+            color: var(--pink);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink), var(--cyan));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .hero h1 { font-size: 3.2rem; }
@@ -1063,6 +1155,21 @@
     </style>
 </head>
 <body>
+    <!-- شاشة التحميل -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-animation"></div>
+        <h2>✨ جارٍ تحميل عالم AnimeVerse السحري ✨</h2>
+        <div class="progress-bar">
+            <div class="progress-fill" id="loadingProgress"></div>
+        </div>
+    </div>
+
+    <!-- إشعارات -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText"></span>
+    </div>
+
     <!-- خلفية سحرية متحركة -->
     <div class="magic-bg" id="magicBg"></div>
 
@@ -1251,14 +1358,6 @@
         </div>
     </div>
 
-    <!-- YouTube Player (Hidden) -->
-    <iframe id="youtube-player"
-        src="https://www.youtube.com/embed/BjCqdWOXjxY?enablejsapi=1&controls=0&disablekb=1&modestbranding=1&rel=0&autoplay=1"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-    </iframe>
-
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -1315,6 +1414,9 @@
             drama: [],
             movie: []
         };
+
+        // المفضلة الشخصية
+        let favorites = JSON.parse(localStorage.getItem('animeverse_favorites')) || [];
 
         // تعبئة قاعدة البيانات
         function populateAnimeDatabase() {
@@ -1453,6 +1555,7 @@
             const itemsToShow = animeList.slice(0, displayCount);
             
             itemsToShow.forEach(anime => {
+                const isFavorite = favorites.includes(anime.id);
                 const card = document.createElement('div');
                 card.className = 'anime-card';
                 card.innerHTML = `
@@ -1476,10 +1579,15 @@
                                 <i class="fas fa-star"></i>
                                 <span>${anime.rating}</span>
                             </div>
-                            <button class="btn btn-primary view-details" data-id="${anime.id}" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
-                                <i class="fas fa-play"></i>
-                                شاهد الآن
-                            </button>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${anime.id}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="btn btn-primary view-details" data-id="${anime.id}" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+                                    <i class="fas fa-play"></i>
+                                    شاهد الآن
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1493,6 +1601,44 @@
                     showAnimeDetails(animeId);
                 });
             });
+            
+            // إضافة مستمعي الأحداث لأزرار المفضلة
+            document.querySelectorAll('.favorite-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const animeId = parseInt(this.getAttribute('data-id'));
+                    toggleFavorite(animeId, this);
+                });
+            });
+        }
+
+        // تبديل المفضلة
+        function toggleFavorite(animeId, button) {
+            const index = favorites.indexOf(animeId);
+            if (index === -1) {
+                favorites.push(animeId);
+                button.classList.add('active');
+                showNotification('تمت الإضافة إلى المفضلة!');
+            } else {
+                favorites.splice(index, 1);
+                button.classList.remove('active');
+                showNotification('تمت الإزالة من المفضلة!');
+            }
+            
+            // حفظ المفضلة في التخزين المحلي
+            localStorage.setItem('animeverse_favorites', JSON.stringify(favorites));
+        }
+
+        // عرض إشعار
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
 
         // عرض تفاصيل الأنمي
@@ -1714,8 +1860,33 @@
             });
         }
 
+        // محاكاة شاشة التحميل
+        function simulateLoading() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressBar = document.getElementById('loadingProgress');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                        }, 500);
+                    }, 500);
+                }
+                
+                progressBar.style.width = `${progress}%`;
+            }, 200);
+        }
+
         // تهيئة كل شيء عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
+            simulateLoading();
             populateAnimeDatabase();
             createMagicBackground();
             createAnimeCards(animeDatabase.trending, 'trendingGrid');
@@ -1731,6 +1902,7 @@
     </script>
 </body>
 </html>
+
 
 
 
