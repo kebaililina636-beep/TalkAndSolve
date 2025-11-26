@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -48,6 +49,65 @@
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
+        }
+
+        /* شاشة التحميل */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 107, 203, 0.3);
+            border-top: 5px solid var(--pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        .loading-screen h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(43, 226, 208, 0.5);
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink), var(--cyan));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* خلفية متحركة سحرية */
@@ -190,6 +250,12 @@
             left: 100%;
         }
 
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
         .search-bar {
             display: flex;
             align-items: center;
@@ -231,6 +297,25 @@
 
         .search-bar button:hover {
             transform: scale(1.2);
+        }
+
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255, 107, 203, 0.2);
+            transform: rotate(90deg);
         }
 
         /* Hero Section سحري */
@@ -614,6 +699,95 @@
             75% { transform: translateX(-8px) translateY(8px); }
         }
 
+        /* Footer */
+        footer {
+            background: rgba(15, 8, 33, 0.9);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid var(--card-border);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--cyan);
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--pink);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--pink);
+            transform: translateX(-5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--pink);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .hero h1 { font-size: 3.2rem; }
@@ -630,6 +804,7 @@
             .cta-buttons { flex-direction: column; align-items: center; }
             .btn { width: 250px; justify-content: center; }
             .anime-character { display: none; }
+            .section-header { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
         }
 
         @media (max-width: 480px) {
@@ -637,6 +812,7 @@
             .hero { padding: 6rem 1rem 4rem; }
             .hero h1 { font-size: 2rem; }
             .anime-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -670,11 +846,14 @@
                 <a href="#" class="nav-link" data-category="trending">
                     <i class="fas fa-fire"></i> الشائع
                 </a>
-                <a href="#" class="nav-link" data-category="anime">
-                    <i class="fas fa-play-circle"></i> الأنمي
+                <a href="#" class="nav-link" data-category="shonen">
+                    <i class="fas fa-fist-raised"></i> شونين
                 </a>
-                <a href="#" class="nav-link" data-category="drama">
-                    <i class="fas fa-heart"></i> الدراما
+                <a href="#" class="nav-link" data-category="action">
+                    <i class="fas fa-explosion"></i> أكشن
+                </a>
+                <a href="#" class="nav-link" data-category="fantasy">
+                    <i class="fas fa-hat-wizard"></i> فانتازيا
                 </a>
                 <a href="#" class="nav-link" data-category="movie">
                     <i class="fas fa-film"></i> الأفلام
@@ -682,7 +861,7 @@
             </div>
             <div class="header-controls">
                 <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="ابحث في عالم الأنمي...">
+                    <input type="text" id="searchInput" placeholder="🔍 ابحث في عالم الأنمي السحري...">
                     <button id="searchBtn"><i class="fas fa-search"></i></button>
                 </div>
                 <button class="settings-btn" id="settingsBtn">
@@ -696,7 +875,7 @@
     <section class="hero">
         <div class="hero-content">
             <h1>✨ مرحباً في عالم AnimeVerse السحري! ✨</h1>
-            <p>استكشف آلاف الأنميات والدرامات في عالم خيالي مليء بالمغامرات والسحر. ابدأ رحلتك الآن!</p>
+            <p>استكشف آلاف الأنميات في عالم خيالي مليء بالمغامرات والسحر. ابدأ رحلتك الآن!</p>
             <div class="cta-buttons">
                 <button class="btn btn-primary" id="exploreBtn">
                     <i class="fas fa-play"></i> ابدأ المغامرة
@@ -711,7 +890,7 @@
     <!-- Trending Anime Section -->
     <section class="section" id="trendingSection">
         <div class="section-header">
-            <h2 class="section-title">🌟 الأنمي الساحر هذا الأسبوع</h2>
+            <h2 class="section-title">🌟 أنمي الأسبوع الساحر</h2>
             <a href="#" class="view-all">
                 <span>استكشف الكل</span>
                 <i class="fas fa-arrow-left"></i>
@@ -722,16 +901,30 @@
         </div>
     </section>
 
-    <!-- Popular Dramas Section -->
-    <section class="section" id="dramaSection">
+    <!-- Shonen Anime Section -->
+    <section class="section" id="shonenSection">
         <div class="section-header">
-            <h2 class="section-title">💖 درامات لا تُنسى</h2>
+            <h2 class="section-title">⚔️ أنمي الشونين الرائعة</h2>
             <a href="#" class="view-all">
                 <span>شاهد المزيد</span>
                 <i class="fas fa-arrow-left"></i>
             </a>
         </div>
-        <div class="anime-grid" id="dramaGrid">
+        <div class="anime-grid" id="shonenGrid">
+            <!-- البطاقات سيتم إضافتها بالجافاسكريبت -->
+        </div>
+    </section>
+
+    <!-- Action Anime Section -->
+    <section class="section" id="actionSection">
+        <div class="section-header">
+            <h2 class="section-title">💥 أنمي الأكشن المثيرة</h2>
+            <a href="#" class="view-all">
+                <span>اكتشف المزيد</span>
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="anime-grid" id="actionGrid">
             <!-- البطاقات سيتم إضافتها بالجافاسكريبت -->
         </div>
     </section>
@@ -750,8 +943,57 @@
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>عن AnimeVerse</h3>
+                <p>منصة عربية شاملة لمحبي الأنمي، نقدم أحدث المحتويات وأجودها مع ترجمة عربية احترافية.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> الصفحة الرئيسية</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> قائمة الأنمي</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أفلام الأنمي</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> الأنمي الجديدة</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> المدونة</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>الفئات</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الأكشن</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الشونين</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الفانتازيا</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الرومانسية</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الغموض</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>الدعم</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> مركز المساعدة</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> الأسئلة الشائعة</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> اتصل بنا</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> الإبلاغ عن مشكلة</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> سياسة الخصوصية</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 AnimeVerse. جميع الحقوق محفوظة. صنع بـ ❤️ لمحبي الأنمي</p>
+        </div>
+    </footer>
+
     <script>
-        // قاعدة بيانات الأنمي الموسعة (60+ أنمي)
+        // قاعدة بيانات الأنمي الموسعة (أنمي فقط)
         const animeDatabase = {
             trending: [
                 {
@@ -768,8 +1010,7 @@
                         status: "مكتمل",
                         studio: "Studio Pierrot",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "تستكمل القصة رحلة ناروتو في سن المراهقة، حيث يواجه تهديدات منظمة الأكاتسكي وأعضاء آخرين يهددون السلام العالمي."
+                    }
                 },
                 {
                     id: 2,
@@ -785,8 +1026,7 @@
                         status: "مكتمل",
                         studio: "Toei Animation",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "تدور القصة بعد معركة جوكو ضد ماجين بوو، حيث يظهر إله الدمار بيروس ويقرر اختبار قوة جوكو وفريقه."
+                    }
                 },
                 {
                     id: 3,
@@ -802,8 +1042,7 @@
                         status: "مكتمل",
                         studio: "Wit Studio / MAPPA",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "في عالم حيث البشرية تعيش خلف جدران ضخمة للاحتماء من العمالقة، ينضم إيرين ييغر إلى الجيش للانتقام من العمالقة."
+                    }
                 },
                 {
                     id: 4,
@@ -819,9 +1058,10 @@
                         status: "مستمر",
                         studio: "Toei Animation",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "مونكي دي لوفي، شاب يتمتع بجسم مطاطي، يشكل طاقم قراصنة للعثور على الكنز الأسطوري ون بيس ليصبح ملك القراصنة."
-                },
+                    }
+                }
+            ],
+            shonen: [
                 {
                     id: 5,
                     title: "بليتش",
@@ -836,8 +1076,7 @@
                         status: "مكتمل",
                         studio: "Studio Pierrot",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "إيتشيغو كوروساكي، طالب في المدرسة الثانوية، يكتسب قوى الشينيغامي ويبدأ رحلته لحماية البشر من الأرواح الشريرة."
+                    }
                 },
                 {
                     id: 6,
@@ -853,8 +1092,7 @@
                         status: "مستمر",
                         studio: "TMS Entertainment",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "شينتشي كودو، محقق في المرحلة الثانوية، يتحول إلى طفل بعد تناوله سم من منظمة سرية."
+                    }
                 },
                 {
                     id: 7,
@@ -870,8 +1108,7 @@
                         status: "مكتمل",
                         studio: "Madhouse",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "غون فريكس، فتى صغير، يقرر أن يصبح هانتراً مثل والده المفقود، فيخوض اختبار الهانتر الخطير."
+                    }
                 },
                 {
                     id: 8,
@@ -887,11 +1124,10 @@
                         status: "مكتمل",
                         studio: "Shaft",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "كويومي أراراغي، طالب في المدرسة الثانوية، يساعد الفتيات في حل مشاكلهن المتعلقة بالكائنات الغريبة والأرواح."
+                    }
                 }
             ],
-            anime: [
+            action: [
                 {
                     id: 9,
                     title: "فول ميتال ألكيميست",
@@ -906,8 +1142,7 @@
                         status: "مكتمل",
                         studio: "Bones",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "إدوارد وألفونس إلريك، شابان يمارسان الخيمياء، يسعيان لإيجاد حجر الفيلسوف لاستعادة أجسادهما."
+                    }
                 },
                 {
                     id: 10,
@@ -923,8 +1158,7 @@
                         status: "مكتمل",
                         studio: "Madhouse",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "لايت ياغامي، طالب موهوب، يجد دفتر الموت الذي يسمح له بقتل أي شخص بمجرد كتابة اسمه."
+                    }
                 },
                 {
                     id: 11,
@@ -940,8 +1174,7 @@
                         status: "مكتمل",
                         studio: "Toei Animation",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "أوساغي تسوكينو، فتاة في المدرسة الإعدادية، تكتشف أنها أميرة القمر وأصبحت محاربة سيلور مون."
+                    }
                 },
                 {
                     id: 12,
@@ -957,151 +1190,12 @@
                         status: "مستمر",
                         studio: "A-1 Pictures",
                         duration: "24 دقيقة"
-                    },
-                    fullDescription: "كازوتو كيريجايا، لاعب في لعبة الواقع الافتراضي، يجد نفسه محاصراً في اللعبة ويجب عليه إنهائها للنجاة."
-                },
-                {
-                    id: 13,
-                    title: "نو غيم نو لايف",
-                    image: "https://cdn.myanimelist.net/images/anime/1074/111944.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2014",
-                    rating: "8.1",
-                    description: "أخ وأخت عباقرة في الألعاب يتحديان عالم فانتازيا.",
-                    tags: ["مغامرة", "كوميدي", "فانتازيا", "شريحة من الحياة"],
-                    details: {
-                        episodes: "12",
-                        status: "مكتمل",
-                        studio: "Madhouse",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "سورا وشيرو، أخ وأخت لا يهزمان في أي لعبة، ينقلان إلى عالم فانتازيا حيث يجب أن يتحديا الإله في الألعاب."
-                },
-                {
-                    id: 14,
-                    title: "فايري تيل",
-                    image: "https://cdn.myanimelist.net/images/anime/5/18179.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2009-2019",
-                    rating: "7.5",
-                    description: "لوسي تنضم إلى نقابة السحرة فايري تيل.",
-                    tags: ["أكشن", "مغامرة", "كوميدي", "فانتازيا"],
-                    details: {
-                        episodes: "328",
-                        status: "مكتمل",
-                        studio: "A-1 Pictures",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "لوسي هارتفيليا، ساحرة شابة، تنضم إلى نقابة فايري تيل الأسطورية وتصادق ناتسو دراغنيل وزملائه."
-                },
-                {
-                    id: 15,
-                    title: "بلاك كلوفر",
-                    image: "https://cdn.myanimelist.net/images/anime/2/88336.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2017-2021",
-                    rating: "7.2",
-                    description: "أستا يسعى ليصبح ساحر الإمبراطور بدون أي قوى سحرية.",
-                    tags: ["أكشن", "مغامرة", "كوميدي", "فانتازيا"],
-                    details: {
-                        episodes: "170",
-                        status: "مكتمل",
-                        studio: "Studio Pierrot",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "أستا، فتى بدون أي قوى سحرية في عالم مليء بالسحر، يسعى ليصبح ساحر الإمبراطور باستخدام قوته الجسدية الفريدة."
-                },
-                {
-                    id: 16,
-                    title: "مهاوكا شوجو",
-                    image: "https://cdn.myanimelist.net/images/anime/1869/128287.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2014",
-                    rating: "7.8",
-                    description: "تاتسويا شيبا يحمي أخته في أكاديمية السحر.",
-                    tags: ["أكشن", "خيال علمي", "رومانسي", "مدرسة"],
-                    details: {
-                        episodes: "26",
-                        status: "مكتمل",
-                        studio: "Madhouse",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "في عالم حيث السحر أصبح علماً، يحمي تاتسويا شيبا أخته مياكي في أكاديمية النخبة للسحر."
-                }
-            ],
-            drama: [
-                {
-                    id: 17,
-                    title: "يور نو تابي",
-                    image: "https://cdn.myanimelist.net/images/anime/1245/111940.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2018",
-                    rating: "8.4",
-                    description: "رحلة شاب ياباني حول العالم بحثاً عن أطباق لذيذة.",
-                    tags: ["مغامرة", "طعام", "ثقافة", "دراما"],
-                    details: {
-                        episodes: "24",
-                        status: "مكتمل",
-                        studio: "Satelight",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "شاب ياباني يسافر حول العالم لاكتشاف أطباق مختلفة وتجارب ثقافية فريدة."
-                },
-                {
-                    id: 18,
-                    title: "فايوليت إيفرغاردن",
-                    image: "https://cdn.myanimelist.net/images/anime/1795/95088.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2018",
-                    rating: "8.7",
-                    description: "فتاة تكتب رسائل للآخرين وتكتشف مشاعرها الخاصة.",
-                    tags: ["دراما", "رومانسي", "شريحة من الحياة"],
-                    details: {
-                        episodes: "13",
-                        status: "مكتمل",
-                        studio: "Kyoto Animation",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "فايوليت، فتاة كانت جندية سابقة، تعمل ككاتبة رسائل وتتعلم عن المشاعر الإنسانية."
-                },
-                {
-                    id: 19,
-                    title: "أنوهانا",
-                    image: "https://cdn.myanimelist.net/images/anime/5/79697.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2011",
-                    rating: "8.3",
-                    description: "مجموعة أصدقاء يتعاملون مع ذكرى صديقتهم المتوفاة.",
-                    tags: ["دراما", "شريحة من الحياة", "فوق طبيعي"],
-                    details: {
-                        episodes: "11",
-                        status: "مكتمل",
-                        studio: "A-1 Pictures",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "جينتا ورفاقه يحاولون تحقيق رغبة مينامي الأخيرة، التي تظهر لهم كشبح بعد سنوات من وفاتها."
-                },
-                {
-                    id: 20,
-                    title: "يور ليي في أبريل",
-                    image: "https://cdn.myanimelist.net/images/anime/3/67177.jpg",
-                    type: "مسلسل تلفزيوني",
-                    year: "2014-2015",
-                    rating: "8.7",
-                    description: "عازف بيانو موهوب يلتقي بعازفة كمان متفائلة.",
-                    tags: ["دراما", "موسيقى", "رومانسي", "شريحة من الحياة"],
-                    details: {
-                        episodes: "22",
-                        status: "مكتمل",
-                        studio: "A-1 Pictures",
-                        duration: "24 دقيقة"
-                    },
-                    fullDescription: "كوسي أريما، عازف بيانو موهوب فقد شغفه بالموسيقى، يلتقي كاوري ميازونو، عازفة كمان متفائلة تعيد إليه الإلهام."
+                    }
                 }
             ],
             movie: [
                 {
-                    id: 21,
+                    id: 13,
                     title: "كيمي نو نا وا (اسمك)",
                     image: "https://cdn.myanimelist.net/images/anime/5/87048.jpg",
                     type: "فيلم",
@@ -1114,11 +1208,10 @@
                         status: "مكتمل",
                         studio: "CoMix Wave Films",
                         duration: "106 دقيقة"
-                    },
-                    fullDescription: "ميتسوها، فتاة تعيش في الريف، وتاكي، فتى يعيش في طوكيو، يتبادلان الأجساد بشكل عشوائي."
+                    }
                 },
                 {
-                    id: 22,
+                    id: 14,
                     title: "تواين ستار بريكورز",
                     image: "https://cdn.myanimelist.net/images/anime/12/83533.jpg",
                     type: "فيلم",
@@ -1131,11 +1224,10 @@
                         status: "مكتمل",
                         studio: "Studio Khara",
                         duration: "112 دقيقة"
-                    },
-                    fullDescription: "في عالم بديل، يجب على مجموعة من المراهقين قيادة آلات عملاقة للدفاع عن الأرض."
+                    }
                 },
                 {
-                    id: 23,
+                    id: 15,
                     title: "هاولز موفينغ كاستل",
                     image: "https://cdn.myanimelist.net/images/anime/1470/138501.jpg",
                     type: "فيلم",
@@ -1148,11 +1240,10 @@
                         status: "مكتمل",
                         studio: "Studio Ghibli",
                         duration: "119 دقيقة"
-                    },
-                    fullDescription: "صوفي، شابة تتحول إلى عجوز بواسطة ساحرة شريرة، تلتقي بالساحر هاول وتسعى لكسر التعويذة."
+                    }
                 },
                 {
-                    id: 24,
+                    id: 16,
                     title: "الفتاة التي قفزت عبر الزمن",
                     image: "https://cdn.myanimelist.net/images/anime/1694/132451.jpg",
                     type: "فيلم",
@@ -1165,63 +1256,10 @@
                         status: "مكتمل",
                         studio: "Madhouse",
                         duration: "98 دقيقة"
-                    },
-                    fullDescription: "ماكونو كونوما، طالبة في المدرسة الثانوية، تكتشف فجأة أنها تستطيع القفز عبر الزمن وتحاول استخدام هذه القدرة لتحسين حياتها."
+                    }
                 }
             ]
         };
-
-        // نظام الموسيقى المخفي مع الرابط الذي طلبته
-        class MusicPlayer {
-            constructor() {
-                this.audio = new Audio();
-                this.isPlaying = false;
-                this.volume = 0.3;
-                
-                // استخدام الرابط الذي طلبته
-                this.playlist = [
-                    {
-                        name: "موسيقى أنمي جميلة",
-                        url: "https://www.youtube.com/embed/AT_UG_VY-ks?autoplay=1&loop=1&playlist=AT_UG_VY-ks"
-                    }
-                ];
-                
-                this.init();
-            }
-            
-            init() {
-                this.audio.volume = this.volume;
-                
-                // إنشاء iframe مخفي لتشغيل يوتيوب
-                this.createYouTubePlayer();
-                
-                // بدء التشغيل التلقائي
-                setTimeout(() => {
-                    this.play();
-                }, 3000);
-            }
-            
-            createYouTubePlayer() {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.width = "0";
-                iframe.height = "0";
-                iframe.src = "https://www.youtube.com/embed/AT_UG_VY-ks?autoplay=1&loop=1&playlist=AT_UG_VY-ks&enablejsapi=1";
-                iframe.allow = "autoplay";
-                iframe.frameBorder = "0";
-                iframe.allowFullscreen = true;
-                
-                document.body.appendChild(iframe);
-                this.iframe = iframe;
-                
-                console.log('🎵 مشغل يوتيوب جاهز للتشغيل التلقائي');
-            }
-            
-            play() {
-                console.log('🎵 بدء تشغيل الموسيقى...');
-                // سيبدأ التشغيل تلقائياً من خلال iframe يوتيوب
-            }
-        }
 
         // إنشاء الخلفية السحرية
         function createMagicBackground() {
@@ -1263,7 +1301,7 @@
                 card.className = 'anime-card';
                 card.innerHTML = `
                     <div class="card-image">
-                        <img src="${anime.image}" alt="${anime.title}" onerror="this.src='https://via.placeholder.com/400x600/6c4df6/ffffff?text=${anime.title}'">
+                        <img src="${anime.image}" alt="ملصق أنمي ${anime.title}" onerror="this.src='https://via.placeholder.com/400x600/6c4df6/ffffff?text=${anime.title}'">
                         <div class="card-overlay">
                             <div class="card-title">${anime.title}</div>
                             <div class="card-info">
@@ -1322,12 +1360,10 @@
             simulateLoading();
             createMagicBackground();
             
-            // إنشاء مشغل الموسيقى (مخفي)
-            const musicPlayer = new MusicPlayer();
-            
             // تحميل البطاقات
             createAnimeCards(animeDatabase.trending, 'trendingGrid');
-            createAnimeCards(animeDatabase.anime, 'dramaGrid');
+            createAnimeCards(animeDatabase.shonen, 'shonenGrid');
+            createAnimeCards(animeDatabase.action, 'actionGrid');
             createAnimeCards(animeDatabase.movie, 'movieGrid');
             
             // تفاعلات الأزرار
@@ -1341,6 +1377,20 @@
                 document.getElementById('trendingSection').scrollIntoView({ 
                     behavior: 'smooth'
                 });
+            });
+
+            // تفاعل البحث
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('searchInput').value;
+                if (searchTerm.trim()) {
+                    alert(`🔍 البحث عن: ${searchTerm}\n\nهذه خاصية تجريبية، في النسخة الكاملة سيتم تنفيذ البحث الحقيقي.`);
+                }
+            });
+
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('searchBtn').click();
+                }
             });
         });
     </script>
