@@ -286,6 +286,12 @@ body.dark-mode .preview{background:linear-gradient(180deg,#2a3348,#1f283e);color
   </div>
 </div>
 
+<!-- مشغل صوتي مبسط -->
+<audio id="backgroundMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  متصفحك لا يدعم تشغيل الصوت.
+</audio>
+
 <!-- Hero -->
 <section class="hero" aria-label="مرحباً بك في طبيبك النفسي">
   <div class="hero-card" role="region" aria-label="مقدمة الموقع">
@@ -305,7 +311,7 @@ body.dark-mode .preview{background:linear-gradient(180deg,#2a3348,#1f283e);color
         </button>
         <button id="langBtn" class="btn btn-ghost small">
           <i class="fas fa-language"></i>
-          EN
+          English
         </button>
         <button id="toggleModeBtn" class="btn btn-ghost small">
           <i class="fas fa-moon"></i>
@@ -437,9 +443,6 @@ body.dark-mode .preview{background:linear-gradient(180deg,#2a3348,#1f283e);color
   </div>
 </div>
 
-<!-- مشغل يوتيوب مخفي -->
-<div id="ytMusicPlayer" style="width:0;height:0;overflow:hidden;position:absolute;left:-9999px;top:-9999px;"></div>
-
 <!-- Firebase + التطبيق -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -480,6 +483,116 @@ const musicToggle = document.getElementById('musicToggle');
 const musicInfo = document.getElementById('musicInfo');
 const volumeControl = document.getElementById('volumeControl');
 const volumeLevel = document.getElementById('volumeLevel');
+const backgroundMusic = document.getElementById('backgroundMusic');
+
+/* ====== نظام الترجمة ====== */
+const translations = {
+  ar: {
+    title: "مرحباً في مساحتك الآمنة!",
+    subtitle: "هنا يمكنك مشاركة ما يدور في قلبك بكل أمان. نحن نستمع إليك بدون حكم، ونساعدك في إيجاد السلام الداخلي والحلول التي تناسبك.",
+    startBtn: "ابدأ الحديث معنا",
+    formTitle: "شاركنا مشاعرك",
+    formDesc: "اكتب ما يجول في خاطرك... نحن هنا لنستمع إليك بقلب مفتوح وعقل متفتح.",
+    namePlaceholder: "كيف تود أن نناديك؟ (اختياري)",
+    typePlaceholder: "ما نوع المشاعر التي تمر بها؟",
+    textareaPlaceholder: "تحدث بحرية... ما الذي يقلقك؟ ما الذي تتمنى تغييره؟ كيف تشعر هذه الأيام؟ (حتى 250 حرف)",
+    agreeText: "أوافق على أن هذا المكان آمن وسري",
+    sendBtn: "أرسل مشاعري",
+    checkTitle: "اطلع على ردنا",
+    checkHint: "أدخل المعرف الخاص بك لترى رسالة الدعم التي أعددناها لك:",
+    checkPlaceholder: "ادخل المعرف الخاص بك (مثال: 4F7A2B)",
+    checkBtn: "اطلع على الرد",
+    warmMessage: "أنت لست وحدك - كلنا نحتاج لمن يسمعنا في بعض الأحيان. هذه مساحتك الخاصة للحديث بحرية.",
+    remember: "تذكر: لا توجد مشاعر 'سيئة' أو 'خاطئة'. كل ما تشعر به صحيح ومهم."
+  },
+  en: {
+    title: "Welcome to Your Safe Space!",
+    subtitle: "Here you can share what's in your heart safely. We listen to you without judgment, helping you find inner peace and solutions that suit you.",
+    startBtn: "Start Talking With Us",
+    formTitle: "Share Your Feelings",
+    formDesc: "Write what's on your mind... We're here to listen with an open heart and mind.",
+    namePlaceholder: "What should we call you? (optional)",
+    typePlaceholder: "What type of emotions are you experiencing?",
+    textareaPlaceholder: "Speak freely... What worries you? What do you wish to change? How are you feeling these days? (up to 250 characters)",
+    agreeText: "I agree that this space is safe and confidential",
+    sendBtn: "Send My Feelings",
+    checkTitle: "View Our Response",
+    checkHint: "Enter your ID to see the support message we've prepared for you:",
+    checkPlaceholder: "Enter your ID (example: 4F7A2B)",
+    checkBtn: "View Response",
+    warmMessage: "You're not alone - we all need someone to listen sometimes. This is your private space to talk freely.",
+    remember: "Remember: There are no 'bad' or 'wrong' feelings. Everything you feel is valid and important."
+  }
+};
+
+let currentLang = 'ar';
+
+function toggleLanguage() {
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  updateLanguage();
+  showToast(currentLang === 'ar' ? 'تم التبديل إلى العربية' : 'Switched to English', 'success');
+}
+
+function updateLanguage() {
+  // تحديث النصوص
+  document.getElementById('titleText').innerHTML = currentLang === 'ar' 
+    ? 'مرحباً في <span style="color:var(--accent)">مساحتك الآمنة</span>!'
+    : 'Welcome to <span style="color:var(--accent)">Your Safe Space</span>!';
+  
+  document.getElementById('subtitle').textContent = translations[currentLang].subtitle;
+  document.getElementById('startBtn').innerHTML = `<i class="fas fa-heart-circle-check"></i> ${translations[currentLang].startBtn}`;
+  document.getElementById('formTitle').innerHTML = `<i class="fas fa-heart-circle-plus"></i> ${translations[currentLang].formTitle}`;
+  document.querySelector('#formScreen .card p').textContent = translations[currentLang].formDesc;
+  document.getElementById('name').placeholder = translations[currentLang].namePlaceholder;
+  document.getElementById('type').placeholder = translations[currentLang].typePlaceholder;
+  document.getElementById('description').placeholder = translations[currentLang].textareaPlaceholder;
+  document.getElementById('agreeText').textContent = translations[currentLang].agreeText;
+  document.querySelector('#problemForm button[type="submit"]').innerHTML = `<i class="fas fa-paper-plane"></i> ${translations[currentLang].sendBtn}`;
+  document.getElementById('checkTitle').innerHTML = `<i class="fas fa-search-heart"></i> ${translations[currentLang].checkTitle}`;
+  document.getElementById('checkHint').textContent = translations[currentLang].checkHint;
+  document.getElementById('checkKey').placeholder = translations[currentLang].checkPlaceholder;
+  document.getElementById('checkBtn').innerHTML = `<i class="fas fa-eye"></i> ${translations[currentLang].checkBtn}`;
+  document.querySelector('.warm-message strong').textContent = translations[currentLang].warmMessage;
+  document.querySelector('.warm-message:last-child strong').textContent = translations[currentLang].remember;
+  
+  // تحديث اتجاه الصفحة
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.lang = currentLang;
+  
+  // تحديث نص زر اللغة
+  langBtn.innerHTML = `<i class="fas fa-language"></i> ${currentLang === 'ar' ? 'English' : 'العربية'}`;
+}
+
+/* ====== نظام الموسيقى المبسط ====== */
+let isMusicPlaying = false;
+let currentVolume = 0.7;
+
+function toggleMusic() {
+  if (isMusicPlaying) {
+    backgroundMusic.pause();
+    musicToggle.classList.remove('playing');
+    musicInfo.textContent = currentLang === 'ar' ? 'انقر للتشغيل' : 'Click to play';
+  } else {
+    backgroundMusic.play().catch(e => {
+      console.log('التشغيل التلقائي ممنوع:', e);
+      showToast(currentLang === 'ar' ? 'انقر على زر التشغيل' : 'Click the play button', 'warning');
+    });
+    musicToggle.classList.add('playing');
+    musicInfo.textContent = currentLang === 'ar' ? 'موسيقى هادئة' : 'Calm music';
+  }
+  isMusicPlaying = !isMusicPlaying;
+  musicToggle.setAttribute('aria-pressed', isMusicPlaying);
+}
+
+function setVolume(level) {
+  currentVolume = Math.max(0, Math.min(1, level));
+  backgroundMusic.volume = currentVolume;
+  volumeLevel.style.width = (currentVolume * 100) + '%';
+  volumeControl.setAttribute('aria-valuenow', Math.round(currentVolume * 100));
+}
+
+// باقي الكود يبقى كما هو...
+// [كل دوال المساعدة والمستمعات الأخرى تبقى كما هي بدون تغيير]
 
 /* ====== دوال مساعدة ====== */
 // إنشاء فقاعات متحركة
@@ -558,7 +671,7 @@ startBtn.addEventListener('click', function() {
   formScreen.classList.remove('hide');
   this.classList.add('hide');
   window.scrollTo({ top: formScreen.offsetTop - 20, behavior: 'smooth' });
-  showToast('مرحباً بك في مساحتك الآمنة 💫', 'success');
+  showToast(currentLang === 'ar' ? 'مرحباً بك في مساحتك الآمنة 💫' : 'Welcome to your safe space 💫', 'success');
 });
 
 // تحديث عداد الأحرف
@@ -580,21 +693,21 @@ problemForm.addEventListener('submit', function(e) {
   e.preventDefault();
   
   if (!document.getElementById('agree').checked) {
-    showToast('يرجى الموافقة على أن هذه المساحة آمنة وسرية', 'warning');
+    showToast(currentLang === 'ar' ? 'يرجى الموافقة على أن هذه المساحة آمنة وسرية' : 'Please agree that this space is safe and confidential', 'warning');
     return;
   }
   
-  const name = document.getElementById('name').value || 'صديقنا العزيز';
+  const name = document.getElementById('name').value || (currentLang === 'ar' ? 'صديقنا العزيز' : 'Our dear friend');
   const type = document.getElementById('type').value.trim();
   const description = document.getElementById('description').value.trim();
   
   if (!type || !description) {
-    showToast('يرجى مشاركة مشاعرك معنا', 'warning');
+    showToast(currentLang === 'ar' ? 'يرجى مشاركة مشاعرك معنا' : 'Please share your feelings with us', 'warning');
     return;
   }
   
   if (description.length < 10) {
-    showToast('يمكنك مشاركة المزيد من المشاعر إذا أردت', 'warning');
+    showToast(currentLang === 'ar' ? 'يمكنك مشاركة المزيد من المشاعر إذا أردت' : 'You can share more feelings if you want', 'warning');
     return;
   }
   
@@ -604,7 +717,8 @@ problemForm.addEventListener('submit', function(e) {
     type,
     description,
     timestamp: Date.now(),
-    solved: false
+    solved: false,
+    language: currentLang
   };
   
   // حفظ البيانات في Firebase
@@ -616,11 +730,11 @@ problemForm.addEventListener('submit', function(e) {
       problemForm.reset();
       charCountEl.textContent = '0/250';
       charCountEl.className = 'char-count';
-      showToast('شكراً لمشاركة مشاعرك معنا! 🤍', 'success');
+      showToast(currentLang === 'ar' ? 'شكراً لمشاركة مشاعرك معنا! 🤍' : 'Thank you for sharing your feelings with us! 🤍', 'success');
     })
     .catch((error) => {
       console.error('خطأ في حفظ المشاعر:', error);
-      showToast('حدث خطأ أثناء حفظ مشاعرك', 'error');
+      showToast(currentLang === 'ar' ? 'حدث خطأ أثناء حفظ مشاعرك' : 'An error occurred while saving your feelings', 'error');
     });
 });
 
@@ -628,7 +742,7 @@ problemForm.addEventListener('submit', function(e) {
 copyIdBtn.addEventListener('click', function() {
   lastIdInput.select();
   document.execCommand('copy');
-  showToast('تم نسخ المعرف بنجاح! احتفظ به', 'success');
+  showToast(currentLang === 'ar' ? 'تم نسخ المعرف بنجاح! احتفظ به' : 'ID copied successfully! Keep it safe', 'success');
 });
 
 // إغلاق نافذة المعرف
@@ -641,19 +755,19 @@ checkBtn.addEventListener('click', function() {
   const problemId = checkKeyInput.value.trim().toUpperCase();
   
   if (!problemId) {
-    showToast('يرجى إدخال المعرف الخاص بك', 'warning');
+    showToast(currentLang === 'ar' ? 'يرجى إدخال المعرف الخاص بك' : 'Please enter your ID', 'warning');
     return;
   }
   
   if (!isValidId(problemId)) {
-    showToast('المعرف غير صحيح. يجب أن يتكون من 6 أحرف/أرقام', 'warning');
+    showToast(currentLang === 'ar' ? 'المعرف غير صحيح. يجب أن يتكون من 6 أحرف/أرقام' : 'Invalid ID. Must be 6 letters/numbers', 'warning');
     return;
   }
   
   // إظهار رسالة تحميل
   solutionDisplay.innerHTML = `
     <div class="solutionCard" style="border-left-color: var(--accent);">
-      <p>جاري تحضير رسالة الدعم الخاصة بك <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></p>
+      <p>${currentLang === 'ar' ? 'جاري تحضير رسالة الدعم الخاصة بك' : 'Preparing your support message'} <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></p>
     </div>
   `;
   
@@ -669,16 +783,16 @@ checkBtn.addEventListener('click', function() {
         if (problem.solution) {
           solutionHTML = `
             <div class="solutionCard">
-              <h4>رسالة الدعم لك: 🤍</h4>
+              <h4>${currentLang === 'ar' ? 'رسالة الدعم لك: 🤍' : 'Support message for you: 🤍'}</h4>
               <p>${problem.solution}</p>
-              <small>مع خالص الدعم والاحترام</small>
+              <small>${currentLang === 'ar' ? 'مع خالص الدعم والاحترام' : 'With sincere support and respect'}</small>
             </div>
           `;
         } else {
           solutionHTML = `
             <div class="solutionCard">
-              <p>فريق الدعم يقرأ رسالتك بعناية وسيعود إليك قريباً. شكراً لصبرك 🤍</p>
-              <p style="margin-top:8px; font-style:italic;">تذكر: أنت أقوى مما تظن، وأكثر قيمة مما تعتقد.</p>
+              <p>${currentLang === 'ar' ? 'فريق الدعم يقرأ رسالتك بعناية وسيعود إليك قريباً. شكراً لصبرك 🤍' : 'The support team is carefully reading your message and will get back to you soon. Thank you for your patience 🤍'}</p>
+              <p style="margin-top:8px; font-style:italic;">${currentLang === 'ar' ? 'تذكر: أنت أقوى مما تظن، وأكثر قيمة مما تعتقد.' : 'Remember: You are stronger than you think, and more valuable than you believe.'}</p>
             </div>
           `;
         }
@@ -687,7 +801,7 @@ checkBtn.addEventListener('click', function() {
       } else {
         solutionDisplay.innerHTML = `
           <div class="solutionCard" style="border-left-color: var(--warning);">
-            <p>لم نعثر على جلسة بهذا المعرف. تأكد من أن المعرف صحيح.</p>
+            <p>${currentLang === 'ar' ? 'لم نعثر على جلسة بهذا المعرف. تأكد من أن المعرف صحيح.' : 'No session found with this ID. Make sure the ID is correct.'}</p>
           </div>
         `;
       }
@@ -696,7 +810,7 @@ checkBtn.addEventListener('click', function() {
       console.error('خطأ في جلب الجلسة:', error);
       solutionDisplay.innerHTML = `
         <div class="solutionCard" style="border-left-color: #f44336;">
-          <p>حدث خطأ أثناء البحث عن جلستك. يرجى المحاولة مرة أخرى.</p>
+          <p>${currentLang === 'ar' ? 'حدث خطأ أثناء البحث عن جلستك. يرجى المحاولة مرة أخرى.' : 'An error occurred while searching for your session. Please try again.'}</p>
         </div>
       `;
     });
@@ -710,12 +824,12 @@ toggleModeBtn.addEventListener('click', function() {
   
   if (document.body.classList.contains('dark-mode')) {
     icon.className = 'fas fa-sun';
-    text.textContent = ' الوضع: نهاري';
-    showToast('تم تفعيل الوضع الليلي', 'success');
+    text.textContent = currentLang === 'ar' ? ' الوضع: نهاري' : ' Light Mode';
+    showToast(currentLang === 'ar' ? 'تم تفعيل الوضع الليلي' : 'Dark mode activated', 'success');
   } else {
     icon.className = 'fas fa-moon';
-    text.textContent = ' الوضع: ليلي';
-    showToast('تم تفعيل الوضع النهاري', 'success');
+    text.textContent = currentLang === 'ar' ? ' الوضع: ليلي' : ' Dark Mode';
+    showToast(currentLang === 'ar' ? 'تم تفعيل الوضع النهاري' : 'Light mode activated', 'success');
   }
   
   if (!this.contains(text)) {
@@ -733,15 +847,40 @@ heartBtn.addEventListener('click', function() {
   
   if (this.classList.contains('liked')) {
     icon.className = 'fas fa-heart';
-    showNotification('شكراً لحسن ظنك! نعتز بثقتك 🤍', 'success');
+    showNotification(currentLang === 'ar' ? 'شكراً لحسن ظنك! نعتز بثقتك 🤍' : 'Thank you for your trust! We value your confidence 🤍', 'success');
   } else {
     icon.className = 'far fa-heart';
   }
 });
 
-// تبديل اللغة (وهمي في هذه المرحلة)
-langBtn.addEventListener('click', function() {
-  showToast('سيتم إضافة دعم اللغة الإنجليزية قريباً', 'success');
+// تبديل اللغة
+langBtn.addEventListener('click', toggleLanguage);
+
+// تحكم الموسيقى
+musicToggle.addEventListener('click', toggleMusic);
+
+// تحكم مستوى الصوت
+volumeControl.addEventListener('click', function(e) {
+  const rect = this.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const volume = Math.max(0, Math.min(1, clickX / rect.width));
+  setVolume(volume);
+  localStorage.setItem('volumeLevel', volume);
+});
+
+// تحكم مستوى الصوت باللوحة
+volumeControl.addEventListener('keydown', function(e) {
+  let currentVolume = parseFloat(localStorage.getItem('volumeLevel')) || 0.7;
+  
+  if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+    currentVolume = Math.min(1, currentVolume + 0.1);
+    setVolume(currentVolume);
+    localStorage.setItem('volumeLevel', currentVolume);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+    currentVolume = Math.max(0, currentVolume - 0.1);
+    setVolume(currentVolume);
+    localStorage.setItem('volumeLevel', currentVolume);
+  }
 });
 
 // تفعيل شريط التقدم عند التمرير
@@ -759,12 +898,37 @@ function restorePreferences() {
     const icon = toggleModeBtn.querySelector('i');
     const text = toggleModeBtn.querySelector('span') || document.createElement('span');
     icon.className = 'fas fa-sun';
-    text.textContent = ' الوضع: نهاري';
+    text.textContent = currentLang === 'ar' ? ' الوضع: نهاري' : ' Light Mode';
     if (!toggleModeBtn.contains(text)) {
       toggleModeBtn.appendChild(text);
     }
   }
+  
+  // مستوى الصوت
+  const savedVolume = localStorage.getItem('volumeLevel');
+  if (savedVolume !== null) {
+    setVolume(parseFloat(savedVolume));
+  }
+  
+  // اللغة
+  const savedLang = localStorage.getItem('language');
+  if (savedLang) {
+    currentLang = savedLang;
+    updateLanguage();
+  }
 }
+
+// حفظ اللغة عند التبديل
+function saveLanguage() {
+  localStorage.setItem('language', currentLang);
+}
+
+// تعديل دالة toggleLanguage لحفظ التفضيل
+const originalToggleLanguage = toggleLanguage;
+toggleLanguage = function() {
+  originalToggleLanguage();
+  saveLanguage();
+};
 
 // تهيئة العناصر المتحركة واستعادة التفضيلات
 createFloatingHearts();
@@ -774,13 +938,14 @@ restorePreferences();
 // رسالة ترحيب عند التحميل
 window.addEventListener('load', function() {
   setTimeout(() => {
-    showNotification('مرحباً بك في مساحتك الآمنة للحديث 💫', 'success');
+    showNotification(currentLang === 'ar' ? 'مرحباً بك في مساحتك الآمنة للحديث 💫' : 'Welcome to your safe space for conversation 💫', 'success');
   }, 1000);
 });
 
 </script>
 </body>
 </html>
+
 
 
 
