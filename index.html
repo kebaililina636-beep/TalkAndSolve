@@ -52,53 +52,139 @@
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
-            cursor: pointer; /* تغيير المؤشر للإشارة إلى تفاعل */
         }
 
-        /* إشعار تشغيل الموسيقى */
-        .music-notice {
+        /* شريط التحكم في الموسيقى */
+        .music-player {
             position: fixed;
             bottom: 20px;
-            left: 20px;
+            right: 20px;
             z-index: 9998;
             background: rgba(26, 16, 53, 0.95);
             backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            border-radius: 15px;
+            padding: 15px;
+            border-radius: 20px;
             border: 2px solid var(--pink);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
-            gap: 12px;
-            max-width: 300px;
+            gap: 15px;
+            min-width: 300px;
             animation: slideIn 0.5s ease-out;
-            cursor: default;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
         }
 
-        .music-notice i {
-            color: var(--pink);
-            font-size: 1.3rem;
-            animation: pulse 2s infinite;
+        .music-player.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .music-notice span {
-            font-size: 0.9rem;
-            color: white;
+        .music-info {
+            flex-grow: 1;
         }
 
-        .music-notice strong {
+        .music-title {
+            font-weight: 600;
             color: var(--cyan);
+            margin-bottom: 5px;
+        }
+
+        .music-artist {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .music-btn {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 107, 203, 0.5);
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--cyan);
+            cursor: pointer;
         }
 
         @keyframes slideIn {
             from {
-                transform: translateX(-100%);
+                transform: translateX(100%);
                 opacity: 0;
             }
             to {
                 transform: translateX(0);
                 opacity: 1;
             }
+        }
+
+        /* إشعار تشغيل الموسيقى */
+        .music-notice {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9997;
+            background: rgba(26, 16, 53, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 18px;
+            border-radius: 15px;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 250px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .music-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .music-notice i {
+            color: var(--cyan);
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .music-notice span {
+            font-size: 0.85rem;
+            color: white;
         }
 
         @keyframes pulse {
@@ -569,7 +655,7 @@
             transform: scale(1.2);
         }
 
-        /* بطاقات الأنمي السحرية - تصميم جديد */
+        /* بطاقات الأنمي السحرية */
         .section {
             padding: 4rem 2rem;
             max-width: 1400px;
@@ -771,11 +857,6 @@
             box-shadow: 0 5px 15px rgba(255, 107, 203, 0.4);
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
         /* قسم الأنمي الحالي */
         .current-season {
             background: rgba(26, 16, 53, 0.5);
@@ -964,10 +1045,10 @@
             }
             .anime-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
             .anime-character { opacity: 0.3; width: 100px; font-size: 60px; }
-            .music-notice {
-                left: 50%;
-                transform: translateX(-50%);
-                max-width: 90%;
+            .music-player {
+                right: 50%;
+                transform: translateX(50%);
+                min-width: 280px;
             }
         }
 
@@ -1027,6 +1108,13 @@
             .current-season {
                 padding: 2rem 1rem;
             }
+            .music-player {
+                bottom: 70px;
+                right: 10px;
+                left: 10px;
+                transform: none;
+                min-width: auto;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1044,6 +1132,10 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
+            .music-player {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -1057,10 +1149,24 @@
         </div>
     </div>
 
+    <!-- مشغل الموسيقى -->
+    <div class="music-player" id="musicPlayer">
+        <div class="music-info">
+            <div class="music-title">Los! Los! Los!</div>
+            <div class="music-artist">Anime OST</div>
+        </div>
+        <div class="music-controls">
+            <button class="music-btn" id="playPauseBtn">
+                <i class="fas fa-play"></i>
+            </button>
+            <input type="range" min="0" max="100" value="60" class="volume-slider" id="volumeSlider">
+        </div>
+    </div>
+
     <!-- إشعار تشغيل الموسيقى -->
-    <div class="music-notice" id="musicNotice" style="display: none;">
+    <div class="music-notice" id="musicNotice">
         <i class="fas fa-music"></i>
-        <span>الموسيقى <strong>Los! Los! Los!</strong> تعمل الآن! <br><small>اضغط على أي مكان للتشغيل</small></span>
+        <span>الموسيقى تعمل الآن! <br><small>اضغط على أي زر للتشغيل</small></span>
     </div>
 
     <!-- شخصيات أنمي متحركة -->
@@ -1108,10 +1214,10 @@
                     <button id="searchBtn"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="user-menu">
-                    <button class="btn btn-primary" style="padding: 0.8rem 1.5rem;">
+                    <button class="btn btn-primary" style="padding: 0.8rem 1.5rem;" id="signupBtn">
                         <i class="fas fa-user-plus"></i> تسجيل
                     </button>
-                    <div class="user-avatar">
+                    <div class="user-avatar" id="userAvatar">
                         <i class="fas fa-user"></i>
                     </div>
                 </div>
@@ -1314,114 +1420,175 @@
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2024 AnimeVerse. جميع الحقوق محفوظة. صنع بـ ❤️ لمحبي الأنمي | تشغيل: Los! Los! Los! - Tanya Degurechaff</p>
+            <p>&copy; 2024 AnimeVerse. جميع الحقوق محفوظة. صنع بـ ❤️ لمحبي الأنمي</p>
         </div>
     </footer>
 
     <script>
-        // نظام الموسيقى الذكي
-        const musicSystem = {
-            audio: null,
-            isPlaying: false,
-            isInitialized: false,
-            musicStarted: false,
+        // نظام الموسيقى الكامل
+        class MusicSystem {
+            constructor() {
+                this.audio = null;
+                this.isPlaying = false;
+                this.isInitialized = false;
+                this.volume = 0.6;
+                this.currentTrack = 0;
+                
+                // قائمة بالموسيقى مع روابط مباشرة للصوت
+                this.tracks = [
+                    {
+                        title: "Anime Adventure",
+                        artist: "Epic OST",
+                        src: "https://assets.mixkit.co/music/preview/mixkit-driving-ambition-32.mp3"
+                    },
+                    {
+                        title: "Fantasy World",
+                        artist: "Orchestral",
+                        src: "https://assets.mixkit.co/music/preview/mixkit-epic-adventure-4-995.mp3"
+                    },
+                    {
+                        title: "Battle Theme",
+                        artist: "Action OST",
+                        src: "https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-667.mp3"
+                    }
+                ];
+                
+                this.init();
+            }
             
-            init: function() {
+            init() {
                 if (this.isInitialized) return;
                 
                 // إنشاء عنصر الصوت
                 this.audio = new Audio();
                 this.audio.loop = true;
-                this.audio.volume = 0.7;
-                
-                // محاولة استخدام رابط مباشر من YouTube
-                // ملاحظة: تحتاج إلى رابط مباشر للصوت، ليس رابط YouTube العادي
-                // هذا مثال، تحتاج إلى استبداله برابط حقيقي
-                this.audio.src = 'https://www.youtube.com/watch?v=ZRtdQ81jPUQ';
-                
-                // بدلاً من ذلك، يمكن استخدام ملف صوتي محلي
-                // this.audio.src = 'los-los-los.mp3';
+                this.audio.volume = this.volume;
+                this.audio.src = this.tracks[this.currentTrack].src;
                 
                 this.isInitialized = true;
                 
-                // إضافة حدث لمعرفة عندما يمكن تشغيل الصوت
+                // إضافة مستمعي الأحداث
                 this.audio.addEventListener('canplaythrough', () => {
-                    console.log('الموسيقى جاهزة للتشغيل');
+                    console.log('🎵 الموسيقى جاهزة للتشغيل');
                 });
                 
                 this.audio.addEventListener('error', (e) => {
-                    console.log('خطأ في تحميل الصوت:', e);
-                    // إذا فشل تحميل الصوت، سنستخدم طريقة بديلة
-                    this.useAlternativeMethod();
+                    console.error('❌ خطأ في تحميل الصوت:', e);
                 });
-            },
-            
-            useAlternativeMethod: function() {
-                // طريقة بديلة: فتح نافذة YouTube خلفية
-                const youtubeWindow = window.open(
-                    'https://www.youtube.com/embed/ZRtdQ81jPUQ?autoplay=1&loop=1&playlist=ZRtdQ81jPUQ',
-                    'youtubePlayer',
-                    'width=100,height=100,left=-1000,top=-1000'
-                );
                 
-                if (youtubeWindow) {
-                    setTimeout(() => {
-                        youtubeWindow.close();
-                    }, 3000); // إغلاق النافذة بعد 3 ثواني
+                this.audio.addEventListener('ended', () => {
+                    this.nextTrack();
+                });
+            }
+            
+            startMusic() {
+                if (!this.isInitialized) this.init();
+                
+                const playPromise = this.audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        this.isPlaying = true;
+                        this.updateUI();
+                        this.showMusicNotice();
+                        console.log('🎵 الموسيقى تعمل الآن!');
+                    }).catch(error => {
+                        console.warn('⚠️ تعذر تشغيل الموسيقاء تلقائياً:', error);
+                        this.showPlaybackError();
+                    });
                 }
-            },
+            }
             
-            startMusic: function() {
-                if (this.musicStarted) return;
-                
-                this.musicStarted = true;
-                this.init();
-                
-                // محاولة تشغيل الصوت
-                if (this.audio) {
-                    const playPromise = this.audio.play();
-                    
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            this.isPlaying = true;
-                            this.showMusicNotice();
-                            console.log('🎵 الموسيقى تعمل الآن!');
-                        }).catch(error => {
-                            console.log('تعذر تشغيل الموسيقى تلقائياً:', error);
-                            this.useAlternativeMethod();
-                        });
-                    }
-                }
-            },
-            
-            showMusicNotice: function() {
-                const notice = document.getElementById('musicNotice');
-                notice.style.display = 'flex';
-                
-                // إخفاء الإشعار بعد 5 ثواني
-                setTimeout(() => {
-                    notice.style.opacity = '0';
-                    notice.style.transition = 'opacity 1s ease';
-                    setTimeout(() => {
-                        notice.style.display = 'none';
-                    }, 1000);
-                }, 5000);
-            },
-            
-            toggleMusic: function() {
-                if (!this.audio) return;
+            togglePlayPause() {
+                if (!this.isInitialized) return;
                 
                 if (this.isPlaying) {
                     this.audio.pause();
                     this.isPlaying = false;
                 } else {
-                    this.audio.play();
-                    this.isPlaying = true;
+                    this.audio.play().then(() => {
+                        this.isPlaying = true;
+                    }).catch(error => {
+                        console.warn('❌ خطأ في التشغيل:', error);
+                    });
+                }
+                
+                this.updateUI();
+            }
+            
+            nextTrack() {
+                this.currentTrack = (this.currentTrack + 1) % this.tracks.length;
+                this.audio.src = this.tracks[this.currentTrack].src;
+                this.audio.play();
+                this.updateUI();
+            }
+            
+            setVolume(value) {
+                this.volume = value / 100;
+                if (this.audio) {
+                    this.audio.volume = this.volume;
                 }
             }
-        };
+            
+            updateUI() {
+                const playPauseBtn = document.getElementById('playPauseBtn');
+                const musicTitle = document.querySelector('.music-title');
+                const musicArtist = document.querySelector('.music-artist');
+                
+                if (playPauseBtn) {
+                    playPauseBtn.innerHTML = this.isPlaying ? 
+                        '<i class="fas fa-pause"></i>' : 
+                        '<i class="fas fa-play"></i>';
+                }
+                
+                if (musicTitle && musicArtist) {
+                    musicTitle.textContent = this.tracks[this.currentTrack].title;
+                    musicArtist.textContent = this.tracks[this.currentTrack].artist;
+                }
+            }
+            
+            showMusicNotice() {
+                const notice = document.getElementById('musicNotice');
+                const player = document.getElementById('musicPlayer');
+                
+                if (notice) {
+                    notice.classList.add('show');
+                    setTimeout(() => {
+                        notice.classList.remove('show');
+                    }, 3000);
+                }
+                
+                if (player) {
+                    setTimeout(() => {
+                        player.classList.add('show');
+                    }, 500);
+                }
+            }
+            
+            showPlaybackError() {
+                const notice = document.getElementById('musicNotice');
+                if (notice) {
+                    notice.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>تحديث المتصفح مطلوب<br><small>لتفعيل تشغيل الموسيقى</small></span>
+                    `;
+                    notice.classList.add('show');
+                    
+                    setTimeout(() => {
+                        notice.classList.remove('show');
+                        notice.innerHTML = `
+                            <i class="fas fa-music"></i>
+                            <span>الموسيقى تعمل الآن! <br><small>اضغط على أي زر للتشغيل</small></span>
+                        `;
+                    }, 5000);
+                }
+            }
+        }
 
-        // قاعدة بيانات الأنمي الموسعة والمحسنة
+        // إنشاء مثيل نظام الموسيقى
+        const musicSystem = new MusicSystem();
+
+        // قاعدة بيانات الأنمي
         const animeDatabase = {
             season: [
                 {
@@ -1938,8 +2105,126 @@
                 
                 // إضافة حدث النقر للبطاقة
                 card.addEventListener('click', function() {
-                    alert(`🎬 جار تحميل ${anime.title}\n\nالتقييم: ${anime.rating}/10\nالحالة: ${anime.status}\n\nهذه خاصية تجريبية، في النسخة الكاملة ستفتح صفحة الأنمي.`);
+                    showAnimeModal(anime);
                 });
+            });
+        }
+
+        // عرض معلومات الأنمي
+        function showAnimeModal(anime) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, var(--dark), var(--darker));
+                    border-radius: 20px;
+                    padding: 30px;
+                    max-width: 600px;
+                    width: 100%;
+                    border: 2px solid var(--pink);
+                    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+                    position: relative;
+                ">
+                    <button style="
+                        position: absolute;
+                        top: 15px;
+                        left: 15px;
+                        background: var(--pink);
+                        border: none;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        color: white;
+                        cursor: pointer;
+                        font-size: 1.2rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onclick="this.parentElement.parentElement.remove()">×</button>
+                    
+                    <h2 style="color: var(--cyan); margin-bottom: 20px; text-align: center;">${anime.title}</h2>
+                    <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <img src="${anime.image}" alt="${anime.title}" style="
+                            width: 200px;
+                            height: 300px;
+                            object-fit: cover;
+                            border-radius: 10px;
+                            border: 2px solid var(--pink);
+                        " onerror="this.src='https://via.placeholder.com/200x300/6c4df6/ffffff?text=${encodeURIComponent(anime.title)}'">
+                        <div style="flex: 1; min-width: 250px;">
+                            <p style="margin-bottom: 15px; color: rgba(255,255,255,0.9);">${anime.description}</p>
+                            <div style="margin-bottom: 10px;">
+                                <strong style="color: var(--cyan);">التقييم: </strong>
+                                <span style="color: var(--yellow);">⭐ ${anime.rating}/10</span>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong style="color: var(--cyan);">النوع: </strong>
+                                <span>${anime.type}</span>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong style="color: var(--cyan);">عدد الحلقات: </strong>
+                                <span>${anime.episodes}</span>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong style="color: var(--cyan);">السنة: </strong>
+                                <span>${anime.year}</span>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <strong style="color: var(--cyan);">الحالة: </strong>
+                                <span style="color: ${anime.status === 'مستمر' ? 'var(--cyan)' : 'var(--pink)'}">${anime.status}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <strong style="color: var(--cyan); display: block; margin-bottom: 10px;">التصنيفات:</strong>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            ${anime.tags.map(tag => `<span style="
+                                background: rgba(108, 77, 246, 0.2);
+                                color: var(--blue-light);
+                                padding: 5px 12px;
+                                border-radius: 15px;
+                                border: 1px solid rgba(108, 77, 246, 0.3);
+                                font-size: 0.9rem;
+                            ">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <button style="
+                        background: linear-gradient(135deg, var(--pink), var(--purple));
+                        color: white;
+                        border: none;
+                        padding: 12px 30px;
+                        border-radius: 25px;
+                        font-size: 1rem;
+                        cursor: pointer;
+                        display: block;
+                        margin: 0 auto;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fas fa-play"></i> بدء المشاهدة
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // إغلاق النافذة عند النقر خارجها
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
             });
         }
 
@@ -1967,6 +2252,65 @@
             }, 200);
         }
 
+        // تهيئة المشغل الموسيقي
+        function initializeMusicControls() {
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            
+            if (playPauseBtn) {
+                playPauseBtn.addEventListener('click', () => {
+                    musicSystem.togglePlayPause();
+                });
+            }
+            
+            if (volumeSlider) {
+                volumeSlider.addEventListener('input', (e) => {
+                    musicSystem.setVolume(e.target.value);
+                });
+            }
+        }
+
+        // تهيئة الأزرار والموسيقى
+        function initializeButtons() {
+            // قائمة جميع الأزرار التي تبدأ الموسيقى
+            const musicButtons = [
+                'exploreBtn',
+                'communityBtn',
+                'searchBtn',
+                'signupBtn',
+                'userAvatar'
+            ];
+            
+            // إضافة حدث لكل زر
+            musicButtons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (!musicSystem.isPlaying) {
+                            musicSystem.startMusic();
+                        }
+                    });
+                }
+            });
+            
+            // إضافة حدث للأزرار العامة
+            document.addEventListener('click', function(e) {
+                // التحقق إذا كان النقر على أي زر أو رابط
+                if (e.target.closest('.btn') || 
+                    e.target.closest('.watch-btn') ||
+                    e.target.closest('.nav-link') ||
+                    e.target.closest('.view-all') ||
+                    e.target.closest('.anime-card') ||
+                    e.target.closest('.hero-anime-item')) {
+                    
+                    if (!musicSystem.isPlaying) {
+                        musicSystem.startMusic();
+                    }
+                }
+            });
+        }
+
         // تهيئة كل شيء عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             simulateLoading();
@@ -1980,39 +2324,15 @@
             createAnimeCards(animeDatabase.fantasy, 'fantasyGrid');
             createAnimeCards(animeDatabase.movies, 'movieGrid');
             
-            // إضافة حدث لبدء الموسيقى عند أي تفاعل مع الصفحة
-            function startMusicOnInteraction() {
-                musicSystem.startMusic();
-                
-                // إزالة جميع مستمعي الأحداث بعد بدء الموسيقى
-                document.body.removeEventListener('click', startMusicOnInteraction);
-                document.body.removeEventListener('keydown', startMusicOnInteraction);
-                document.body.removeEventListener('touchstart', startMusicOnInteraction);
-                document.body.removeEventListener('mousemove', startMusicOnInteraction);
-            }
+            // تهيئة التحكم في الموسيقى
+            initializeMusicControls();
+            initializeButtons();
             
-            // إضافة مستمعي الأحداث لبدء الموسيقى
-            document.body.addEventListener('click', startMusicOnInteraction);
-            document.body.addEventListener('keydown', startMusicOnInteraction);
-            document.body.addEventListener('touchstart', startMusicOnInteraction);
-            document.body.addEventListener('mousemove', startMusicOnInteraction);
-            
-            // تفاعلات الأزرار الرئيسية
-            document.getElementById('exploreBtn').addEventListener('click', function() {
-                document.getElementById('trendingSection').scrollIntoView({ 
-                    behavior: 'smooth'
-                });
-            });
-
-            document.getElementById('communityBtn').addEventListener('click', function() {
-                alert('🎌 انضم إلى مجتمع AnimeVerse!\n\nميزات المجتمع:\n• مناقشات الأنمي\n• مراجعات وتقييمات\n• تحديات مشاهدة\n• مسابقات وأحداث\n• مجموعات حسب الأنمي المفضلة\n\nهذه خاصية تجريبية، في النسخة الكاملة ستفتح صفحة المجتمع.');
-            });
-
-            // تفاعل البحث
+            // تفاعلات البحث
             document.getElementById('searchBtn').addEventListener('click', function() {
                 const searchTerm = document.getElementById('searchInput').value;
                 if (searchTerm.trim()) {
-                    alert(`🔍 البحث عن: "${searchTerm}"\n\nنتائج البحث المحتملة:\n1. ${searchTerm} (أنمي)\n2. شخصيات من ${searchTerm}\n3. استوديوهات متخصصة في ${searchTerm}\n4. مراجعات عن ${searchTerm}\n\nهذه خاصية تجريبية، في النسخة الكاملة سيتم تنفيذ البحث الحقيقي.`);
+                    showSearchResults(searchTerm);
                 }
             });
 
@@ -2060,9 +2380,143 @@
                 observer.observe(card);
             });
         });
+
+        // عرض نتائج البحث
+        function showSearchResults(term) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                padding: 20px;
+            `;
+            
+            // جمع كل الأنمي في مصفوفة واحدة
+            const allAnime = [
+                ...animeDatabase.season,
+                ...animeDatabase.trending,
+                ...animeDatabase.topRated,
+                ...animeDatabase.shonen,
+                ...animeDatabase.fantasy,
+                ...animeDatabase.movies
+            ];
+            
+            // تصفية الأنمي حسب مصطلح البحث
+            const results = allAnime.filter(anime => 
+                anime.title.toLowerCase().includes(term.toLowerCase()) ||
+                anime.tags.some(tag => tag.toLowerCase().includes(term.toLowerCase())) ||
+                anime.description.toLowerCase().includes(term.toLowerCase())
+            );
+            
+            modal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, var(--dark), var(--darker));
+                    border-radius: 20px;
+                    padding: 30px;
+                    max-width: 800px;
+                    width: 100%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    border: 2px solid var(--cyan);
+                    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+                    position: relative;
+                ">
+                    <button style="
+                        position: absolute;
+                        top: 15px;
+                        left: 15px;
+                        background: var(--cyan);
+                        border: none;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        color: white;
+                        cursor: pointer;
+                        font-size: 1.2rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onclick="this.parentElement.parentElement.remove()">×</button>
+                    
+                    <h2 style="color: var(--pink); margin-bottom: 20px; text-align: center;">
+                        <i class="fas fa-search"></i> نتائج البحث عن: "${term}"
+                    </h2>
+                    
+                    ${results.length === 0 ? `
+                        <div style="text-align: center; padding: 40px 20px;">
+                            <i class="fas fa-search" style="font-size: 3rem; color: var(--cyan); margin-bottom: 20px;"></i>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem;">
+                                لم يتم العثور على نتائج لـ "${term}"
+                            </p>
+                            <p style="color: rgba(255,255,255,0.6); margin-top: 10px;">
+                                حاول البحث بمصطلح آخر أو تصفح الأقسام المختلفة
+                            </p>
+                        </div>
+                    ` : `
+                        <p style="color: var(--cyan); margin-bottom: 20px;">
+                            وجدنا ${results.length} نتيجة
+                        </p>
+                        <div style="display: grid; gap: 15px;">
+                            ${results.map(anime => `
+                                <div style="
+                                    background: rgba(255,255,255,0.05);
+                                    border-radius: 10px;
+                                    padding: 15px;
+                                    display: flex;
+                                    gap: 15px;
+                                    align-items: center;
+                                    cursor: pointer;
+                                    transition: all 0.3s ease;
+                                    border: 1px solid transparent;
+                                " onmouseover="this.style.borderColor='var(--pink)'; this.style.transform='translateY(-3px)'" 
+                                onmouseout="this.style.borderColor='transparent'; this.style.transform='translateY(0)'"
+                                onclick="showAnimeModal(${JSON.stringify(anime).replace(/"/g, '&quot;')}); this.parentElement.parentElement.parentElement.remove()">
+                                    <img src="${anime.image}" alt="${anime.title}" style="
+                                        width: 80px;
+                                        height: 120px;
+                                        object-fit: cover;
+                                        border-radius: 8px;
+                                        border: 2px solid var(--cyan);
+                                    " onerror="this.src='https://via.placeholder.com/80x120/6c4df6/ffffff?text=${encodeURIComponent(anime.title.substring(0, 10))}'">
+                                    <div style="flex: 1;">
+                                        <h3 style="color: white; margin-bottom: 5px;">${anime.title}</h3>
+                                        <div style="display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+                                            <span style="background: rgba(255,107,203,0.2); color: var(--pink-light); padding: 3px 8px; border-radius: 12px; font-size: 0.8rem;">${anime.type}</span>
+                                            <span style="background: rgba(43,226,208,0.2); color: var(--cyan-light); padding: 3px 8px; border-radius: 12px; font-size: 0.8rem;">⭐ ${anime.rating}</span>
+                                            <span style="background: rgba(255,215,0,0.2); color: var(--yellow-light); padding: 3px 8px; border-radius: 12px; font-size: 0.8rem;">${anime.year}</span>
+                                        </div>
+                                        <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.4;">
+                                            ${anime.description.substring(0, 100)}...
+                                        </p>
+                                    </div>
+                                    <i class="fas fa-chevron-left" style="color: var(--pink);"></i>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // إغلاق النافذة عند النقر خارجها
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
     </script>
 </body>
 </html>
+
 
 
 
