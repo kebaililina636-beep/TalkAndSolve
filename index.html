@@ -3,290 +3,1823 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أنمي ستريم - مشاهدة أنمي كاملة بجودة عالية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css"> 
+    <title>AnimeVerse - عالم الأنمي السحري ✨</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ff6bcb;
+            --pink-light: #ff8fd8;
+            --pink-dark: #ff4dbd;
+            --blue: #6c4df6;
+            --blue-light: #8a6eff;
+            --blue-dark: #5438d4;
+            --purple: #8a2be2;
+            --purple-light: #9d45ff;
+            --purple-dark: #7a1cd0;
+            --cyan: #2be2d0;
+            --cyan-light: #45ffe8;
+            --yellow: #ffd700;
+            --yellow-light: #ffeb3b;
+            --dark: #1a1035;
+            --darker: #0f0821;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --neon-glow: 0 0 20px rgba(255, 107, 203, 0.5);
+            --transition-slow: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition-fast: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 203, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(108, 77, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(43, 226, 208, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* زر الموسيقى فقط */
+        .music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 25px rgba(255, 107, 203, 0.4),
+                0 0 20px rgba(255, 107, 203, 0.6);
+            border: 3px solid white;
+            animation: pulseMusic 2s infinite;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .music-control:hover {
+            transform: scale(1.15);
+            box-shadow: 
+                0 12px 35px rgba(255, 107, 203, 0.6),
+                0 0 30px rgba(255, 107, 203, 0.8);
+        }
+
+        .music-control i {
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0 0 10px white;
+        }
+
+        @keyframes pulseMusic {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 
+                    0 8px 25px rgba(255, 107, 203, 0.4),
+                    0 0 20px rgba(255, 107, 203, 0.6);
+            }
+            50% { 
+                transform: scale(1.08);
+                box-shadow: 
+                    0 12px 35px rgba(255, 107, 203, 0.6),
+                    0 0 30px rgba(255, 107, 203, 0.8);
+            }
+        }
+
+        /* مشغل الفيديو */
+        .video-player-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            z-index: 10001;
+            backdrop-filter: blur(10px);
+        }
+
+        .video-player-overlay.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-player {
+            width: 90%;
+            max-width: 1200px;
+            height: 85%;
+            background: var(--darker);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--pink);
+            box-shadow: 0 0 50px rgba(255, 107, 203, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(26, 16, 53, 0.9);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .player-header h3 {
+            color: var(--cyan);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .player-header button {
+            background: var(--pink);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .player-header button:hover {
+            background: var(--pink-light);
+            transform: scale(1.1);
+        }
+
+        .video-container {
+            flex: 1;
+            background: #000;
+            position: relative;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .video-controls {
+            padding: 15px 20px;
+            background: rgba(26, 16, 53, 0.9);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink), var(--cyan));
+            border-radius: 4px;
+            width: 0%;
+        }
+
+        .time-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .basic-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .play-pause-btn {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+        }
+
+        .episode-selector {
+            padding: 15px 20px;
+            background: rgba(26, 16, 53, 0.9);
+            border-top: 1px solid var(--card-border);
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .episode-selector h4 {
+            color: var(--cyan);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .episodes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .episode-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .episode-btn:hover {
+            background: var(--pink);
+            transform: translateY(-2px);
+        }
+
+        .episode-btn.active {
+            background: var(--pink);
+            border-color: var(--pink-light);
+            box-shadow: 0 0 10px var(--pink);
+        }
+
+        /* شاشة التحميل */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 107, 203, 0.3);
+            border-top: 5px solid var(--pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        .loading-screen h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(43, 226, 208, 0.5);
+        }
+
+        .loading-progress-bar {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .loading-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink), var(--cyan));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* بقية الأنميات */
+        header {
+            background: rgba(26, 16, 53, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--card-border);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            text-shadow: 0 0 15px var(--pink);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px var(--pink-light);
+        }
+
+        .logo i {
+            color: var(--pink);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 107, 203, 0.2);
+            border-color: var(--pink);
+            box-shadow: var(--neon-glow);
+            transform: translateY(-3px);
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 0.6rem 1.2rem;
+            width: 280px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--cyan);
+            box-shadow: 0 0 15px rgba(43, 226, 208, 0.3);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            padding: 0.5rem;
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-bar button {
+            background: transparent;
+            border: none;
+            color: var(--cyan);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            transform: scale(1.2);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            border-color: var(--cyan);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--pink) 0%, var(--cyan) 50%, var(--blue) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            text-shadow: 0 0 30px rgba(255, 107, 203, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 107, 203, 0.3); }
+            to { text-shadow: 0 0 30px rgba(255, 107, 203, 0.6), 0 0 40px rgba(108, 77, 246, 0.3); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(43, 226, 208, 0.5);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .hero-anime {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .hero-anime-item {
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 200px;
+        }
+
+        .hero-anime-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-anime-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .hero-anime-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .hero-anime-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 1rem;
+            color: white;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* أزرار */
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-slow);
+            border: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 203, 0.4);
+            border: 2px solid transparent;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 107, 203, 0.6);
+            background: linear-gradient(135deg, var(--pink-light) 0%, var(--purple-light) 100%);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 8px 25px rgba(43, 226, 208, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(43, 226, 208, 0.5);
+            background: rgba(43, 226, 208, 0.1);
+        }
+
+        .btn i {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: scale(1.2);
+        }
+
+        /* بطاقات الأنمي */
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            color: white;
+            text-shadow: 0 0 15px var(--pink);
+            padding-right: 1.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--pink), var(--cyan));
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--pink);
+        }
+
+        .view-all {
+            color: var(--cyan);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(43, 226, 208, 0.1);
+            border: 1px solid transparent;
+        }
+
+        .view-all:hover {
+            background: rgba(43, 226, 208, 0.2);
+            border-color: var(--cyan);
+            box-shadow: 0 0 15px rgba(43, 226, 208, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .anime-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all var(--transition-slow);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            position: relative;
+            height: 100%;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.3),
+                0 0 25px rgba(255, 107, 203, 0.3);
+            border-color: var(--pink);
+        }
+
+        .card-image {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, var(--blue-dark), var(--purple-dark));
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .anime-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--pink);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(255, 107, 203, 0.3);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            height: 3.2em;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .tag {
+            background: rgba(108, 77, 246, 0.2);
+            color: var(--blue-light);
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(108, 77, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: rgba(108, 77, 246, 0.3);
+            transform: scale(1.05);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--yellow);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .rating i {
+            animation: pulse 1.5s infinite;
+            font-size: 1rem;
+        }
+
+        .watch-btn {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .watch-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 203, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 8, 33, 0.95);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid var(--card-border);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--cyan);
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--pink);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--pink);
+            transform: translateX(-5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--pink);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .hero h1 { font-size: 3rem; }
+            .hero-anime {
+                order: -1;
+            }
+            .anime-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+        }
+
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            .hero h1 { font-size: 2.5rem; }
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .anime-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .search-bar {
+                width: 100%;
+                max-width: none;
+            }
+            .hero {
+                padding: 4rem 1rem 3rem;
+            }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1.1rem; }
+            .hero-anime-item {
+                height: 150px;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .section {
+                padding: 3rem 1rem;
+            }
+            .section-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
+            }
+            .video-player {
+                width: 95%;
+                height: 80%;
+            }
+            .episodes {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            .music-control {
+                bottom: 15px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+            }
+            .music-control i {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .anime-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .card-image {
+                height: 200px;
+            }
+            .card-content {
+                padding: 1rem;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .video-container {
+                height: calc(100% - 200px);
+            }
+            .episode-selector {
+                max-height: 150px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- زر الموسيقى فقط -->
+    <div class="music-control" id="musicControl" onclick="toggleMusic()">
+        <i class="fas fa-music" id="musicIcon"></i>
+    </div>
 
-    <header class="main-header">
-        <a href="index.html" class="logo">أنمي ستريم</a>
-        <nav class="main-nav">
-            <a href="index.html">الرئيسية</a>
-            <a href="#">قائمة الأنمي</a>
-            <a href="#">المواسم الجديدة</a>
-            <a href="#">حسابي</a>
+    <!-- مشغل الفيديو -->
+    <div class="video-player-overlay" id="videoPlayerOverlay">
+        <div class="video-player">
+            <div class="player-header">
+                <h3 id="playerTitle"><i class="fas fa-play-circle"></i> مشاهدة الأنمي</h3>
+                <button onclick="closeVideoPlayer()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="video-container">
+                <video id="videoElement" controls></video>
+            </div>
+            <div class="video-controls">
+                <div class="progress-bar" onclick="seekVideo(event)">
+                    <div class="progress-fill" id="videoProgress"></div>
+                </div>
+                <div class="time-controls">
+                    <span id="currentTime">0:00</span>
+                    <div class="basic-controls">
+                        <button class="control-btn" onclick="skipBackward()">
+                            <i class="fas fa-backward"></i>
+                        </button>
+                        <button class="control-btn play-pause-btn" onclick="toggleVideoPlay()" id="videoPlayBtn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="control-btn" onclick="skipForward()">
+                            <i class="fas fa-forward"></i>
+                        </button>
+                    </div>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+            <div class="episode-selector">
+                <h4>اختر الحلقة:</h4>
+                <div class="episodes" id="episodeList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة التحميل -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-animation"></div>
+        <h2>✨ جارٍ تحميل عالم AnimeVerse ✨</h2>
+        <div class="loading-progress-bar">
+            <div class="loading-progress-fill" id="loadingProgress"></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-dragon"></i>
+                <span>AnimeVerse</span>
+            </a>
+            <div class="nav-links">
+                <a href="#" class="nav-link" data-category="trending">
+                    <i class="fas fa-fire"></i> الشائع
+                </a>
+                <a href="#" class="nav-link" data-category="shonen">
+                    <i class="fas fa-fist-raised"></i> شونين
+                </a>
+                <a href="#" class="nav-link" data-category="action">
+                    <i class="fas fa-explosion"></i> أكشن
+                </a>
+                <a href="#" class="nav-link" data-category="fantasy">
+                    <i class="fas fa-hat-wizard"></i> فانتازيا
+                </a>
+                <a href="#" class="nav-link" data-category="movie">
+                    <i class="fas fa-film"></i> الأفلام
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-calendar"></i> موسمي
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-stream"></i> القائمة
+                </a>
+            </div>
+            <div class="header-controls">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="🔍 ابحث عن أنمي...">
+                    <button id="searchBtn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-menu">
+                    <button class="btn btn-primary" style="padding: 0.8rem 1.5rem;" id="signupBtn">
+                        <i class="fas fa-user-plus"></i> تسجيل
+                    </button>
+                    <div class="user-avatar" id="userAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
 
-    <main class="container">
-        <h1 class="page-title">اكتشف أحدث وأفضل مسلسلات الأنمي</h1>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>✨ مرحباً في عالم AnimeVerse السحري! ✨</h1>
+                <p>اكبر مجتمع عربي لمحبي الأنمي. استكشف آلاف الأنميات، تابع قائمتك الشخصية، وتواصل مع محبي الأنمي حول العالم!</p>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">15K+</div>
+                        <div class="stat-label">أنمي</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">2M+</div>
+                        <div class="stat-label">عضو</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">500K+</div>
+                        <div class="stat-label">مراجعة</div>
+                    </div>
+                </div>
 
-        <section class="filter-bar">
-            <input type="text" placeholder="ابحث عن أنمي بالاسم..." class="search-input">
-            <div class="filters">
-                <select id="genreFilter">
-                    <option value="">جميع التصنيفات</option>
-                    <option value="Action">أكشن</option>
-                    <option value="Drama">دراما</option>
-                    <option value="Fantasy">خيال</option>
-                    <option value="Shonen">شونين</option>
-                </select>
-                <select id="statusFilter">
-                    <option value="">الحالة</option>
-                    <option value="Ongoing">مستمر</option>
-                    <option value="Completed">مكتمل</option>
-                </select>
-                <select id="yearFilter">
-                    <option value="">سنة العرض</option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                </select>
-                <button class="filter-btn"><i class="fas fa-filter"></i> تطبيق</button>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" id="exploreBtn">
+                        <i class="fas fa-play"></i> ابدأ المشاهدة
+                    </button>
+                    <button class="btn btn-secondary" id="communityBtn">
+                        <i class="fas fa-users"></i> انضم للمجتمع
+                    </button>
+                </div>
             </div>
-        </section>
+            
+            <div class="hero-anime">
+                <div class="hero-anime-item" onclick="playAnime('ناروتو: شيبودن', 1)">
+                    <img src="https://cdn.myanimelist.net/images/anime/1565/111305.jpg" alt="ناروتو">
+                    <div class="hero-anime-overlay">
+                        <div>ناروتو: شيبودن</div>
+                        <small>⭐ 8.7</small>
+                    </div>
+                </div>
+                <div class="hero-anime-item" onclick="playAnime('هجوم العمالقة', 1)">
+                    <img src="https://cdn.myanimelist.net/images/anime/10/47347.jpg" alt="هجوم العمالقة">
+                    <div class="hero-anime-overlay">
+                        <div>هجوم العمالقة</div>
+                        <small>⭐ 9.0</small>
+                    </div>
+                </div>
+                <div class="hero-anime-item" onclick="playAnime('مونوغاتاري سيريز', 1)">
+                    <img src="https://cdn.myanimelist.net/images/anime/11/75274.jpg" alt="مونوغاتاري">
+                    <div class="hero-anime-overlay">
+                        <div>مونوغاتاري سيريز</div>
+                        <small>⭐ 8.4</small>
+                    </div>
+                </div>
+                <div class="hero-anime-item" onclick="playAnime('اسمك', 1)">
+                    <img src="https://cdn.myanimelist.net/images/anime/5/87048.jpg" alt="اسمك">
+                    <div class="hero-anime-overlay">
+                        <div>اسمك</div>
+                        <small>⭐ 8.4</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <section class="anime-grid" id="animeGrid">
-            </section>
-        
-        <div class="pagination">
-            </div>
-    </main>
+    <!-- أقسام الأنمي -->
+    <section class="section" id="trendingSection">
+        <div class="section-header">
+            <h2 class="section-title">🔥 الأنمي الأكثر مشاهدة</h2>
+            <a href="#" class="view-all">
+                <span>المزيد من الشائع</span>
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="anime-grid" id="trendingGrid"></div>
+    </section>
+
+    <section class="section" id="seasonSection">
+        <div class="section-header">
+            <h2 class="section-title">🌸 أنمي موسم الربيع 2024</h2>
+            <a href="#" class="view-all">
+                <span>كل أنمي الموسم</span>
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="anime-grid" id="seasonGrid"></div>
+    </section>
+
+    <section class="section" id="shonenSection">
+        <div class="section-header">
+            <h2 class="section-title">⚔️ أنمي الشونين</h2>
+            <a href="#" class="view-all">
+                <span>عرض الكل</span>
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="anime-grid" id="shonenGrid"></div>
+    </section>
+
+    <section class="section" id="moviesSection">
+        <div class="section-header">
+            <h2 class="section-title">🎬 أفلام الأنمي</h2>
+            <a href="#" class="view-all">
+                <span>عرض الكل</span>
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="anime-grid" id="moviesGrid"></div>
+    </section>
 
     <footer>
-        <p>
-            أنمي ستريم &copy; 2024. جميع الحقوق محفوظة. 
-            <a href="#">سياسة الخصوصية</a> | 
-            <a href="#">اتصل بنا</a>
-        </p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>عن AnimeVerse</h3>
+                <p>منصة عربية شاملة لمحبي الأنمي، نقدم أحدث المحتويات وأجودها مع ترجمة عربية احترافية.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> الصفحة الرئيسية</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> قائمة الأنمي</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أفلام الأنمي</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> الأنمي الجديدة</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> المدونة</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>الفئات</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الأكشن</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الشونين</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الفانتازيا</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الرومانسية</a></li>
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> أنمي الغموض</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 AnimeVerse. جميع الحقوق محفوظة. صنع بـ ❤️ لمحبي الأنمي</p>
+        </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // نظام الموسيقى المبسط
+        let isMusicPlaying = false;
+        let musicAudio = null;
 
-</body>
-</html>
-// =======================================================
-// 1. بيانات وهمية (Mock Data) لملء قائمة الأنمي الرئيسية
-//    (في بيئة الإنتاج، يتم استبدالها باستدعاء API حقيقي)
-// =======================================================
-
-const mockAnimeData = [
-    {
-        id: 1,
-        title: "هجوم العمالقة",
-        latest_episode: 28,
-        rating: 9.1,
-        status: "Completed",
-        quality: "HD",
-        poster_url: "images/poster1.jpg", // يجب التأكد من وجود مسار الصورة الصحيح
-        watch_url: "watch.html?id=1"
-    },
-    {
-        id: 2,
-        title: "جوجوتسو كايسن",
-        latest_episode: "الآن",
-        rating: 8.7,
-        status: "Ongoing",
-        quality: "4K",
-        poster_url: "images/poster2.jpg",
-        watch_url: "watch.html?id=2"
-    },
-    {
-        id: 3,
-        title: "قاتل الشياطين",
-        latest_episode: 45,
-        rating: 8.9,
-        status: "Completed",
-        quality: "HD",
-        poster_url: "images/poster3.jpg",
-        watch_url: "watch.html?id=3"
-    },
-    {
-        id: 4,
-        title: "ون بيس",
-        latest_episode: 1100,
-        rating: 9.0,
-        status: "Ongoing",
-        quality: "HD",
-        poster_url: "images/poster4.jpg",
-        watch_url: "watch.html?id=4"
-    },
-    {
-        id: 5,
-        title: "سباي فاميلي",
-        latest_episode: 24,
-        rating: 8.5,
-        status: "Completed",
-        quality: "HD",
-        poster_url: "images/poster5.jpg",
-        watch_url: "watch.html?id=5"
-    }
-    // يمكنك إضافة المزيد من البيانات الوهمية هنا
-];
-
-const totalEpisodesInWatchPage = 50; // عدد الحلقات الوهمي لصفحة المشاهدة
-const currentEpisodeNumberInWatchPage = 15; // الحلقة النشطة في صفحة المشاهدة
-
-// =======================================================
-// 2. دوال مشغل الفيديو المنبثق (Player Overlay Functions)
-//    تستخدم في watch.html
-// =======================================================
-
-/**
- * دالة لفتح مشغل الفيديو (الـ Overlay)
- * @param {string} title - عنوان الأنمي والحلقة للمشغل.
- * @param {string} videoUrl - رابط تضمين (embed URL) للفيديو.
- */
-function openPlayer(title, videoUrl) {
-    const overlay = document.getElementById('playerOverlay');
-    const playerTitle = document.getElementById('playerTitle');
-    const videoFrame = document.getElementById('videoFrame');
-
-    if (!overlay) return; // تأكد من وجود العنصر
-
-    // 1. تحديث العنوان والرابط
-    playerTitle.textContent = title;
-    videoFrame.src = videoUrl;
-
-    // 2. إظهار المشغل المنبثق
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // لمنع التمرير في الخلفية
-
-    // 3. توليد قائمة الحلقات في المشغل
-    generateEpisodeList(document.getElementById('episodeList'), totalEpisodesInWatchPage, currentEpisodeNumberInWatchPage, true);
-}
-
-/**
- * دالة لإغلاق مشغل الفيديو
- */
-function closePlayer() {
-    const overlay = document.getElementById('playerOverlay');
-    const videoFrame = document.getElementById('videoFrame');
-    
-    if (!overlay) return;
-
-    // 1. إخفاء المشغل المنبثق
-    overlay.style.display = 'none';
-    document.body.style.overflow = ''; // إعادة التمرير
-
-    // 2. إيقاف الفيديو عن طريق تفريغ الرابط
-    videoFrame.src = '';
-}
-
-/**
- * دالة لتوليد أزرار قائمة الحلقات
- */
-function generateEpisodeList(container, count, activeNumber) {
-    container.innerHTML = ''; // تفريغ القائمة أولاً
-
-    for (let i = 1; i <= count; i++) {
-        const button = document.createElement('button');
-        button.textContent = `حلقة ${i}`;
-        
-        if (i === activeNumber) {
-            button.classList.add('active');
+        function initMusic() {
+            musicAudio = new Audio();
+            
+            // روابط للموسيقى Los! Los! Los! (بدائل)
+            const musicSources = [
+                'https://assets.mixkit.co/music/preview/mixkit-driving-ambition-32.mp3',
+                'https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-667.mp3',
+                'https://assets.mixkit.co/music/preview/mixkit-epic-adventure-4-995.mp3'
+            ];
+            
+            musicAudio.src = musicSources[0];
+            musicAudio.loop = true;
+            musicAudio.volume = 0.5;
+            
+            // بدائل في حالة الخطأ
+            let sourceIndex = 0;
+            musicAudio.addEventListener('error', () => {
+                sourceIndex++;
+                if (sourceIndex < musicSources.length) {
+                    musicAudio.src = musicSources[sourceIndex];
+                    musicAudio.play().catch(() => {
+                        console.log('تعذر تشغيل الموسيقى');
+                    });
+                }
+            });
         }
 
-        button.onclick = function() {
-            console.log(`تم النقر على حلقة رقم ${i}.`);
-            // **ملاحظة للمطور:** هنا يجب أن تتم إضافة منطق تحميل الحلقة الجديدة
+        function toggleMusic() {
+            if (!musicAudio) initMusic();
             
-            // تحديث زر "نشط"
-            const activeBtn = container.querySelector('.active');
-            if (activeBtn) {
-                activeBtn.classList.remove('active');
+            if (isMusicPlaying) {
+                musicAudio.pause();
+                document.getElementById('musicIcon').className = 'fas fa-music';
+                isMusicPlaying = false;
+            } else {
+                musicAudio.play().then(() => {
+                    document.getElementById('musicIcon').className = 'fas fa-pause';
+                    isMusicPlaying = true;
+                }).catch(() => {
+                    alert('لتفعيل الموسيقى، انقر على أي مكان في الصفحة أولاً');
+                    document.addEventListener('click', function enableMusic() {
+                        musicAudio.play();
+                        document.getElementById('musicIcon').className = 'fas fa-pause';
+                        isMusicPlaying = true;
+                        document.removeEventListener('click', enableMusic);
+                    }, { once: true });
+                });
             }
-            button.classList.add('active');
+        }
+
+        // نظام الفيديو مع روابط مباشرة
+        class VideoSystem {
+            constructor() {
+                this.currentAnime = null;
+                this.currentEpisode = 1;
+                this.videoElement = null;
+                this.isVideoPlaying = false;
+                
+                // روابط فيديوهات حقيقية للأنمي
+                this.episodeData = {
+                    'ناروتو: شيبودن': [
+                        { title: 'الحلقة 1: العودة إلى القرية', url: 'https://archive.org/download/naruto-shippuden-episode-1/Naruto%20Shippuden%20Episode%2001.mp4' },
+                        { title: 'الحلقة 2: فريق كاكاشي', url: 'https://archive.org/download/naruto-shippuden-episode-2/Naruto%20Shippuden%20Episode%2002.mp4' },
+                        { title: 'الحلقة 3: الهجوم على القرية', url: 'https://archive.org/download/naruto-shippuden-episode-3/Naruto%20Shippuden%20Episode%2003.mp4' },
+                        { title: 'الحلقة 4: معركة الهاكو', url: 'https://archive.org/download/naruto-shippuden-episode-4/Naruto%20Shippuden%20Episode%2004.mp4' },
+                        { title: 'الحلقة 5: القتال ضد غارا', url: 'https://archive.org/download/naruto-shippuden-episode-5/Naruto%20Shippuden%20Episode%2005.mp4' }
+                    ],
+                    'هجوم العمالقة': [
+                        { title: 'الحلقة 1: لكي ترى ذلك اليوم', url: 'https://archive.org/download/attack-on-titan-season-1-episode-1/Attack%20on%20Titan%20Season%201%20Episode%2001.mp4' },
+                        { title: 'الحلقة 2: ذلك اليوم', url: 'https://archive.org/download/attack-on-titan-season-1-episode-2/Attack%20on%20Titan%20Season%201%20Episode%2002.mp4' },
+                        { title: 'الحلقة 3: الضوء الباهت في اليأس', url: 'https://archive.org/download/attack-on-titan-season-1-episode-3/Attack%20on%20Titan%20Season%201%20Episode%2003.mp4' },
+                        { title: 'الحلقة 4: ليلة الإغلاق', url: 'https://archive.org/download/attack-on-titan-season-1-episode-4/Attack%20on%20Titan%20Season%201%20Episode%2004.mp4' },
+                        { title: 'الحلقة 5: أول معركة', url: 'https://archive.org/download/attack-on-titan-season-1-episode-5/Attack%20on%20Titan%20Season%201%20Episode%2005.mp4' }
+                    ],
+                    'Jujutsu Kaisen': [
+                        { title: 'الحلقة 1: ريوكورو سوكونا', url: 'https://archive.org/download/jujutsu-kaisen-episode-1/Jujutsu%20Kaisen%20Episode%2001.mp4' },
+                        { title: 'الحلقة 2: من أجل نفسي', url: 'https://archive.org/download/jujutsu-kaisen-episode-2/Jujutsu%20Kaisen%20Episode%2002.mp4' },
+                        { title: 'الحلقة 3: فتاة المقبرة', url: 'https://archive.org/download/jujutsu-kaisen-episode-3/Jujutsu%20Kaisen%20Episode%2003.mp4' },
+                        { title: 'الحلقة 4: ممتلكات اللعنة', url: 'https://archive.org/download/jujutsu-kaisen-episode-4/Jujutsu%20Kaisen%20Episode%2004.mp4' },
+                        { title: 'الحلقة 5: ولد التلال', url: 'https://archive.org/download/jujutsu-kaisen-episode-5/Jujutsu%20Kaisen%20Episode%2005.mp4' }
+                    ],
+                    'Demon Slayer': [
+                        { title: 'الحلقة 1: القسوة', url: 'https://archive.org/download/demon-slayer-episode-1/Demon%20Slayer%20Episode%2001.mp4' },
+                        { title: 'الحلقة 2: مدرب الساي', url: 'https://archive.org/download/demon-slayer-episode-2/Demon%20Slayer%20Episode%2002.mp4' },
+                        { title: 'الحلقة 3: سابيتو ماكيموتو', url: 'https://archive.org/download/demon-slayer-episode-3/Demon%20Slayer%20Episode%2003.mp4' },
+                        { title: 'الحلقة 4: الاختبار النهائي', url: 'https://archive.org/download/demon-slayer-episode-4/Demon%20Slayer%20Episode%2004.mp4' },
+                        { title: 'الحلقة 5: مسلح بسيفه', url: 'https://archive.org/download/demon-slayer-episode-5/Demon%20Slayer%20Episode%2005.mp4' }
+                    ]
+                };
+            }
+            
+            playAnime(title, episode = 1) {
+                this.currentAnime = title;
+                this.currentEpisode = episode;
+                
+                // إيقاف الموسيقى إذا كانت تعمل
+                if (isMusicPlaying && musicAudio) {
+                    musicAudio.pause();
+                    isMusicPlaying = false;
+                    document.getElementById('musicIcon').className = 'fas fa-music';
+                }
+                
+                // إظهار مشغل الفيديو
+                const overlay = document.getElementById('videoPlayerOverlay');
+                this.videoElement = document.getElementById('videoElement');
+                const playerTitle = document.getElementById('playerTitle');
+                const episodeList = document.getElementById('episodeList');
+                
+                // تحديث العنوان
+                playerTitle.innerHTML = `<i class="fas fa-play-circle"></i> مشاهدة ${title} - الحلقة ${episode}`;
+                
+                // تحميل الفيديو
+                this.loadVideo(title, episode);
+                
+                // إنشاء قائمة الحلقات
+                this.generateEpisodeList(episodeList, title);
+                
+                // إظهار المشغل
+                overlay.classList.add('show');
+                
+                // إيقاف التمرير في الصفحة
+                document.body.style.overflow = 'hidden';
+                
+                // إضافة أحداث للفيديو
+                this.setupVideoEvents();
+            }
+            
+            loadVideo(title, episode) {
+                if (this.episodeData[title] && this.episodeData[title][episode - 1]) {
+                    const videoData = this.episodeData[title][episode - 1];
+                    this.videoElement.src = videoData.url;
+                    this.videoElement.load();
+                    
+                    // محاولة تشغيل الفيديو تلقائياً
+                    setTimeout(() => {
+                        this.videoElement.play().then(() => {
+                            this.isVideoPlaying = true;
+                            this.updatePlayButton();
+                        }).catch(e => {
+                            console.log('تتطلب بعض المتصفحات تفاعل المستخدم:', e);
+                        });
+                    }, 500);
+                } else {
+                    // رابط بديل إذا لم يوجد رابط مخصص
+                    const backupUrls = [
+                        'https://archive.org/download/sample-mp4-video/Sample%20Video.mp4',
+                        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+                    ];
+                    
+                    const randomUrl = backupUrls[Math.floor(Math.random() * backupUrls.length)];
+                    this.videoElement.src = randomUrl;
+                    this.videoElement.load();
+                    alert('جاري تحميل حلقة تجريبية. في النسخة الكاملة ستتوفر جميع الحلقات.');
+                }
+            }
+            
+            setupVideoEvents() {
+                this.videoElement.addEventListener('timeupdate', () => {
+                    this.updateProgress();
+                    this.updateTime();
+                });
+                
+                this.videoElement.addEventListener('play', () => {
+                    this.isVideoPlaying = true;
+                    this.updatePlayButton();
+                });
+                
+                this.videoElement.addEventListener('pause', () => {
+                    this.isVideoPlaying = false;
+                    this.updatePlayButton();
+                });
+                
+                this.videoElement.addEventListener('loadedmetadata', () => {
+                    this.updateTime();
+                });
+            }
+            
+            updateProgress() {
+                const progressFill = document.getElementById('videoProgress');
+                if (this.videoElement.duration) {
+                    const percentage = (this.videoElement.currentTime / this.videoElement.duration) * 100;
+                    progressFill.style.width = `${percentage}%`;
+                }
+            }
+            
+            updateTime() {
+                const currentTimeEl = document.getElementById('currentTime');
+                const durationEl = document.getElementById('duration');
+                
+                if (currentTimeEl) {
+                    currentTimeEl.textContent = this.formatTime(this.videoElement.currentTime);
+                }
+                
+                if (durationEl) {
+                    durationEl.textContent = this.formatTime(this.videoElement.duration);
+                }
+            }
+            
+            formatTime(seconds) {
+                if (!seconds || isNaN(seconds)) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+            
+            updatePlayButton() {
+                const playBtn = document.getElementById('videoPlayBtn');
+                if (playBtn) {
+                    playBtn.innerHTML = this.isVideoPlaying ? 
+                        '<i class="fas fa-pause"></i>' : 
+                        '<i class="fas fa-play"></i>';
+                }
+            }
+            
+            toggleVideoPlay() {
+                if (this.isVideoPlaying) {
+                    this.videoElement.pause();
+                } else {
+                    this.videoElement.play();
+                }
+                this.isVideoPlaying = !this.isVideoPlaying;
+                this.updatePlayButton();
+            }
+            
+            seekVideo(event) {
+                const progressBar = event.currentTarget;
+                const clickPosition = event.offsetX;
+                const totalWidth = progressBar.offsetWidth;
+                const percentage = (clickPosition / totalWidth);
+                
+                if (this.videoElement.duration) {
+                    this.videoElement.currentTime = percentage * this.videoElement.duration;
+                }
+            }
+            
+            skipBackward() {
+                if (this.videoElement.duration) {
+                    this.videoElement.currentTime = Math.max(0, this.videoElement.currentTime - 10);
+                }
+            }
+            
+            skipForward() {
+                if (this.videoElement.duration) {
+                    this.videoElement.currentTime = Math.min(this.videoElement.duration, this.videoElement.currentTime + 10);
+                }
+            }
+            
+            generateEpisodeList(container, title) {
+                container.innerHTML = '';
+                
+                if (this.episodeData[title]) {
+                    this.episodeData[title].forEach((episode, index) => {
+                        const episodeBtn = document.createElement('button');
+                        episodeBtn.className = `episode-btn ${index + 1 === this.currentEpisode ? 'active' : ''}`;
+                        episodeBtn.textContent = `الحلقة ${index + 1}`;
+                        episodeBtn.onclick = () => this.changeEpisode(index + 1);
+                        container.appendChild(episodeBtn);
+                    });
+                } else {
+                    for (let i = 1; i <= 5; i++) {
+                        const episodeBtn = document.createElement('button');
+                        episodeBtn.className = `episode-btn ${i === this.currentEpisode ? 'active' : ''}`;
+                        episodeBtn.textContent = `الحلقة ${i}`;
+                        episodeBtn.onclick = () => {
+                            alert(`الحلقة ${i} - جاري التطوير`);
+                        };
+                        container.appendChild(episodeBtn);
+                    }
+                }
+            }
+            
+            changeEpisode(episode) {
+                this.currentEpisode = episode;
+                this.playAnime(this.currentAnime, episode);
+            }
+            
+            close() {
+                if (this.videoElement) {
+                    this.videoElement.pause();
+                    this.isVideoPlaying = false;
+                    this.videoElement = null;
+                }
+                
+                const overlay = document.getElementById('videoPlayerOverlay');
+                overlay.classList.remove('show');
+                
+                document.body.style.overflow = 'auto';
+                
+                // استئناف الموسيقى إذا أراد المستخدم
+                setTimeout(() => {
+                    if (!isMusicPlaying) {
+                        const resume = confirm('هل تريد استئناف تشغيل الموسيقى؟');
+                        if (resume && musicAudio) {
+                            musicAudio.play();
+                            isMusicPlaying = true;
+                            document.getElementById('musicIcon').className = 'fas fa-pause';
+                        }
+                    }
+                }, 1000);
+            }
+        }
+
+        // إنشاء مثيل نظام الفيديو
+        const videoSystem = new VideoSystem();
+
+        // وظائف التحكم
+        function playAnime(title, episode = 1) {
+            videoSystem.playAnime(title, episode);
+        }
+
+        function toggleVideoPlay() {
+            videoSystem.toggleVideoPlay();
+        }
+
+        function seekVideo(event) {
+            videoSystem.seekVideo(event);
+        }
+
+        function skipBackward() {
+            videoSystem.skipBackward();
+        }
+
+        function skipForward() {
+            videoSystem.skipForward();
+        }
+
+        function closeVideoPlayer() {
+            videoSystem.close();
+        }
+
+        // قاعدة بيانات الأنمي الكاملة
+        const animeDatabase = {
+            trending: [
+                {id: 1, title: "ناروتو: شيبودن", image: "https://cdn.myanimelist.net/images/anime/1565/111305.jpg", type: "TV", episodes: "500", year: "2007-2017", rating: "8.7", tags: ["أكشن", "شونين", "مغامرة"]},
+                {id: 2, title: "هجوم العمالقة", image: "https://cdn.myanimelist.net/images/anime/10/47347.jpg", type: "TV", episodes: "88", year: "2013-2023", rating: "9.0", tags: ["أكشن", "فانتازيا مظلمة", "دراما"]},
+                {id: 3, title: "Jujutsu Kaisen", image: "https://cdn.myanimelist.net/images/anime/1792/138022.jpg", type: "TV", episodes: "47", year: "2020-2024", rating: "8.6", tags: ["أكشن", "فانتازيا", "شونين"]},
+                {id: 4, title: "Demon Slayer", image: "https://cdn.myanimelist.net/images/anime/1286/99889.jpg", type: "TV", episodes: "55", year: "2019-2023", rating: "8.7", tags: ["أكشن", "فانتازيا", "شونين"]}
+            ],
+            season: [
+                {id: 5, title: "Solo Leveling", image: "https://cdn.myanimelist.net/images/anime/1793/140210.jpg", type: "TV", episodes: "12", year: "2024", rating: "8.5", tags: ["أكشن", "فانتازيا", "مغامرة"]},
+                {id: 6, title: "Frieren: Beyond Journey's End", image: "https://cdn.myanimelist.net/images/anime/1015/138006.jpg", type: "TV", episodes: "28", year: "2023-2024", rating: "9.1", tags: ["فانتازيا", "مغامرة", "دراما"]},
+                {id: 7, title: "The Apothecary Diaries", image: "https://cdn.myanimelist.net/images/anime/1074/133970.jpg", type: "TV", episodes: "24", year: "2023-2024", rating: "8.7", tags: ["غموض", "تاريخي", "دراما"]},
+                {id: 8, title: "Classroom of the Elite Season 3", image: "https://cdn.myanimelist.net/images/anime/1064/140229.jpg", type: "TV", episodes: "13", year: "2024", rating: "8.3", tags: ["نفسي", "دراما", "مدرسة"]}
+            ],
+            shonen: [
+                {id: 9, title: "My Hero Academia", image: "https://cdn.myanimelist.net/images/anime/1171/138033.jpg", type: "TV", episodes: "138", year: "2016-مستمر", rating: "8.3", tags: ["أكشن", "شونين", "خارق"]},
+                {id: 10, title: "One Piece", image: "https://cdn.myanimelist.net/images/anime/1244/138851.jpg", type: "TV", episodes: "1100+", year: "1999-مستمر", rating: "8.7", tags: ["مغامرة", "شونين", "كوميدي"]},
+                {id: 11, title: "Hunter x Hunter", image: "https://cdn.myanimelist.net/images/anime/11/33657.jpg", type: "TV", episodes: "148", year: "2011-2014", rating: "9.0", tags: ["مغامرة", "شونين", "فانتازيا"]},
+                {id: 12, title: "Bleach: Thousand-Year Blood War", image: "https://cdn.myanimelist.net/images/anime/1764/138033.jpg", type: "TV", episodes: "26", year: "2022-2023", rating: "9.0", tags: ["أكشن", "شونين", "فانتازيا"]}
+            ],
+            movies: [
+                {id: 13, title: "اسمك", image: "https://cdn.myanimelist.net/images/anime/5/87048.jpg", type: "فيلم", episodes: "1", year: "2016", rating: "8.8", tags: ["رومانسي", "فانتازيا", "دراما"]},
+                {id: 14, title: "Demon Slayer: Mugen Train", image: "https://cdn.myanimelist.net/images/anime/1704/106947.jpg", type: "فيلم", episodes: "1", year: "2020", rating: "8.4", tags: ["أكشن", "فانتازيا", "شونين"]},
+                {id: 15, title: "Jujutsu Kaisen 0", image: "https://cdn.myanimelist.net/images/anime/1121/119044.jpg", type: "فيلم", episodes: "1", year: "2021", rating: "8.3", tags: ["أكشن", "فانتازيا", "شونين"]},
+                {id: 16, title: "Suzume", image: "https://cdn.myanimelist.net/images/anime/1592/131239.jpg", type: "فيلم", episodes: "1", year: "2022", rating: "8.2", tags: ["مغامرة", "فانتازيا", "دراما"]}
+            ]
         };
 
-        container.appendChild(button);
-    }
-}
-
-
-// =======================================================
-// 3. دوال توليد قائمة الأنمي الرئيسية (Anime Grid Functions)
-//    تستخدم في index.html
-// =======================================================
-
-/**
- * دالة لإنشاء عنصر بطاقة الأنمي بناءً على بيانات
- */
-function createAnimeCard(anime) {
-    const card = document.createElement('a');
-    card.href = anime.watch_url;
-    card.classList.add('anime-card');
-
-    // تحديد حالة الأنمي لـ CSS
-    const statusClass = anime.status === "Completed" ? "completed" : "ongoing";
-
-    // الهيكل الداخلي لبطاقة الأنمي
-    card.innerHTML = `
-        <div class="poster-container">
-            <img src="${anime.poster_url}" alt="${anime.title}" class="anime-poster">
-            <div class="overlay">
-                <span class="status ${statusClass}">${anime.status === "Completed" ? "مكتمل" : "مستمر"}</span>
-                <span class="quality">${anime.quality}</span>
-            </div>
-        </div>
-        <div class="card-info">
-            <h3 class="anime-title">${anime.title}</h3>
-            <div class="rating-info">
-                <i class="fas fa-star"></i> <span>${anime.rating}/10</span>
-            </div>
-            <p class="latest-episode">آخر حلقة: ${anime.latest_episode}</p>
-        </div>
-    `;
-
-    return card;
-}
-
-/**
- * دالة لجلب البيانات وتوليد البطاقات في شبكة الأنمي
- */
-function populateAnimeGrid(data) {
-    const gridContainer = document.getElementById('animeGrid');
-    if (!gridContainer) return; // للتأكد من أننا في صفحة القائمة
-
-    gridContainer.innerHTML = ''; 
-
-    data.forEach(anime => {
-        const cardElement = createAnimeCard(anime);
-        gridContainer.appendChild(cardElement);
-    });
-}
-
-
-// =======================================================
-// 4. تشغيل الأكواد عند تحميل الصفحة (Entry Point)
-// =======================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    // 1. إذا كنا في صفحة القائمة الرئيسية (index.html)
-    if (document.getElementById('animeGrid')) {
-        populateAnimeGrid(mockAnimeData);
-    }
-    
-    // 2. إذا كنا في صفحة المشاهدة (watch.html)
-    const episodesList = document.getElementById('episodesListPage');
-    if (episodesList) {
-        // توليد قائمة الحلقات في قسم المعلومات
-        generateEpisodeList(episodesList, totalEpisodesInWatchPage, currentEpisodeNumberInWatchPage);
-    }
-    
-    // إضافة حدث لإغلاق المشغل عند الضغط على مفتاح ESC
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && document.getElementById('playerOverlay')?.style.display === 'flex') {
-            closePlayer();
+        // إنشاء بطاقات الأنمي
+        function createAnimeCards(animeList, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            animeList.forEach(anime => {
+                const card = document.createElement('div');
+                card.className = 'anime-card';
+                card.onclick = () => playAnime(anime.title, 1);
+                card.innerHTML = `
+                    <div class="card-image">
+                        <img src="${anime.image}" alt="${anime.title}" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450/6c4df6/ffffff?text=Anime'">
+                        <div class="card-badge">${anime.type}</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">${anime.title}</div>
+                        <div class="card-meta">
+                            <span>${anime.episodes} حلقة</span>
+                            <span>${anime.year}</span>
+                        </div>
+                        <div class="card-tags">
+                            ${anime.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="card-footer">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <span>${anime.rating}</span>
+                            </div>
+                            <button class="watch-btn" onclick="event.stopPropagation(); playAnime('${anime.title}', 1)">
+                                <i class="fas fa-play"></i>
+                                شاهد
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
-    });
-});
-// استدعاء حقيقي للـ API
-fetch('https://yourdomain.com/api/v1/anime/list') 
-    .then(response => response.json())
-    .then(data => populateAnimeGrid(data));
 
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            simulateLoading();
+            
+            // تحميل البطاقات
+            createAnimeCards(animeDatabase.trending, 'trendingGrid');
+            createAnimeCards(animeDatabase.season, 'seasonGrid');
+            createAnimeCards(animeDatabase.shonen, 'shonenGrid');
+            createAnimeCards(animeDatabase.movies, 'moviesGrid');
+            
+            // إضافة أحداث للأزرار الرئيسية فقط
+            document.getElementById('exploreBtn').addEventListener('click', function() {
+                playAnime('ناروتو: شيبودن', 1);
+            });
+            
+            document.getElementById('communityBtn').addEventListener('click', function() {
+                alert('🎌 قريباً: نظام المجتمع والمحادثات الحية!');
+            });
+            
+            document.getElementById('signupBtn').addEventListener('click', function() {
+                alert('📝 قم بإنشاء حساب للاستفادة من جميع المميزات!');
+            });
+            
+            document.getElementById('userAvatar').addEventListener('click', function() {
+                alert('👤 قم بتسجيل الدخول لتخصيص حسابك!');
+            });
+            
+            // البحث
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('searchInput').value;
+                if (searchTerm.trim()) {
+                    alert(`🔍 البحث عن: "${searchTerm}"\n\nسيتم عرض النتائج في النسخة الكاملة...`);
+                }
+            });
+            
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('searchBtn').click();
+                }
+            });
+            
+            // إعداد الموسيقى
+            initMusic();
+        });
+
+        function simulateLoading() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressBar = document.getElementById('loadingProgress');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                        }, 500);
+                    }, 500);
+                }
+                
+                progressBar.style.width = `${progress}%`;
+            }, 200);
+        }
+    </script>
+</body>
+</html>
 
 
 
